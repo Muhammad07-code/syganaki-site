@@ -1,0 +1,331 @@
+{
+  "brand": {
+    "name": "Husamuddin as-Syganaqi",
+    "type": "Islamic Institute",
+    "short": "as-Syganaqi"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "programs": "Education",
+    "admission": "Admission",
+    "news": "News",
+    "contacts": "Contacts",
+    "gallery": "Gallery",
+    "faq": "FAQ",
+    "apply": "Apply"
+  },
+  "topbar": {
+    "address": "36/4 Kabanbay Batyr Avenue, Astana",
+    "phone": "+7 776 176 41 31",
+    "email": "info@syganaki.kz"
+  },
+  "common": {
+    "all": "All",
+    "more": "More",
+    "read_more": "Read more",
+    "back": "Back",
+    "back_to_news": "Back to news",
+    "search": "Search",
+    "search_placeholder": "Type to search...",
+    "loading": "Loading...",
+    "send": "Send",
+    "submit": "Submit",
+    "success": "Successfully submitted",
+    "error": "Something went wrong. Please try again later.",
+    "whatsapp": "Write on WhatsApp",
+    "online": "Online",
+    "beta": "Beta",
+    "close": "Close",
+    "top": "Top",
+    "details": "Details",
+    "date": "Date",
+    "category": "Category",
+    "not_found": "Content not found"
+  },
+  "hero": {
+    "badge": "Official Islamic Education",
+    "title": "An institute that deepens Islamic knowledge and prepares specialists to serve society",
+    "subtitle": "The Husamuddin as-Syganaqi Islamic Institute combines traditional religious education, academic culture, and spiritual formation.",
+    "primary": "Study Programs",
+    "secondary": "Apply for Admission",
+    "video": "Institute video",
+    "location": "36/4 Kabanbay Batyr Avenue, Astana",
+    "cards": [
+      { "value": "2022", "label": "Year founded" },
+      { "value": "500+", "label": "Students" },
+      { "value": "5", "label": "Programs" },
+      { "value": "25+", "label": "Teachers" }
+    ]
+  },
+  "stats": [
+    { "value": "2022", "label": "Opening year" },
+    { "value": "500+", "label": "Students" },
+    { "value": "5", "label": "Programs" },
+    { "value": "20+", "label": "Mentors" },
+    { "value": "10+", "label": "Partners" }
+  ],
+  "home": {
+    "programs_eyebrow": "Educational Programs",
+    "programs_title": "Deep knowledge and practical preparation",
+    "programs_desc": "The programs combine classical Islamic sciences, Arabic, community work culture, and modern academic standards.",
+    "benefits_eyebrow": "Advantages",
+    "benefits_title": "Knowledge, character, and responsibility in one environment",
+    "news_eyebrow": "News",
+    "news_title": "Latest institute updates",
+    "gallery_eyebrow": "Gallery",
+    "gallery_title": "Campus, classes, and student life",
+    "video_title": "Discover the academic and spiritual environment of the institute",
+    "video_desc": "A concise presentation about admission, programs, housing, and student support.",
+    "testimonials_eyebrow": "Testimonials",
+    "testimonials_title": "What students and alumni say",
+    "contact_eyebrow": "Contacts",
+    "contact_title": "Contact the admissions office"
+  },
+  "benefits": [
+    { "title": "Quality Education", "desc": "Quran, hadith, fiqh, aqidah, and Arabic are taught systematically." },
+    { "title": "Experienced Teachers", "desc": "Classes are led by specialists with religious and academic experience." },
+    { "title": "Spiritual Formation", "desc": "Faith, adab, responsibility, and service to society are cultivated." },
+    { "title": "International Outlook", "desc": "Partnerships, scholarly links, and an open learning environment are developed." }
+  ],
+  "programs": {
+    "title": "Study Programs",
+    "subtitle": "Each program gives students deep religious knowledge, research skills, and a culture of service.",
+    "subjects": "Core subjects",
+    "opportunities": "Opportunities",
+    "duration": "Duration",
+    "format": "Format",
+    "learn_more": "Learn more",
+    "apply": "Apply",
+    "items": [
+      {
+        "id": "islamic-studies",
+        "title": "Islamic Studies",
+        "duration": "4 years",
+        "format": "Full-time",
+        "image": "/institute/quran-ijaza.jpeg",
+        "desc": "A comprehensive program for future theologians and imams with deep study of Islamic sciences.",
+        "subjects": ["Quranic sciences", "Hadith", "Fiqh", "Aqidah", "Islamic history", "Contemporary religious issues"],
+        "opportunities": ["Imam service", "Religious education", "Research projects", "Community counseling"]
+      },
+      {
+        "id": "quran-ijazah",
+        "title": "Quran Ijazah",
+        "duration": "2 years",
+        "format": "Special program",
+        "image": "/institute/quran-ijaza.jpeg",
+        "desc": "A program for memorizing the Quran, mastering tajweed, and preparing for ijazah.",
+        "subjects": ["Hifz", "Tajweed", "Qiraat", "Quran etiquette", "Ijazah preparation"],
+        "opportunities": ["Qari path", "Teaching Quran", "Competitions", "Mentorship"]
+      },
+      {
+        "id": "arabic",
+        "title": "Arabic Language",
+        "duration": "1 year",
+        "format": "Course",
+        "image": "/institute/classroom.jpeg",
+        "desc": "An intensive course from beginner level to confident reading of religious texts.",
+        "subjects": ["Sarf", "Nahw", "Reading and translation", "Speaking practice", "Religious terminology"],
+        "opportunities": ["Reading Arabic texts", "Working with sources", "Preparation for study abroad"]
+      },
+      {
+        "id": "imam",
+        "title": "Imam Preparation",
+        "duration": "3 years",
+        "format": "Professional track",
+        "image": "/institute/study-hall.jpeg",
+        "desc": "A practical program for mosque service, khutbah culture, and community work.",
+        "subjects": ["Khutbah basics", "Fiqh practice", "Communication", "Family and marriage", "Media literacy"],
+        "opportunities": ["Mosque service", "Spiritual counseling", "Youth work", "Social projects"]
+      },
+      {
+        "id": "theology",
+        "title": "Theology",
+        "duration": "4 years",
+        "format": "Academic program",
+        "image": "/institute/library.jpeg",
+        "desc": "Academic study of Islamic theology, religious studies, and contemporary religious discourse.",
+        "subjects": ["Religious studies", "Comparative theology", "Islamic philosophy", "Research methods", "Public communication"],
+        "opportunities": ["Researcher", "Theology expert", "Teaching", "Public and state projects"]
+      }
+    ]
+  },
+  "about": {
+    "title": "About the Institute",
+    "subtitle": "The Husamuddin as-Syganaqi Institute brings together traditional Islamic education, academic responsibility, and spiritual formation.",
+    "history_title": "History and Mission",
+    "history": "The institute was created to raise the quality of religious education in Kazakhstan and prepare knowledgeable, responsible specialists who benefit society. The learning process combines classical texts, modern academic methods, and the mentorship tradition.",
+    "mission_title": "Mission",
+    "mission": "To prepare specialists with deep Islamic knowledge, strong character, and the ability to work wisely with society.",
+    "vision_title": "Vision",
+    "vision": "To become a respected center of quality religious education in Kazakhstan and develop international academic links.",
+    "values_title": "Values",
+    "values": [
+      { "title": "Trust", "desc": "To transmit knowledge responsibly and preserve spiritual heritage with care." },
+      { "title": "Quality", "desc": "To maintain high standards of curriculum, discipline, and student experience." },
+      { "title": "Service", "desc": "To direct acquired knowledge toward public benefit." }
+    ]
+  },
+  "admission": {
+    "title": "Admission",
+    "subtitle": "The admissions office will help you choose a program, prepare documents, and understand the next steps.",
+    "steps_title": "Admission steps",
+    "docs_title": "Required documents",
+    "form_title": "Admission application",
+    "form_subtitle": "Fill in the fields. The application is saved to Firebase and WhatsApp opens contact with the admissions office.",
+    "name": "Name",
+    "phone": "Phone",
+    "program": "Program",
+    "message": "Message",
+    "send": "Send application",
+    "success": "Application received",
+    "success_desc": "The admissions office will contact you soon.",
+    "send_another": "Send another application",
+    "whatsapp_text": "Assalamu alaikum! I would like to learn more about admission to the institute.",
+    "steps": [
+      { "title": "Leave an application", "desc": "Fill out the website form or write on WhatsApp." },
+      { "title": "Get consultation", "desc": "An admissions specialist will explain programs and documents." },
+      { "title": "Submit documents", "desc": "Prepare your documents and send them to the admissions office." },
+      { "title": "Interview", "desc": "A conversation about preparation level and learning goals." },
+      { "title": "Exam", "desc": "Taking the entrance exam for the chosen program." }
+    ],
+    "requirements": ["ID copy", "Education document", "3x4 photo", "Medical certificate", "Application form", "Contact details"]
+  },
+  "news": {
+    "title": "News",
+    "subtitle": "Important events, announcements, and student life updates.",
+    "search_placeholder": "Search news...",
+    "categories": ["All", "Event", "Education", "Announcement", "International"],
+    "fallback": [
+      {
+        "id": "1",
+        "title": "The institute opened the new academic year",
+        "date": "May 10, 2024",
+        "category": "Event",
+        "image": "/institute/students.jpeg",
+        "excerpt": "Students were introduced to academic rules, study priorities, and spiritual formation activities.",
+        "content": "<p>The institute held a ceremonial opening of the new academic year. Teachers emphasized responsibility on the path of knowledge and the importance of spiritual formation.</p><p>This year the program content has been updated, with expanded Arabic, Quranic sciences, and Islamic studies classes.</p>"
+      },
+      {
+        "id": "2",
+        "title": "Student Quran recitation competition concluded",
+        "date": "May 5, 2024",
+        "category": "Education",
+        "image": "/institute/quran-ijaza.jpeg",
+        "excerpt": "Participants were evaluated in tajweed, memorization, and qiraat culture.",
+        "content": "<p>Students demonstrated memorization, adherence to tajweed rules, and recitation culture.</p><p>Winners received certificates, and top participants were offered individual mentorship.</p>"
+      },
+      {
+        "id": "3",
+        "title": "Arabic language course enrollment is open",
+        "date": "May 1, 2024",
+        "category": "Announcement",
+        "image": "/institute/classroom.jpeg",
+        "excerpt": "The course is for applicants who want to understand religious texts in the original language.",
+        "content": "<p>Enrollment for the Arabic language course is open. The program covers the path from beginner level to text analysis.</p><p>Participants will study sarf, nahw, reading, translation, and speaking practice.</p>"
+      }
+    ]
+  },
+  "gallery": {
+    "title": "Gallery",
+    "subtitle": "Institute building, classrooms, library, and student life.",
+    "categories": ["All", "Campus", "Learning", "Students", "Event"],
+    "items": [
+      { "title": "Institute building", "category": "Campus", "image": "/institute/hero-institute.jpeg" },
+      { "title": "Classroom", "category": "Learning", "image": "/institute/classroom.jpeg" },
+      { "title": "Library", "category": "Learning", "image": "/institute/library.jpeg" },
+      { "title": "Students", "category": "Students", "image": "/institute/students.jpeg" },
+      { "title": "Quran class", "category": "Learning", "image": "/institute/quran-ijaza.jpeg" },
+      { "title": "Dormitory", "category": "Campus", "image": "/institute/dormitory.jpeg" },
+      { "title": "Study hall", "category": "Learning", "image": "/institute/study-hall.jpeg" },
+      { "title": "Director office", "category": "Event", "image": "/institute/director.jpg" }
+    ]
+  },
+  "testimonials": [
+    { "name": "Alikhan", "role": "Islamic Studies student", "text": "The institute teaches not only knowledge, but also responsibility, adab, and service culture." },
+    { "name": "Nursultan", "role": "Quran Ijazah track", "text": "Teachers track each student's pace and pay close attention to memorization and tajweed." },
+    { "name": "Medina", "role": "Arabic course", "text": "Classes are systematic, clear, and truly help with religious texts." }
+  ],
+  "faq": {
+    "title": "FAQ",
+    "subtitle": "Short answers about admission, programs, and student life.",
+    "items": [
+      { "question": "What documents are required for admission?", "answer": "You need an ID copy, education document, photo, medical certificate, and application form." },
+      { "question": "Is dormitory accommodation available?", "answer": "Yes. Out-of-city students can receive housing consultation; availability is confirmed during admission." },
+      { "question": "Can I start Arabic from zero?", "answer": "Yes. The Arabic course starts from basic level and gradually leads to reading religious texts." },
+      { "question": "How do I apply to the Quran Ijazah program?", "answer": "Leave an application, pass a preparation-level interview, and receive an individual study plan." },
+      { "question": "What is the class format?", "answer": "Core programs are full-time; some courses may be organized with a flexible schedule." }
+    ]
+  },
+  "contacts": {
+    "title": "Contacts",
+    "subtitle": "Contact the admissions office, academic department, or administration.",
+    "address_title": "Address",
+    "phone_title": "Phone",
+    "email_title": "Email",
+    "hours_title": "Hours",
+    "hours": "Mon-Fri: 09:00 - 18:00",
+    "form_title": "Get consultation",
+    "form_subtitle": "Leave your question and we will respond.",
+    "subject": "Subject",
+    "subjects": ["Admission", "Study program", "Documents", "Other question"],
+    "socials_title": "Social media",
+    "map_title": "Map"
+  },
+  "assistant": {
+    "title": "AI Assistant",
+    "subtitle": "Answers institute questions",
+    "welcome": "Assalamu alaikum! I am the AI assistant of the Husamuddin as-Syganaqi Institute. Ask about admission, programs, or contacts.",
+    "placeholder": "Type your question...",
+    "fallback": "Short answer: I can help with admission, programs, Quran Ijazah, Arabic, and contacts. For details, write to the admissions office on WhatsApp.",
+    "quick": ["How does admission work?", "What programs are available?", "What is the address?"]
+  },
+  "footer": {
+    "description": "An official educational institution combining traditional Islamic education, academic quality, and spiritual formation.",
+    "navigation": "Navigation",
+    "education": "Education",
+    "contacts": "Contacts",
+    "copyright": "© 2026 Husamuddin as-Syganaqi Islamic Institute. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "offer": "Terms of Use"
+  },
+  "admin": {
+    "login_title": "Admin Panel",
+    "login_subtitle": "Private section for institute administration",
+    "password": "Password",
+    "login": "Log in",
+    "logout": "Log out",
+    "back_site": "Back to site",
+    "dashboard": "Dashboard",
+    "applications": "Applications",
+    "inquiries": "Consultations",
+    "news": "News",
+    "gallery": "Photos",
+    "programs": "Programs",
+    "content": "Texts",
+    "assistant": "AI Assistant",
+    "settings": "Settings",
+    "new": "New",
+    "processed": "Processed",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search...",
+    "status": "Status",
+    "title_field": "Title",
+    "image": "Image",
+    "upload": "Upload",
+    "description": "Description",
+    "excerpt": "Excerpt",
+    "content_html": "Full HTML content",
+    "key": "Key",
+    "language": "Language",
+    "question": "Question",
+    "answer": "Answer",
+    "production_note": "Firebase, mobile admin, news CRUD, and application tracking are connected through one control panel.",
+    "firebase_note": "Fill Firebase production environment variables before deployment."
+  }
+}

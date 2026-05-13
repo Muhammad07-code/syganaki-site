@@ -1,0 +1,137 @@
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ArrowRight, BookOpen, CheckCircle2, Clock, GraduationCap, Layers, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { fetchDataList } from '../services/dataService';
+
+const Programs = () => {
+  const { t, i18n } = useTranslation();
+  const fallbackPrograms = t('programs.items', { returnObjects: true }) || [];
+  const [programs, setPrograms] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadPrograms = async () => {
+      setLoading(true);
+      const data = await fetchDataList('programs', fallbackPrograms, i18n.language);
+      setPrograms(data);
+      setLoading(false);
+    };
+    loadPrograms();
+  }, [i18n.language]);
+
+  return (
+    <div className="bg-background">
+      <section className="relative overflow-hidden bg-primary-dark pb-16 pt-32 text-white sm:pt-40">
+        <img src="/institute/quran-ijaza.jpeg" alt={t('programs.title')} className="absolute inset-0 h-full w-full object-cover opacity-28" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary-dark via-primary-dark/90 to-primary-dark/55" />
+        <div className="islamic-pattern absolute inset-0 opacity-[0.12]" />
+        <div className="container-custom relative z-10 max-w-4xl">
+          <p className="section-eyebrow">{t('nav.programs')}</p>
+          <h1 className="section-title text-white">{t('programs.title')}</h1>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-white/72">{t('programs.subtitle')}</p>
+        </div>
+      </section>
+
+      <section className="section-y">
+        <div className="container-custom space-y-8">
+          {loading ? (
+            <div className="flex justify-center py-20">
+              <Loader2 className="animate-spin text-accent-gold" size={40} />
+            </div>
+          ) : (
+            programs.map((program, index) => (
+              <motion.article
+                key={program.id || index}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-90px' }}
+                transition={{ delay: index * 0.04 }}
+                className="premium-card overflow-hidden"
+              >
+                <div className="grid lg:grid-cols-[0.85fr_1.15fr]">
+                  <div className="relative min-h-[320px] overflow-hidden bg-primary-dark">
+                    <img src={program.image} alt={program.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-85 transition-transform duration-700 hover:scale-105" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary-dark via-primary-dark/40 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-7 text-white">
+                      <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent-gold text-primary-dark shadow-xl">
+                        <GraduationCap size={24} />
+                      </span>
+                      <h2 className="font-serif text-3xl font-bold text-white">{program.title}</h2>
+                      <p className="mt-3 max-w-md text-sm leading-7 text-white/72">{program.desc}</p>
+                    </div>
+                  </div>
+
+                  <div className="p-6 sm:p-8 lg:p-10">
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div className="rounded-2xl bg-accent-lightGold/50 border border-accent-gold/10 p-5">
+                        <div className="mb-2 flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-primary">
+                          <Clock size={16} className="text-accent-gold" />
+                          {t('programs.duration')}
+                        </div>
+                        <p className="font-bold text-primary-dark text-lg">{program.duration}</p>
+                      </div>
+                      <div className="rounded-2xl bg-slate-50 border border-slate-100 p-5">
+                        <div className="mb-2 flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-primary">
+                          <Layers size={16} className="text-accent-gold" />
+                          {t('programs.format')}
+                        </div>
+                        <p className="font-bold text-primary-dark text-lg">{program.format}</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-8 grid gap-8 md:grid-cols-2">
+                      {program.subjects && Array.isArray(program.subjects) && (
+                        <div>
+                          <h3 className="mb-5 flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-primary/40">
+                            <BookOpen size={16} />
+                            {t('programs.subjects')}
+                          </h3>
+                          <ul className="space-y-3">
+                            {program.subjects.map((subject) => (
+                              <li key={subject} className="flex gap-3 text-sm font-bold text-slate-600">
+                                <CheckCircle2 size={18} className="shrink-0 text-accent-gold" />
+                                {subject}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {program.opportunities && Array.isArray(program.opportunities) && (
+                        <div>
+                          <h3 className="mb-5 flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-primary/40">
+                            <CheckCircle2 size={16} />
+                            {t('programs.opportunities')}
+                          </h3>
+                          <ul className="space-y-3">
+                            {program.opportunities.map((opportunity) => (
+                              <li key={opportunity} className="flex gap-3 text-sm font-bold text-slate-600">
+                                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-gold" />
+                                {opportunity}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="mt-10 border-t border-slate-100 pt-8">
+                      <Link to="/admission" className="btn-gold !w-full sm:!w-auto !py-4">
+                        {t('programs.apply')}
+                        <ArrowRight size={18} />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </motion.article>
+            ))
+          )}
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Programs;

@@ -1,0 +1,49 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Public content: News, Programs, Gallery, Content
+    match /news/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    match /programs/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    match /gallery/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    match /content/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Administrative data: Applications, Inquiries, Assistant FAQ
+    match /applications/{document=**} {
+      allow read, write: if isAuthenticated();
+      // Allow public to create applications
+      allow create: if true;
+    }
+
+    match /inquiries/{document=**} {
+      allow read, write: if isAuthenticated();
+      // Allow public to send inquiries
+      allow create: if true;
+    }
+
+    match /assistantFaq/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+  }
+}
