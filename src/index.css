@@ -48,6 +48,14 @@
   h5,
   h6 {
     @apply font-serif font-bold tracking-normal text-[var(--ink)];
+    overflow-wrap: break-word;
+  }
+
+  p,
+  span,
+  a,
+  button {
+    overflow-wrap: break-word;
   }
 
   a,

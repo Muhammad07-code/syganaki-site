@@ -36,8 +36,7 @@ const Contacts = () => {
       setSubmitted(true);
       setFormData({ name: '', phone: '', subject: subjects[0], message: '' });
     } catch (err) {
-      console.error(err);
-      setError(t('common.error'));
+      setError(err.message === 'rate_limited' ? t('common.too_many_requests', { defaultValue: t('common.error') }) : t('common.error'));
     } finally {
       setLoading(false);
     }

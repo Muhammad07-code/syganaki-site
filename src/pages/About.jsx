@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Award, Eye, Library, ShieldCheck, Target, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { getInstituteContent } from '../data/instituteContent';
 
 const PageHero = ({ title, subtitle }) => (
   <section className="relative overflow-hidden bg-primary-dark pb-16 pt-32 text-white sm:pt-40">
@@ -17,14 +18,15 @@ const PageHero = ({ title, subtitle }) => (
 );
 
 const About = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const institute = getInstituteContent(i18n.language);
   const values = t('about.values', { returnObjects: true });
   const stats = t('stats', { returnObjects: true });
   const benefits = t('benefits', { returnObjects: true });
 
   return (
     <div className="bg-background">
-      <PageHero title={t('about.title')} subtitle={t('about.subtitle')} />
+      <PageHero title={t('about.title')} subtitle={institute.aboutText} />
 
       <section className="section-y bg-white">
         <div className="container-custom grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
@@ -41,9 +43,9 @@ const About = () => {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-            <p className="section-eyebrow">{t('about.history_title')}</p>
-            <h2 className="section-title">{t('about.history_title')}</h2>
-            <p className="section-copy mt-6">{t('about.history')}</p>
+            <p className="section-eyebrow">{institute.aboutEyebrow}</p>
+            <h2 className="section-title">{institute.aboutTitle}</h2>
+            <p className="section-copy mt-6">{institute.aboutText}</p>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               <div className="premium-card p-6">

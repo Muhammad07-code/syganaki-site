@@ -1,5 +1,6 @@
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db, isFirebaseConfigured } from '../firebase/config';
+import { getInstituteContent } from '../data/instituteContent';
 
 export const askAssistant = async ({ message, language }) => {
   const endpoint = import.meta.env.VITE_AI_ASSISTANT_ENDPOINT;
@@ -14,8 +15,8 @@ export const askAssistant = async ({ message, language }) => {
       const text = message.toLowerCase();
       const match = faqs.find(f => text.includes(f.question.toLowerCase()));
       if (match) return match.answer;
-    } catch (e) {
-      console.error("Assistant local search error:", e);
+    } catch {
+      // Keep backend details out of the public UI.
     }
   }
 
@@ -34,22 +35,23 @@ export const askAssistant = async ({ message, language }) => {
   });
 
   if (!response.ok) {
-    throw new Error(`Assistant API responded with ${response.status}`);
+    throw new Error('assistant_unavailable');
   }
 
   const data = await response.json();
   return data.answer || data.message || null;
 };
 
-export const localAssistantAnswer = (question, t) => {
+export const localAssistantAnswer = (question, t, language = 'kz') => {
   const text = question.toLowerCase();
+  const institute = getInstituteContent(language);
 
   if (text.includes('қабыл') || text.includes('поступ') || text.includes('admission') || text.includes('قبول')) {
     return `${t('admission.steps.0.title')}: ${t('admission.steps.0.desc')} ${t('admission.steps.1.title')}: ${t('admission.steps.1.desc')}`;
   }
 
   if (text.includes('program') || text.includes('бағдар') || text.includes('программ') || text.includes('برنامج')) {
-    const programs = t('programs.items', { returnObjects: true });
+    const programs = institute.programs;
     return Array.isArray(programs)
       ? programs.map((item) => item.title).join(' • ')
       : t('assistant.fallback');

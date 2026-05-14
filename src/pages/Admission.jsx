@@ -4,12 +4,14 @@ import { CheckCircle2, FileText, Loader2, MessageCircle, Send, ShieldCheck } fro
 import { useTranslation } from 'react-i18next';
 import { buildWhatsAppLink, saveApplication } from '../services/formService';
 import { fetchDataList } from '../services/dataService';
+import { getInstituteContent } from '../data/instituteContent';
 
 const WHATSAPP_NUMBER = '+77771764131';
 
 const Admission = () => {
   const { t, i18n } = useTranslation();
-  const fallbackPrograms = t('programs.items', { returnObjects: true }) || [];
+  const institute = getInstituteContent(i18n.language);
+  const fallbackPrograms = institute.programs;
   const [programs, setPrograms] = useState([]);
   const [loadingPrograms, setLoadingPrograms] = useState(true);
 
@@ -57,12 +59,12 @@ const Admission = () => {
     try {
       await saveApplication(formData);
       setSubmitted(true);
+      const firstProgram = programs[0]?.title || fallbackPrograms[0]?.title || '';
       const message = `${t('admission.whatsapp_text')}\n\n${t('admission.name')}: ${formData.fullName}\n${t('admission.phone')}: ${formData.phone}\n${t('admission.program')}: ${formData.program}`;
       window.open(buildWhatsAppLink(WHATSAPP_NUMBER, message), '_blank', 'noopener,noreferrer');
       setFormData({ fullName: '', phone: '', program: firstProgram, message: '' });
     } catch (err) {
-      console.error(err);
-      setError(t('common.error'));
+      setError(err.message === 'rate_limited' ? t('common.too_many_requests', { defaultValue: t('common.error') }) : t('common.error'));
     } finally {
       setLoading(false);
     }

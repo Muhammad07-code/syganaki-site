@@ -48,12 +48,12 @@ const AIAssistant = () => {
       const apiAnswer = await askAssistant({ message: text, language: i18n.language });
       setMessages((current) => [
         ...current,
-        { role: 'assistant', content: apiAnswer || localAssistantAnswer(text, t) },
+        { role: 'assistant', content: apiAnswer || localAssistantAnswer(text, t, i18n.language) },
       ]);
     } catch {
       setMessages((current) => [
         ...current,
-        { role: 'assistant', content: localAssistantAnswer(text, t) },
+        { role: 'assistant', content: localAssistantAnswer(text, t, i18n.language) },
       ]);
     } finally {
       setLoading(false);

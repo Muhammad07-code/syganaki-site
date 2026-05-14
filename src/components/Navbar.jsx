@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   ChevronDown,
-  Globe2,
   Instagram,
   Mail,
   MapPin,
@@ -64,6 +63,7 @@ const Navbar = () => {
   const currentLanguage =
     languages.find((language) => language.code === i18n.language) || languages[0];
   const isLight = scrolled;
+  const direction = i18n.language === 'ar' ? 'rtl' : 'ltr';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -99,7 +99,7 @@ const Navbar = () => {
   return (
     <>
       <div
-        dir="ltr"
+        dir={direction}
         className={`fixed inset-x-0 top-0 z-50 hidden border-b transition-all duration-500 lg:block ${
           scrolled
             ? '-translate-y-full border-transparent bg-primary-dark/0'
@@ -134,7 +134,7 @@ const Navbar = () => {
       </div>
 
       <header
-        dir="ltr"
+        dir={direction}
         className={`fixed inset-x-0 z-50 transition-all duration-500 ${
           isLight
             ? 'top-0 border-b border-slate-200/80 bg-white/95 shadow-[0_18px_60px_rgba(5,24,17,0.08)] backdrop-blur-xl'
@@ -270,7 +270,7 @@ const Navbar = () => {
               className={`flex h-11 w-11 items-center justify-center rounded-lg lg:hidden ${
                 isLight ? 'bg-primary/5 text-primary' : 'bg-white/10 text-white backdrop-blur-xl'
               }`}
-              aria-label="Open menu"
+              aria-label={t('common.open_menu', { defaultValue: 'Open menu' })}
             >
               <Menu size={23} />
             </button>
@@ -305,7 +305,7 @@ const Navbar = () => {
                   type="button"
                   onClick={() => setMenuOpen(false)}
                   className="rounded-lg hover:bg-slate-100 p-2 text-primary transition-colors"
-                  aria-label="Close menu"
+                  aria-label={t('common.close_menu', { defaultValue: 'Close menu' })}
                 >
                   <X size={20} />
                 </button>
@@ -327,7 +327,7 @@ const Navbar = () => {
 
               <div className="border-t border-slate-100 bg-slate-50 p-4 space-y-3">
                 <div>
-                  <p className="text-xs font-bold text-slate-600 mb-2">LANGUAGE</p>
+                  <p className="text-xs font-bold text-slate-600 mb-2">{t('common.language', { defaultValue: 'Language' })}</p>
                   <LanguagePills
                     languages={languages}
                     currentLanguage={currentLanguage}

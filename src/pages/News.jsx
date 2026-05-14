@@ -5,11 +5,21 @@ import { ArrowRight, CalendarDays, Search } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { fetchNewsList } from '../services/newsService';
 import { normalizeText } from '../utils/formatDate';
+import { getInstituteContent } from '../data/instituteContent';
 
 const News = () => {
   const { t, i18n } = useTranslation();
-  const fallback = useMemo(() => t('news.fallback', { returnObjects: true }), [t, i18n.language]);
-  const categories = useMemo(() => t('news.categories', { returnObjects: true }), [t, i18n.language]);
+  const institute = getInstituteContent(i18n.language);
+  const fallback = useMemo(() => institute.events.map(([title, excerpt, image], index) => ({
+    id: `event-${index + 1}`,
+    title,
+    excerpt,
+    image,
+    date: '2025',
+    category: institute.eventEyebrow,
+    content: `<p>${excerpt}</p>`,
+  })), [i18n.language]);
+  const categories = useMemo(() => [t('common.all'), institute.eventEyebrow], [t, i18n.language]);
   const [news, setNews] = useState(fallback);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');

@@ -14,6 +14,7 @@ import {
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, isFirebaseConfigured, storage } from '../firebase/config';
 import { formatDate } from '../utils/formatDate';
+import { validateImageFile } from '../utils/security';
 
 const NEWS_COLLECTION = 'news';
 const localKey = 'syganaki-news';
@@ -126,6 +127,8 @@ export const deleteNewsArticle = (id) => {
 };
 
 export const uploadNewsImage = async (file) => {
+  validateImageFile(file);
+
   const toBase64 = (f) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();

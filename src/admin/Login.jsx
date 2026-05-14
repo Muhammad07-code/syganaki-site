@@ -22,9 +22,8 @@ const Login = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       navigate('/admin');
-    } catch (err) {
-      console.error(err);
-      setError(t('admin.login_error') || 'Email немесе құпиясөз қате');
+    } catch {
+      setError(t('admin.login_error', { defaultValue: 'Invalid email or password' }));
     } finally {
       setLoading(false);
     }
@@ -33,7 +32,7 @@ const Login = () => {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     if (!email) {
-      setError(t('admin.email_required') || 'Email енгізіңіз');
+      setError(t('admin.email_required', { defaultValue: 'Enter email' }));
       return;
     }
     setLoading(true);
@@ -41,9 +40,8 @@ const Login = () => {
     try {
       await sendPasswordResetEmail(auth, email);
       setResetSent(true);
-    } catch (err) {
-      console.error(err);
-      setError(t('admin.reset_error') || 'Қате орын алды. Email дұрыстығын тексеріңіз');
+    } catch {
+      setError(t('admin.reset_error', { defaultValue: 'Something went wrong. Check the email address.' }));
     } finally {
       setLoading(false);
     }
@@ -70,9 +68,9 @@ const Login = () => {
                 <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-accent-gold/10 text-accent-gold">
                   <Mail size={30} />
                 </div>
-                <h1 className="text-3xl font-bold">{t('admin.forgot_password')}</h1>
+                <h1 className="text-3xl font-bold">{t('admin.forgot_password', { defaultValue: 'Password recovery' })}</h1>
                 <p className="mt-2 text-sm leading-6 text-slate-500">
-                  Құпиясөзді қалпына келтіру сілтемесін алу үшін email мекенжайыңызды енгізіңіз
+                  {t('admin.forgot_password_hint', { defaultValue: 'Enter your email to receive a password reset link.' })}
                 </p>
               </div>
 
@@ -80,7 +78,7 @@ const Login = () => {
 
               <form onSubmit={handleResetPassword} className="space-y-6">
                 <label className="block">
-                  <span className="mb-2 block text-xs font-extrabold uppercase tracking-widest text-slate-500">Email Мекенжай</span>
+                  <span className="mb-2 block text-xs font-extrabold uppercase tracking-widest text-slate-500">{t('admin.email', { defaultValue: 'Email address' })}</span>
                   <div className="relative">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                     <input
@@ -94,9 +92,9 @@ const Login = () => {
                   </div>
                 </label>
 
-                <button type="submit" disabled={loading} className="btn-gold w-full flex items-center justify-center gap-3 py-4 shadow-xl shadow-accent-gold/20">
+                <button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-3 py-4 shadow-xl shadow-accent-gold/20">
                   {loading ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
-                  Жіберу
+                  {t('common.send')}
                 </button>
               </form>
             </>
@@ -105,15 +103,15 @@ const Login = () => {
               <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-100 text-green-600">
                 <Send size={32} />
               </div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Сәтті жіберілді!</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">{t('admin.reset_sent', { defaultValue: 'Successfully sent!' })}</h2>
               <p className="text-slate-500 mb-8">
-                {email} мекенжайына құпиясөзді ауыстыру нұсқаулығы жіберілді. Поштаңызды тексеріңіз.
+                {email} - {t('admin.reset_sent_desc', { defaultValue: 'Password reset instructions were sent to your email. Check your inbox.' })}
               </p>
               <button
                 onClick={() => setIsForgotPassword(false)}
                 className="btn-primary w-full"
               >
-                Кіру бетіне оралу
+                {t('admin.return_login', { defaultValue: 'Return to login' })}
               </button>
             </div>
           )}
@@ -162,7 +160,7 @@ const Login = () => {
                 onClick={() => setIsForgotPassword(true)}
                 className="text-xs font-bold text-primary hover:text-accent-gold transition-colors"
               >
-                Құпиясөзді ұмыттыңыз ба?
+                {t('admin.forgot_password_link', { defaultValue: 'Forgot password?' })}
               </button>
             </div>
             <div className="relative">

@@ -19,11 +19,13 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { auth, db, isFirebaseConfigured } from '../firebase/config';
+import { hasAdminAccess } from '../services/adminAuth';
 
 const AdminLayout = () => {
   const { t } = useTranslation();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [accessDenied, setAccessDenied] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [counts, setCounts] = useState({ applications: 0, inquiries: 0 });
   const navigate = useNavigate();
@@ -60,11 +62,22 @@ const AdminLayout = () => {
   ];
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (!currentUser) {
         navigate('/admin/login');
       } else {
-        setUser(currentUser);
+        try {
+          const allowed = await hasAdminAccess(currentUser);
+          if (!allowed) {
+            setAccessDenied(true);
+            await signOut(auth);
+          } else {
+            setUser(currentUser);
+          }
+        } catch {
+          setAccessDenied(true);
+          await signOut(auth);
+        }
       }
       setLoading(false);
     });
@@ -80,6 +93,18 @@ const AdminLayout = () => {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50">
         <div className="h-12 w-12 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (accessDenied) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
+        <div className="premium-panel max-w-md bg-white p-8 text-center">
+          <h1 className="text-2xl font-bold text-primary-dark">{t('admin.unauthorized', { defaultValue: 'You do not have access to this section.' })}</h1>
+          <p className="mt-3 text-sm leading-7 text-slate-600">{t('admin.security_note', { defaultValue: 'Admin access is protected by Firebase Auth and the admin role.' })}</p>
+          <Link to="/admin/login" className="btn-primary mt-6">{t('admin.login')}</Link>
+        </div>
       </div>
     );
   }
@@ -185,4 +210,3 @@ const AdminLayout = () => {
 };
 
 export default AdminLayout;
-

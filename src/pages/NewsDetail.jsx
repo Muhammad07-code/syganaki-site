@@ -4,11 +4,22 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, CalendarDays, Share2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { fetchNewsArticle } from '../services/newsService';
+import { getInstituteContent } from '../data/instituteContent';
+import { sanitizeHtml } from '../utils/security';
 
 const NewsDetail = () => {
   const { id } = useParams();
   const { t, i18n } = useTranslation();
-  const fallback = useMemo(() => t('news.fallback', { returnObjects: true }), [t, i18n.language]);
+  const institute = getInstituteContent(i18n.language);
+  const fallback = useMemo(() => institute.events.map(([title, excerpt, image], index) => ({
+    id: `event-${index + 1}`,
+    title,
+    excerpt,
+    image,
+    date: '2025',
+    category: institute.eventEyebrow,
+    content: `<p>${excerpt}</p>`,
+  })), [i18n.language]);
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -81,7 +92,7 @@ const NewsDetail = () => {
                 className="btn-ghost mt-5 w-full"
               >
                 <Share2 size={16} />
-                Share
+                {t('common.share', { defaultValue: 'Share' })}
               </button>
             </div>
           </aside>
@@ -91,7 +102,7 @@ const NewsDetail = () => {
             <div className="premium-panel bg-white p-6 sm:p-10">
               <div
                 className="prose prose-slate max-w-none prose-p:leading-8 prose-p:text-slate-700 prose-a:text-primary prose-strong:text-primary-dark"
-                dangerouslySetInnerHTML={{ __html: article.content || `<p>${article.excerpt}</p>` }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.content || `<p>${article.excerpt}</p>`) }}
               />
             </div>
           </motion.div>

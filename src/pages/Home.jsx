@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ArrowRight,
+  Award,
+  Bed,
   BookOpen,
+  Briefcase,
   CalendarDays,
   CheckCircle2,
   GraduationCap,
@@ -11,17 +14,12 @@ import {
   Play,
   Quote,
   Sparkles,
+  Utensils,
   Users,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import FAQ from '../sections/FAQ';
-import InstituteAbout from '../sections/InstituteAbout';
-import Advantages from '../sections/Advantages';
-import StaffSection from '../sections/StaffSection';
-import PartnersSection from '../sections/PartnersSection';
-import EventsSection from '../sections/EventsSection';
-import GraduatesSection from '../sections/GraduatesSection';
-import CurriculumSection from '../sections/CurriculumSection';
+import { getInstituteContent } from '../data/instituteContent';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 26 },
@@ -43,13 +41,22 @@ const SectionHeader = ({ eyebrow, title, description, action, titleClassName = '
 );
 
 const Home = () => {
-  const { t } = useTranslation();
-  const heroCards = t('hero.cards', { returnObjects: true });
-  const programs = t('programs.items', { returnObjects: true });
+  const { t, i18n } = useTranslation();
+  const institute = getInstituteContent(i18n.language);
+  const heroCards = institute.stats;
+  const programs = institute.programs;
   const benefits = t('benefits', { returnObjects: true });
-  const news = t('news.fallback', { returnObjects: true });
-  const gallery = t('gallery.items', { returnObjects: true });
+  const news = institute.events.map(([title, excerpt, image], index) => ({
+    id: `event-${index + 1}`,
+    title,
+    excerpt,
+    image,
+    date: index === 3 ? '2025' : '2025',
+    category: institute.eventEyebrow,
+  }));
+  const gallery = institute.gallery;
   const testimonials = t('testimonials', { returnObjects: true });
+  const aboutIcons = [BookOpen, Bed, Utensils, Award];
 
   return (
     <div className="overflow-hidden bg-background">
@@ -66,25 +73,15 @@ const Home = () => {
 
         <div className="container-custom relative z-10 flex min-h-[660px] flex-col justify-center pb-40 pt-16 sm:pb-48 lg:pt-24">
           <motion.div initial="hidden" animate="visible" variants={fadeUp} transition={{ duration: 0.7 }} className="max-w-4xl">
-            <p className="section-eyebrow text-accent-gold">{t('hero.badge')}</p>
-            <h1 className="max-w-4xl text-balance font-serif text-4xl font-extrabold leading-[1.08] text-white sm:text-5xl lg:text-6xl xl:text-7xl">
-              {t('hero.title')}
+            <p className="section-eyebrow text-accent-gold">{institute.heroBadge}</p>
+            <h1 className="max-w-4xl break-words font-serif text-3xl font-extrabold leading-[1.12] text-white [overflow-wrap:anywhere] sm:text-5xl lg:text-6xl xl:text-7xl">
+              {institute.heroTitle}
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-white/78 sm:text-lg">
-              {t('hero.subtitle')}
+              {institute.heroSubtitle}
             </p>
-            <p className="mt-4 max-w-3xl text-sm leading-7 text-white/70 sm:text-base">
-              Исламское образование · Арабский язык · классические исламские науки · бесплатное обучение · общежитие · стипендия
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              {['Тегін оқу', 'Жатақхана', '3 мезгіл тамақ', 'Шәкіртақы'].map((badge) => (
-                <span key={badge} className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white shadow-sm backdrop-blur-xl">
-                  {badge}
-                </span>
-              ))}
-            </div>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link to="/programs" className="btn-primary">
                 <BookOpen size={18} />
                 {t('hero.primary')}
@@ -104,30 +101,54 @@ const Home = () => {
       <div className="relative z-20 -mt-20 px-4 sm:-mt-24 lg:-mt-28">
         <div className="container-custom">
           <div className="premium-panel grid grid-cols-2 gap-px overflow-hidden bg-slate-200/70 shadow-xl lg:grid-cols-4">
-            {heroCards.map((card, index) => (
-              <div key={card.label} className="bg-white/94 p-5 sm:p-6 lg:p-7">
-                <p className="font-serif text-3xl font-extrabold text-primary-dark sm:text-4xl">{card.value}</p>
-                <p className="mt-2 text-xs font-bold uppercase tracking-[0.12em] text-slate-500">{card.label}</p>
+            {heroCards.map(([value, label], index) => (
+              <div key={label} className="bg-white/94 p-5 sm:p-6 lg:p-7">
+                <p className="font-serif text-3xl font-extrabold text-primary-dark sm:text-4xl">{value}</p>
+                <p className="mt-2 text-xs font-bold uppercase tracking-[0.12em] text-slate-500">{label}</p>
                 <div className="mt-4 h-1 w-10 rounded-full bg-accent-gold" style={{ opacity: 1 - index * 0.12 }} />
               </div>
             ))}
           </div>
         </div>
       </div>
-
-      <InstituteAbout />
-      <Advantages />
-      <CurriculumSection />
-      <StaffSection />
-      <PartnersSection />
-      <EventsSection />
-      <GraduatesSection />
+      <section className="section-y bg-background">
+        <div className="container-custom grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }} variants={fadeUp} className="relative">
+            <img src="/institute/library.jpeg" alt={institute.aboutTitle} loading="lazy" className="aspect-[4/3] w-full rounded-lg object-cover shadow-2xl" />
+            <div className="premium-panel absolute bottom-5 left-5 right-5 grid grid-cols-2 gap-px overflow-hidden bg-slate-200/70 sm:grid-cols-4">
+              {institute.stats.map(([value, label]) => (
+                <div key={label} className="bg-white/94 p-4 text-center">
+                  <p className="font-serif text-2xl font-extrabold text-primary-dark">{value}</p>
+                  <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.1em] text-slate-500">{label}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }} variants={fadeUp}>
+            <p className="section-eyebrow">{institute.aboutEyebrow}</p>
+            <h2 className="section-title text-balance">{institute.aboutTitle}</h2>
+            <p className="section-copy mt-5">{institute.aboutText}</p>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              {institute.aboutPoints.map(([title, desc], index) => {
+                const Icon = aboutIcons[index] || CheckCircle2;
+                return (
+                  <div key={title} className="premium-card p-5">
+                    <Icon className="mb-4 text-accent-gold" size={28} />
+                    <h3 className="text-lg font-bold">{title}</h3>
+                    <p className="mt-2 text-sm leading-7 text-slate-600">{desc}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
       <section className="section-y bg-white">
         <div className="container-custom">
           <SectionHeader
-            eyebrow={t('home.programs_eyebrow')}
-            title={t('home.programs_title')}
+            eyebrow={institute.programEyebrow}
+            title={institute.programTitle}
             description={t('home.programs_desc')}
             action={<Link to="/programs" className="btn-ghost">{t('common.all')}<ArrowRight size={16} /></Link>}
           />
@@ -183,6 +204,57 @@ const Home = () => {
         </div>
       </section>
 
+      <section className="section-y bg-white">
+        <div className="container-custom">
+          <SectionHeader eyebrow={institute.teacherEyebrow} title={institute.teacherTitle} description={institute.teacherText} />
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {institute.teachers.map((teacher, index) => (
+              <motion.article key={teacher.name} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ delay: index * 0.04 }} className="premium-card overflow-hidden">
+                <div className="aspect-[4/3] overflow-hidden bg-slate-100">
+                  <img src={teacher.image} alt={teacher.name} loading="lazy" className="h-full w-full object-cover object-top transition-transform duration-700 hover:scale-105" />
+                </div>
+                <div className="p-5">
+                  <h3 className="line-clamp-2 text-xl font-bold text-primary-dark">{teacher.name}</h3>
+                  <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">{teacher.role}</p>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-y bg-background">
+        <div className="container-custom">
+          <SectionHeader eyebrow={institute.graduatesEyebrow} title={institute.graduatesTitle} description={institute.graduatesText} />
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {institute.stats.map(([value, label], index) => (
+              <motion.div key={label} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ delay: index * 0.04 }} className="premium-panel bg-white p-6">
+                <Briefcase className="mb-5 text-accent-gold" size={30} />
+                <p className="font-serif text-4xl font-extrabold text-primary-dark">{value}</p>
+                <p className="mt-2 text-sm font-bold text-slate-600">{label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-y bg-white">
+        <div className="container-custom">
+          <SectionHeader eyebrow={institute.eventEyebrow} title={institute.eventTitle} />
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {institute.events.map(([title, desc, image], index) => (
+              <motion.article key={title} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ delay: index * 0.04 }} className="premium-card overflow-hidden">
+                <img src={image} alt={title} loading="lazy" className="aspect-[16/10] w-full object-cover" />
+                <div className="p-5">
+                  <h3 className="line-clamp-2 text-xl font-bold">{title}</h3>
+                  <p className="mt-3 line-clamp-3 text-sm leading-7 text-slate-600">{desc}</p>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="section-y bg-background">
         <div className="container-custom">
           <SectionHeader
@@ -214,7 +286,7 @@ const Home = () => {
 
       <section className="section-y bg-white">
         <div className="container-custom">
-          <SectionHeader eyebrow={t('home.gallery_eyebrow')} title={t('home.gallery_title')} action={<Link to="/gallery" className="btn-ghost">{t('nav.gallery')}<ArrowRight size={16} /></Link>} />
+          <SectionHeader eyebrow={t('home.gallery_eyebrow')} title={institute.galleryTitle || t('home.gallery_title')} action={<Link to="/gallery" className="btn-ghost">{t('nav.gallery')}<ArrowRight size={16} /></Link>} />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {gallery.slice(0, 4).map((item, index) => (
               <motion.div key={item.title} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ delay: index * 0.04 }} className="group relative aspect-[4/5] overflow-hidden rounded-lg">
