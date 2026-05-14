@@ -15,6 +15,13 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import FAQ from '../sections/FAQ';
+import InstituteAbout from '../sections/InstituteAbout';
+import Advantages from '../sections/Advantages';
+import StaffSection from '../sections/StaffSection';
+import PartnersSection from '../sections/PartnersSection';
+import EventsSection from '../sections/EventsSection';
+import GraduatesSection from '../sections/GraduatesSection';
+import CurriculumSection from '../sections/CurriculumSection';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 26 },
@@ -66,8 +73,18 @@ const Home = () => {
             <p className="mt-6 max-w-2xl text-base leading-8 text-white/78 sm:text-lg">
               {t('hero.subtitle')}
             </p>
+            <p className="mt-4 max-w-3xl text-sm leading-7 text-white/70 sm:text-base">
+              Исламское образование · Арабский язык · классические исламские науки · бесплатное обучение · общежитие · стипендия
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              {['Тегін оқу', 'Жатақхана', '3 мезгіл тамақ', 'Шәкіртақы'].map((badge) => (
+                <span key={badge} className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white shadow-sm backdrop-blur-xl">
+                  {badge}
+                </span>
+              ))}
+            </div>
 
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link to="/programs" className="btn-primary">
                 <BookOpen size={18} />
                 {t('hero.primary')}
@@ -98,7 +115,13 @@ const Home = () => {
         </div>
       </div>
 
-
+      <InstituteAbout />
+      <Advantages />
+      <CurriculumSection />
+      <StaffSection />
+      <PartnersSection />
+      <EventsSection />
+      <GraduatesSection />
 
       <section className="section-y bg-white">
         <div className="container-custom">

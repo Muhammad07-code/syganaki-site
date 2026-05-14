@@ -1,25 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowRight, BookOpen, CheckCircle2, Clock, GraduationCap, Layers, Loader2 } from 'lucide-react';
+import { ArrowRight, BookOpen, Clock, GraduationCap, Layers, ShieldCheck, Globe2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { fetchDataList } from '../services/dataService';
+
+const islamicSciences = [
+  {
+    year: '1-ші жыл',
+    title: 'Подготовительный курс',
+    description: 'Фундаментальные дисциплины для уверенного старта в классическом исламском образовании.',
+    topics: ['Арабский язык', 'Тафсир', 'Уставы учебы'],
+  },
+  {
+    year: '2-ші жыл',
+    title: 'Негізгі ислам ғылымдары',
+    description: 'Глубокое изучение фикха, хадиса и акиды в академическом формате.',
+    topics: ['Фиқх', 'Хадис', 'Акида'],
+  },
+  {
+    year: '3-ші жыл',
+    title: 'Практическая подготовка',
+    description: 'Заключительный этап с исследовательской работой и общественным служением.',
+    topics: ['Коран', 'Ижазалық практика', 'Социальная деятельность'],
+  },
+];
+
+const quranProgram = {
+  duration: '1 жыл',
+  title: 'Құран ижазасы',
+  description: 'Интенсивная программа для заучивания Корана, изучения таджвида и подготовки к официальной ижазе.',
+  points: ['Таджвид', 'Жадығару', 'Құран ғылымдары', 'Араб тілі'],
+};
 
 const Programs = () => {
-  const { t, i18n } = useTranslation();
-  const fallbackPrograms = t('programs.items', { returnObjects: true }) || [];
-  const [programs, setPrograms] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadPrograms = async () => {
-      setLoading(true);
-      const data = await fetchDataList('programs', fallbackPrograms, i18n.language);
-      setPrograms(data);
-      setLoading(false);
-    };
-    loadPrograms();
-  }, [i18n.language]);
+  const { t } = useTranslation();
 
   return (
     <div className="bg-background">
@@ -34,100 +47,111 @@ const Programs = () => {
         </div>
       </section>
 
-      <section className="section-y">
-        <div className="container-custom space-y-8">
-          {loading ? (
-            <div className="flex justify-center py-20">
-              <Loader2 className="animate-spin text-accent-gold" size={40} />
-            </div>
-          ) : (
-            programs.map((program, index) => (
-              <motion.article
-                key={program.id || index}
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-90px' }}
-                transition={{ delay: index * 0.04 }}
-                className="premium-card overflow-hidden"
-              >
-                <div className="grid lg:grid-cols-[0.85fr_1.15fr]">
-                  <div className="relative min-h-[320px] overflow-hidden bg-primary-dark">
-                    <img src={program.image} alt={program.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-85 transition-transform duration-700 hover:scale-105" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary-dark via-primary-dark/40 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-7 text-white">
-                      <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent-gold text-primary-dark shadow-xl">
-                        <GraduationCap size={24} />
-                      </span>
-                      <h2 className="font-serif text-3xl font-bold text-white">{program.title}</h2>
-                      <p className="mt-3 max-w-md text-sm leading-7 text-white/72">{program.desc}</p>
-                    </div>
-                  </div>
+      <section className="section-y bg-white">
+        <div className="container-custom">
+          <div className="mb-10 max-w-2xl">
+            <p className="section-eyebrow">Ислам ғылымдері</p>
+            <h2 className="section-title">3 года системной подготовки в классических исламских науках</h2>
+            <p className="mt-4 text-base leading-8 text-slate-600">
+              Программа включает арабский язык, тафсир, хадис, фикх и акиду, предоставляя глубокое знание и академическую дисциплину.
+            </p>
+          </div>
 
-                  <div className="p-6 sm:p-8 lg:p-10">
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      <div className="rounded-2xl bg-accent-lightGold/50 border border-accent-gold/10 p-5">
-                        <div className="mb-2 flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-primary">
-                          <Clock size={16} className="text-accent-gold" />
-                          {t('programs.duration')}
-                        </div>
-                        <p className="font-bold text-primary-dark text-lg">{program.duration}</p>
-                      </div>
-                      <div className="rounded-2xl bg-slate-50 border border-slate-100 p-5">
-                        <div className="mb-2 flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-primary">
-                          <Layers size={16} className="text-accent-gold" />
-                          {t('programs.format')}
-                        </div>
-                        <p className="font-bold text-primary-dark text-lg">{program.format}</p>
-                      </div>
-                    </div>
-
-                    <div className="mt-8 grid gap-8 md:grid-cols-2">
-                      {program.subjects && Array.isArray(program.subjects) && (
-                        <div>
-                          <h3 className="mb-5 flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-primary/40">
-                            <BookOpen size={16} />
-                            {t('programs.subjects')}
-                          </h3>
-                          <ul className="space-y-3">
-                            {program.subjects.map((subject) => (
-                              <li key={subject} className="flex gap-3 text-sm font-bold text-slate-600">
-                                <CheckCircle2 size={18} className="shrink-0 text-accent-gold" />
-                                {subject}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-
-                      {program.opportunities && Array.isArray(program.opportunities) && (
-                        <div>
-                          <h3 className="mb-5 flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-primary/40">
-                            <CheckCircle2 size={16} />
-                            {t('programs.opportunities')}
-                          </h3>
-                          <ul className="space-y-3">
-                            {program.opportunities.map((opportunity) => (
-                              <li key={opportunity} className="flex gap-3 text-sm font-bold text-slate-600">
-                                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-gold" />
-                                {opportunity}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="mt-10 border-t border-slate-100 pt-8">
-                      <Link to="/admission" className="btn-gold !w-full sm:!w-auto !py-4">
-                        {t('programs.apply')}
-                        <ArrowRight size={18} />
-                      </Link>
-                    </div>
-                  </div>
+          <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+            <div className="relative overflow-hidden rounded-[32px] border border-slate-200 bg-slate-50 p-8">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(202,164,93,0.12),transparent_40%)]" />
+              <div className="relative">
+                <div className="mb-8 rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
+                  <p className="text-xs uppercase tracking-[0.28em] text-accent-gold">Курс құрылымы</p>
+                  <h3 className="mt-4 text-2xl font-semibold text-slate-900">Учебная последовательность по годам</h3>
                 </div>
-              </motion.article>
-            ))
-          )}
+                <div className="space-y-6">
+                  {islamicSciences.map((item, index) => (
+                    <div key={item.year} className="flex gap-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-accent-gold text-white text-sm font-bold shadow-sm">
+                        {item.year}
+                      </div>
+                      <div>
+                        <p className="text-sm uppercase tracking-[0.24em] text-slate-500">{item.year}</p>
+                        <h4 className="mt-2 text-xl font-semibold text-slate-900">{item.title}</h4>
+                        <p className="mt-3 text-sm leading-7 text-slate-600">{item.description}</p>
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {item.topics.map((topic) => (
+                            <span key={topic} className="rounded-full bg-primary/5 px-3 py-1 text-xs font-semibold text-primary-dark">{topic}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-6">
+              {islamicSciences.map((item) => (
+                <article key={item.title} className="premium-card p-8">
+                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-3xl bg-primary/5 text-primary-dark">
+                    <GraduationCap size={22} />
+                  </div>
+                  <h3 className="text-2xl font-semibold text-slate-900">{item.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-slate-600">{item.description}</p>
+                  <div className="mt-5 grid gap-2">
+                    {item.topics.map((topic) => (
+                      <div key={topic} className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">
+                        <span className="h-2.5 w-2.5 rounded-full bg-accent-gold" />
+                        {topic}
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section-y bg-slate-50">
+        <div className="container-custom">
+          <div className="mb-10 max-w-2xl">
+            <p className="section-eyebrow">Құран ижазасы</p>
+            <h2 className="section-title">Программа посвящена изучению Корана и таджвиду</h2>
+            <p className="mt-4 text-base leading-8 text-slate-600">
+              Одногодичная программа для глубокого изучения правил чтения, заучивания и науки о Коране.
+            </p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+            <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
+              <div className="mb-6 inline-flex items-center gap-3 rounded-3xl bg-accent-gold/10 px-4 py-3 text-sm font-semibold text-accent-gold">
+                <Globe2 size={18} /> 1 жыл
+              </div>
+              <h3 className="text-3xl font-semibold text-slate-900">{quranProgram.title}</h3>
+              <p className="mt-4 text-sm leading-7 text-slate-600">{quranProgram.description}</p>
+              <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                {quranProgram.points.map((point) => (
+                  <div key={point} className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+                    <p className="text-sm font-semibold text-slate-900">{point}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-[32px] bg-primary-dark p-8 text-white shadow-premium">
+              <div className="mb-6 inline-flex items-center gap-3 rounded-full bg-white/10 px-4 py-3 text-sm font-semibold text-white">
+                <BookOpen size={18} /> Арнайы программа
+              </div>
+              <p className="text-sm uppercase tracking-[0.24em] text-accent-gold">Құран ғылымдары</p>
+              <h3 className="mt-5 text-3xl font-semibold leading-tight">Профессиональная подготовка по чтению Корана</h3>
+              <div className="mt-6 space-y-4 text-sm leading-7 text-white/75">
+                <p>Глубокое заучивание Корана под руководством опытных преподавателей.</p>
+                <p>Изучение классических школ таджвида и кыраата.</p>
+                <p>Подготовка к официальной ижазе и публичному чтению.</p>
+              </div>
+              <Link to="/admission" className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent-gold px-6 py-3 text-sm font-semibold text-primary-dark transition-all hover:bg-[#d9b66d]">
+                Подать заявку
+                <ArrowRight size={16} />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </div>
