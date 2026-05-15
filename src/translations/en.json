@@ -10,6 +10,8 @@
     "programs": "Education",
     "admission": "Admission",
     "news": "News",
+    "teachers": "Faculty",
+    "partners": "Partners",
     "contacts": "Contacts",
     "gallery": "Gallery",
     "faq": "FAQ",
@@ -284,11 +286,15 @@
     "description": "An official educational institution combining traditional Islamic education, academic quality, and spiritual formation.",
     "navigation": "Navigation",
     "education": "Education",
+    "teachers": "Faculty",
+    "partners": "Partners",
     "contacts": "Contacts",
-    "copyright": "© 2026 Husamuddin as-Syganaqi Islamic Institute. All rights reserved.",
+    "copyright": "В© 2026 Husamuddin as-Syganaqi Islamic Institute. All rights reserved.",
     "privacy": "Privacy Policy",
     "offer": "Terms of Use"
   },
+    "teachers": { "title": "Our Faculty", "subtitle": "Experienced specialists with deep Islamic knowledge and academic credentials", "phd": "PhD Holders", "specialists": "Islamic Scholars", "experienced": "Years Average", "administration": "Administration", "quran": "Quranic Sciences", "islamic": "Islamic Studies", "languages": "Arabic Language" },
+  "partners": { "title": "Institutional Partnerships", "subtitle": "The institute collaborates with leading universities, organizations, and institutions worldwide", "international": "International Partners", "international_desc": "Global partnerships for academic cooperation", "national": "National Partners", "national_desc": "Collaborative institutions in Kazakhstan", "community": "Community Partners", "community_desc": "Local organizations and mosques" },
   "admin": {
     "login_title": "Admin Panel",
     "login_subtitle": "Private section for institute administration",
@@ -329,3 +335,5 @@
     "firebase_note": "Fill Firebase production environment variables before deployment."
   }
 }
+
+

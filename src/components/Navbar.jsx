@@ -10,6 +10,7 @@ import {
   Search,
   Send,
   X,
+  Globe,
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -36,25 +37,13 @@ const Navbar = () => {
   const navItems = useMemo(
     () => [
       { label: t('nav.home'), path: '/' },
-      {
-        label: t('nav.about'),
-        path: '/about',
-        children: [
-          { label: t('about.history_title'), path: '/about' },
-          { label: t('gallery.title'), path: '/gallery' },
-          { label: t('faq.title'), path: '/#faq' },
-        ],
-      },
-      {
-        label: t('nav.programs'),
-        path: '/programs',
-        children: t('programs.items', { returnObjects: true }).slice(0, 3).map((item) => ({
-          label: item.title,
-          path: '/programs',
-        })),
-      },
+      { label: t('nav.about'), path: '/about' },
+      { label: t('nav.programs'), path: '/programs' },
+      { label: t('nav.teachers'), path: '/teachers' },
+      { label: t('nav.partners'), path: '/partners' },
       { label: t('nav.admission'), path: '/admission' },
       { label: t('nav.news'), path: '/news' },
+      { label: t('nav.gallery'), path: '/gallery' },
       { label: t('nav.contacts'), path: '/contacts' },
     ],
     [t],
@@ -78,6 +67,14 @@ const Navbar = () => {
     setSearchOpen(false);
   }, [location.pathname]);
 
+  // Close language dropdown on outside click
+  useEffect(() => {
+    if (!langOpen) return;
+    const handleClick = () => setLangOpen(false);
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, [langOpen]);
+
   const changeLanguage = (code) => {
     i18n.changeLanguage(code);
     setLangOpen(false);
@@ -98,6 +95,7 @@ const Navbar = () => {
 
   return (
     <>
+      {/* ── Topbar ── */}
       <div
         dir={direction}
         className={`fixed inset-x-0 top-0 z-50 hidden border-b transition-all duration-500 lg:block ${
@@ -133,6 +131,7 @@ const Navbar = () => {
         </div>
       </div>
 
+      {/* ── Main header ── */}
       <header
         dir={direction}
         className={`fixed inset-x-0 z-50 transition-all duration-500 ${
@@ -141,8 +140,9 @@ const Navbar = () => {
             : 'top-0 bg-transparent lg:top-10'
         }`}
       >
-        <div className="container-custom flex h-20 items-center justify-between gap-4 lg:h-[86px]">
-          <Link to="/" onClick={handleLogoClick} className="flex min-w-0 items-center gap-3">
+        <div className="container-custom flex h-20 items-center justify-between gap-3 lg:h-[86px]">
+          {/* ── Logo ── */}
+          <Link to="/" onClick={handleLogoClick} className="flex shrink-0 items-center gap-3">
             <span
               className={`flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border p-1.5 transition-all ${
                 isLight
@@ -152,9 +152,9 @@ const Navbar = () => {
             >
               <img src="/logo.png" alt={t('brand.name')} className="h-full w-full object-contain" />
             </span>
-            <span className="min-w-0">
+            <span className="hidden min-w-0 sm:block">
               <span
-                className={`block truncate font-serif text-lg font-extrabold leading-tight sm:text-xl ${
+                className={`block truncate font-serif text-lg font-extrabold leading-tight ${
                   isLight ? 'text-primary-dark' : 'text-white'
                 }`}
               >
@@ -166,13 +166,14 @@ const Navbar = () => {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-1 lg:flex">
+          {/* ── Desktop nav ── */}
+          <nav className="hidden items-center gap-0.5 xl:flex">
             {navItems.map((item) => (
               <div key={item.path} className="group relative">
                 <NavLink
                   to={item.path}
                   className={({ isActive }) =>
-                    `flex min-h-[44px] items-center gap-1 whitespace-nowrap rounded-lg px-3 text-xs font-extrabold uppercase tracking-[0.08em] transition-all ${
+                    `flex min-h-[44px] items-center gap-1 whitespace-nowrap rounded-lg px-2.5 text-[11px] font-extrabold uppercase tracking-[0.06em] transition-all ${
                       isLight ? 'text-slate-700 hover:bg-primary/5' : 'text-white/90 hover:bg-white/10'
                     } ${isActive ? 'text-accent-gold' : ''}`
                   }
@@ -200,30 +201,34 @@ const Navbar = () => {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          {/* ── Right controls ── */}
+          <div className="flex shrink-0 items-center gap-2">
+            {/* Search button - desktop only */}
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
               aria-label={t('common.search')}
-              className={`hidden h-11 w-11 items-center justify-center rounded-lg lg:flex ${
+              className={`hidden h-11 w-11 items-center justify-center rounded-lg xl:flex ${
                 isLight ? 'text-slate-700 hover:bg-primary/5' : 'text-white hover:bg-white/10'
               }`}
             >
               <Search size={20} />
             </button>
 
-            <div className="relative hidden sm:block">
+            {/* ── Language switcher (always visible) ── */}
+            <div className="relative" onClick={(e) => e.stopPropagation()}>
               <button
                 type="button"
                 onClick={() => setLangOpen((value) => !value)}
-                className={`flex h-9 items-center gap-1.5 rounded-full px-3 text-xs font-bold transition-colors ${
+                className={`flex h-9 items-center gap-1.5 rounded-full px-2.5 text-xs font-bold transition-colors ${
                   isLight
                     ? 'text-slate-600 hover:bg-slate-100 hover:text-primary-dark'
                     : 'text-white/80 hover:bg-white/10 hover:text-white'
                 }`}
               >
+                <Globe size={16} className="opacity-70" />
                 {currentLanguage.short}
-                <ChevronDown size={14} className="opacity-70" />
+                <ChevronDown size={14} className={`opacity-70 transition-transform ${langOpen ? 'rotate-180' : ''}`} />
               </button>
 
               <AnimatePresence>
@@ -232,20 +237,22 @@ const Navbar = () => {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 8 }}
-                    className="premium-card absolute right-0 top-full mt-2 w-32 overflow-hidden p-1.5"
+                    className="premium-card absolute right-0 top-full mt-2 w-36 overflow-hidden p-1.5"
+                    style={{ zIndex: 100 }}
                   >
                     {languages.map((language) => (
                       <button
                         key={language.code}
                         type="button"
                         onClick={() => changeLanguage(language.code)}
-                        className={`flex w-full items-center justify-between rounded px-3 py-2 text-xs font-semibold transition-colors ${
+                        className={`flex w-full items-center justify-between rounded px-3 py-2.5 text-xs font-semibold transition-colors ${
                           currentLanguage.code === language.code
                             ? 'bg-primary/10 text-primary-dark'
                             : 'text-slate-600 hover:bg-slate-50 hover:text-primary'
                         }`}
                       >
-                        {language.label}
+                        <span>{language.label}</span>
+                        <span className="text-[10px] opacity-50">{language.short}</span>
                       </button>
                     ))}
                   </motion.div>
@@ -253,6 +260,7 @@ const Navbar = () => {
               </AnimatePresence>
             </div>
 
+            {/* Apply button - hidden on smaller screens */}
             <Link 
               to="/admission" 
               className={`hidden xl:inline-flex h-9 items-center justify-center rounded-full px-5 text-xs font-bold transition-all ${
@@ -264,13 +272,14 @@ const Navbar = () => {
               {t('nav.apply')}
             </Link>
 
+            {/* Mobile menu button */}
             <button
               type="button"
               onClick={() => setMenuOpen(true)}
-              className={`flex h-11 w-11 items-center justify-center rounded-lg lg:hidden ${
+              className={`flex h-11 w-11 items-center justify-center rounded-lg xl:hidden ${
                 isLight ? 'bg-primary/5 text-primary' : 'bg-white/10 text-white backdrop-blur-xl'
               }`}
-              aria-label={t('common.open_menu', { defaultValue: 'Open menu' })}
+              aria-label="Open menu"
             >
               <Menu size={23} />
             </button>
@@ -278,6 +287,7 @@ const Navbar = () => {
         </div>
       </header>
 
+      {/* ── Mobile sidebar ── */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -285,15 +295,17 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[90] bg-black/40 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-[90] bg-black/40 backdrop-blur-sm"
             onClick={() => setMenuOpen(false)}
           >
             <motion.aside
-              initial={{ x: '100%' }}
+              initial={{ x: direction === 'rtl' ? '-100%' : '100%' }}
               animate={{ x: 0 }}
-              exit={{ x: '100%' }}
+              exit={{ x: direction === 'rtl' ? '-100%' : '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 240 }}
-              className="safe-bottom ml-auto flex h-full w-full max-w-sm flex-col bg-white shadow-2xl overflow-hidden"
+              className={`safe-bottom flex h-full w-full max-w-sm flex-col bg-white shadow-2xl overflow-hidden ${
+                direction === 'rtl' ? 'mr-auto' : 'ml-auto'
+              }`}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
@@ -305,7 +317,7 @@ const Navbar = () => {
                   type="button"
                   onClick={() => setMenuOpen(false)}
                   className="rounded-lg hover:bg-slate-100 p-2 text-primary transition-colors"
-                  aria-label={t('common.close_menu', { defaultValue: 'Close menu' })}
+                  aria-label="Close menu"
                 >
                   <X size={20} />
                 </button>
@@ -327,7 +339,7 @@ const Navbar = () => {
 
               <div className="border-t border-slate-100 bg-slate-50 p-4 space-y-3">
                 <div>
-                  <p className="text-xs font-bold text-slate-600 mb-2">{t('common.language', { defaultValue: 'Language' })}</p>
+                  <p className="text-xs font-bold text-slate-600 mb-2">{t('admin.language', { defaultValue: '' }) || 'Тіл / Язык / Language'}</p>
                   <LanguagePills
                     languages={languages}
                     currentLanguage={currentLanguage}
@@ -349,6 +361,7 @@ const Navbar = () => {
         )}
       </AnimatePresence>
 
+      {/* ── Search overlay ── */}
       <AnimatePresence>
         {searchOpen && (
           <motion.div

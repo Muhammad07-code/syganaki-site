@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -6,7 +6,6 @@ import {
   Award,
   Bed,
   BookOpen,
-  Briefcase,
   CalendarDays,
   CheckCircle2,
   GraduationCap,
@@ -15,10 +14,8 @@ import {
   Quote,
   Sparkles,
   Utensils,
-  Users,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import FAQ from '../sections/FAQ';
 import { getInstituteContent } from '../data/instituteContent';
 
 const fadeUp = {
@@ -55,7 +52,6 @@ const Home = () => {
     category: institute.eventEyebrow,
   }));
   const gallery = institute.gallery;
-  const testimonials = t('testimonials', { returnObjects: true });
   const aboutIcons = [BookOpen, Bed, Utensils, Award];
 
   return (
@@ -90,12 +86,9 @@ const Home = () => {
                 {t('hero.secondary')}
                 <ArrowRight size={18} />
               </Link>
-
             </div>
           </motion.div>
-
         </div>
-
       </section>
 
       <div className="relative z-20 -mt-20 px-4 sm:-mt-24 lg:-mt-28">
@@ -111,25 +104,18 @@ const Home = () => {
           </div>
         </div>
       </div>
+
       <section className="section-y bg-background">
         <div className="container-custom grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }} variants={fadeUp} className="relative">
-            <img src="/institute/library.jpeg" alt={institute.aboutTitle} loading="lazy" className="aspect-[4/3] w-full rounded-lg object-cover shadow-2xl" />
-            <div className="premium-panel absolute bottom-5 left-5 right-5 grid grid-cols-2 gap-px overflow-hidden bg-slate-200/70 sm:grid-cols-4">
-              {institute.stats.map(([value, label]) => (
-                <div key={label} className="bg-white/94 p-4 text-center">
-                  <p className="font-serif text-2xl font-extrabold text-primary-dark">{value}</p>
-                  <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.1em] text-slate-500">{label}</p>
-                </div>
-              ))}
-            </div>
+            <img src="/institute/library.jpeg" alt={institute.aboutTitle} loading="lazy" className="aspect-[4/3] w-full rounded-3xl object-cover shadow-2xl" />
           </motion.div>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }} variants={fadeUp}>
             <p className="section-eyebrow">{institute.aboutEyebrow}</p>
             <h2 className="section-title text-balance">{institute.aboutTitle}</h2>
-            <p className="section-copy mt-5">{institute.aboutText}</p>
+            <p className="section-copy mt-5 max-w-2xl">{institute.aboutText}</p>
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              {institute.aboutPoints.map(([title, desc], index) => {
+              {institute.aboutPoints.slice(0, 4).map(([title, desc], index) => {
                 const Icon = aboutIcons[index] || CheckCircle2;
                 return (
                   <div key={title} className="premium-card p-5">
@@ -152,9 +138,8 @@ const Home = () => {
             description={t('home.programs_desc')}
             action={<Link to="/programs" className="btn-ghost">{t('common.all')}<ArrowRight size={16} /></Link>}
           />
-
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {programs.map((program, index) => (
+          <div className="grid gap-5 md:grid-cols-2">
+            {programs.slice(0, 2).map((program, index) => (
               <motion.article
                 key={program.id}
                 initial="hidden"
@@ -162,25 +147,21 @@ const Home = () => {
                 viewport={{ once: true, margin: '-80px' }}
                 variants={fadeUp}
                 transition={{ delay: index * 0.04 }}
-                className={`group relative min-h-[360px] overflow-hidden rounded-lg ${
-                  index === 0 ? 'md:col-span-2 lg:col-span-2' : ''
-                }`}
+                className="group relative overflow-hidden rounded-3xl bg-slate-50 shadow-xl"
               >
-                <img src={program.image} alt={program.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary-dark via-primary-dark/72 to-primary-dark/10" />
-                <div className="relative z-10 flex h-full min-h-[360px] flex-col justify-end p-6 text-white">
-                  <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent-gold text-primary-dark">
-                    {index % 2 === 0 ? <GraduationCap size={23} /> : <BookOpen size={23} />}
+                <img src={program.image} alt={program.title} loading="lazy" className="h-[320px] w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="relative z-10 p-7">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-primary-dark/95 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white">
+                    {program.format}
                   </span>
-                  <h3 className="font-serif text-2xl font-bold text-white">{program.title}</h3>
-                  <p className="mt-3 line-clamp-3 text-sm leading-7 text-white/75">{program.desc}</p>
-                  <div className="mt-5 flex flex-wrap gap-2 text-xs font-bold text-white/85">
-                    <span className="rounded-full bg-white/12 px-3 py-1.5 backdrop-blur">{program.duration}</span>
-                    <span className="rounded-full bg-white/12 px-3 py-1.5 backdrop-blur">{program.format}</span>
+                  <h3 className="mt-6 text-2xl font-serif font-bold text-primary-dark">{program.title}</h3>
+                  <p className="mt-4 text-sm leading-7 text-slate-600">{program.desc}</p>
+                  <div className="mt-6 flex flex-wrap gap-3 text-xs font-semibold text-slate-500">
+                    <span className="rounded-full bg-slate-100 px-3 py-1.5">{program.duration}</span>
+                    <span className="rounded-full bg-slate-100 px-3 py-1.5">{program.level || t('programs.level_standard')}</span>
                   </div>
-                  <Link to="/programs" className="mt-6 inline-flex items-center gap-2 text-sm font-extrabold text-accent-gold">
-                    {t('programs.learn_more')}
-                    <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                  <Link to="/programs" className="mt-7 inline-flex items-center gap-2 text-sm font-extrabold text-accent-gold">
+                    {t('programs.learn_more')}<ArrowRight size={16} />
                   </Link>
                 </div>
               </motion.article>
@@ -189,26 +170,16 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="bg-primary-dark py-12 text-white">
+      <section className="section-y bg-background">
         <div className="container-custom">
-          <SectionHeader eyebrow={t('home.benefits_eyebrow')} title={t('home.benefits_title')} titleClassName="text-white" />
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {benefits.map((benefit, index) => (
-              <motion.div key={benefit.title} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ delay: index * 0.06 }} className="glass-dark p-6">
-                <CheckCircle2 className="mb-5 text-accent-gold" size={30} />
-                <h3 className="text-xl font-bold text-white">{benefit.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-white/65">{benefit.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-y bg-white">
-        <div className="container-custom">
-          <SectionHeader eyebrow={institute.teacherEyebrow} title={institute.teacherTitle} description={institute.teacherText} />
+          <SectionHeader
+            eyebrow={institute.teacherEyebrow}
+            title={institute.teacherTitle}
+            description={institute.teacherText}
+            action={<Link to="/teachers" className="btn-ghost">{t('nav.teachers')}<ArrowRight size={16} /></Link>}
+          />
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {institute.teachers.map((teacher, index) => (
+            {institute.teachers.slice(0, 3).map((teacher, index) => (
               <motion.article key={teacher.name} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ delay: index * 0.04 }} className="premium-card overflow-hidden">
                 <div className="aspect-[4/3] overflow-hidden bg-slate-100">
                   <img src={teacher.image} alt={teacher.name} loading="lazy" className="h-full w-full object-cover object-top transition-transform duration-700 hover:scale-105" />
@@ -223,47 +194,11 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="section-y bg-background">
-        <div className="container-custom">
-          <SectionHeader eyebrow={institute.graduatesEyebrow} title={institute.graduatesTitle} description={institute.graduatesText} />
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {institute.stats.map(([value, label], index) => (
-              <motion.div key={label} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ delay: index * 0.04 }} className="premium-panel bg-white p-6">
-                <Briefcase className="mb-5 text-accent-gold" size={30} />
-                <p className="font-serif text-4xl font-extrabold text-primary-dark">{value}</p>
-                <p className="mt-2 text-sm font-bold text-slate-600">{label}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section className="section-y bg-white">
         <div className="container-custom">
-          <SectionHeader eyebrow={institute.eventEyebrow} title={institute.eventTitle} />
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {institute.events.map(([title, desc, image], index) => (
-              <motion.article key={title} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ delay: index * 0.04 }} className="premium-card overflow-hidden">
-                <img src={image} alt={title} loading="lazy" className="aspect-[16/10] w-full object-cover" />
-                <div className="p-5">
-                  <h3 className="line-clamp-2 text-xl font-bold">{title}</h3>
-                  <p className="mt-3 line-clamp-3 text-sm leading-7 text-slate-600">{desc}</p>
-                </div>
-              </motion.article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-y bg-background">
-        <div className="container-custom">
-          <SectionHeader
-            eyebrow={t('home.news_eyebrow')}
-            title={t('home.news_title')}
-            action={<Link to="/news" className="btn-ghost">{t('news.title')}<ArrowRight size={16} /></Link>}
-          />
+          <SectionHeader eyebrow={t('home.news_eyebrow')} title={t('home.news_title')} action={<Link to="/news" className="btn-ghost">{t('news.title')}<ArrowRight size={16} /></Link>} />
           <div className="grid gap-5 lg:grid-cols-3">
-            {news.map((item, index) => (
+            {news.slice(0, 3).map((item, index) => (
               <motion.article key={item.id} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ delay: index * 0.06 }} className="premium-card overflow-hidden">
                 <Link to={`/news/${item.id}`} className="block">
                   <div className="aspect-[16/10] overflow-hidden">
@@ -284,7 +219,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="section-y bg-white">
+      <section className="section-y bg-background">
         <div className="container-custom">
           <SectionHeader eyebrow={t('home.gallery_eyebrow')} title={institute.galleryTitle || t('home.gallery_title')} action={<Link to="/gallery" className="btn-ghost">{t('nav.gallery')}<ArrowRight size={16} /></Link>} />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -302,67 +237,17 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="bg-primary-dark py-16 text-white">
-        <div className="container-custom grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-          <div className="relative overflow-hidden rounded-lg">
-            <img src="/institute/hero-institute.jpeg" alt={t('home.video_title')} loading="lazy" className="h-[320px] w-full object-cover sm:h-[440px]" />
-            <div className="absolute inset-0 bg-primary-dark/35" />
-            <button type="button" className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-accent-gold text-primary-dark shadow-2xl">
-              <Play size={28} fill="currentColor" />
-            </button>
-          </div>
-          <div className="max-w-xl">
-            <p className="section-eyebrow">{t('hero.video')}</p>
-            <h2 className="section-title text-white">{t('home.video_title')}</h2>
-            <p className="mt-5 text-lg leading-8 text-white/68">{t('home.video_desc')}</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-y bg-background">
+      <section className="bg-primary-dark py-12 text-white">
         <div className="container-custom">
-          <SectionHeader eyebrow={t('home.testimonials_eyebrow')} title={t('home.testimonials_title')} />
-          <div className="grid gap-5 lg:grid-cols-3">
-            {testimonials.map((item, index) => (
-              <motion.figure key={item.name} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ delay: index * 0.05 }} className="premium-card p-6">
-                <Quote className="mb-5 text-accent-gold" size={30} />
-                <blockquote className="text-sm leading-7 text-slate-700">{item.text}</blockquote>
-                <figcaption className="mt-6 border-t border-slate-100 pt-5">
-                  <p className="font-bold text-primary-dark">{item.name}</p>
-                  <p className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">{item.role}</p>
-                </figcaption>
-              </motion.figure>
+          <SectionHeader eyebrow={t('home.benefits_eyebrow')} title={t('home.benefits_title')} titleClassName="text-white" />
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {benefits.map((benefit, index) => (
+              <motion.div key={benefit.title} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} transition={{ delay: index * 0.06 }} className="glass-dark p-6">
+                <CheckCircle2 className="mb-5 text-accent-gold" size={30} />
+                <h3 className="text-xl font-bold text-white">{benefit.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-white/65">{benefit.desc}</p>
+              </motion.div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <div id="faq">
-        <FAQ />
-      </div>
-
-      <section className="section-y bg-white">
-        <div className="container-custom">
-          <SectionHeader eyebrow={t('home.contact_eyebrow')} title={t('home.contact_title')} action={<Link to="/contacts" className="btn-primary">{t('nav.contacts')}<ArrowRight size={16} /></Link>} />
-          <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
-            <div className="premium-card p-6">
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-white">
-                <Users size={24} />
-              </div>
-              <h3 className="text-2xl font-bold">{t('contacts.form_title')}</h3>
-              <p className="mt-3 text-sm leading-7 text-slate-600">{t('contacts.form_subtitle')}</p>
-              <div className="mt-6 space-y-3 text-sm font-semibold text-slate-700">
-                <p className="flex gap-3"><MapPin size={18} className="text-accent-gold shrink-0" /><a href="https://2gis.kz/astana/geo/70000001066292633/71.416744,51.125984" target="_blank" rel="noreferrer" className="hover:text-accent-gold">{t('topbar.address')}</a></p>
-                <p className="flex gap-3"><CalendarDays size={18} className="text-accent-gold" />{t('contacts.hours')}</p>
-              </div>
-            </div>
-            <div className="overflow-hidden rounded-lg border border-slate-200 shadow-sm">
-              <iframe
-                title={t('contacts.map_title')}
-                className="h-[320px] w-full border-0"
-                src="/2gis-map.html"
-              />
-            </div>
           </div>
         </div>
       </section>
