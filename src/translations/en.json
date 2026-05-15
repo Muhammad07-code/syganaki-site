@@ -97,6 +97,7 @@
     "opportunities": "Opportunities",
     "duration": "Duration",
     "format": "Format",
+    "books": "Study books",
     "learn_more": "Learn more",
     "apply": "Apply",
     "items": [
@@ -280,6 +281,8 @@
     "welcome": "Assalamu alaikum! I am the AI assistant of the Husamuddin as-Syganaqi Institute. Ask about admission, programs, or contacts.",
     "placeholder": "Type your question...",
     "fallback": "Short answer: I can help with admission, programs, Quran Ijazah, Arabic, and contacts. For details, write to the admissions office on WhatsApp.",
+    "out_of_scope": "I answer only questions about Husamuddin as-Syganaqi Islamic Institute: programs, admission, faculty, contacts, events and institute life.",
+    "related": "Related topics:",
     "quick": ["How does admission work?", "What programs are available?", "What is the address?"]
   },
   "footer": {
@@ -293,8 +296,8 @@
     "privacy": "Privacy Policy",
     "offer": "Terms of Use"
   },
-    "teachers": { "title": "Our Faculty", "subtitle": "Experienced specialists with deep Islamic knowledge and academic credentials", "phd": "PhD Holders", "specialists": "Islamic Scholars", "experienced": "Years Average", "administration": "Administration", "quran": "Quranic Sciences", "islamic": "Islamic Studies", "languages": "Arabic Language" },
-  "partners": { "title": "Institutional Partnerships", "subtitle": "The institute collaborates with leading universities, organizations, and institutions worldwide", "international": "International Partners", "international_desc": "Global partnerships for academic cooperation", "national": "National Partners", "national_desc": "Collaborative institutions in Kazakhstan", "community": "Community Partners", "community_desc": "Local organizations and mosques" },
+  "teachers": { "title": "Our Faculty", "subtitle": "Experienced specialists with deep Islamic knowledge and academic credentials", "phd": "PhD Holders", "specialists": "Teachers", "experienced": "Years Average", "international": "International faculty", "administration": "Administration", "quran": "Quranic Sciences", "islamic": "Islamic Studies", "languages": "Arabic Language", "education": "Education", "cta_title": "Study with the institute faculty", "cta_desc": "The admissions office can help you choose a track and prepare the documents." },
+  "partners": { "title": "Institutional Partnerships", "subtitle": "The institute grows through DUMK, national and international academic relations, and the expertise of Al-Azhar and Haseki.", "international": "International Partners", "international_desc": "Global partnerships for academic cooperation", "national": "National Partners", "national_desc": "Collaborative institutions in Kazakhstan", "community": "Community Partners", "community_desc": "Local organizations and mosques", "academic_title": "Academic relations and international participation", "academic_desc": "Institute representatives participate in international seminars and scholarly conferences with presentations.", "contact_title": "Contact us about partnership", "contact_desc": "For academic, educational or community project proposals, contact the administration." },
   "admin": {
     "login_title": "Admin Panel",
     "login_subtitle": "Private section for institute administration",

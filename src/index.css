@@ -116,7 +116,15 @@
     @apply inline-flex min-h-[46px] items-center justify-center gap-2 rounded-lg bg-accent-gold px-5 py-3 text-sm font-extrabold text-primary-dark shadow-[0_16px_34px_rgba(202,164,93,0.24)] transition-all duration-300 hover:bg-[#d9b66d] hover:shadow-[0_18px_44px_rgba(202,164,93,0.34)] focus:outline-none focus:ring-4 focus:ring-accent-gold/25 disabled:pointer-events-none disabled:opacity-60;
   }
 
+  .btn-gold {
+    @apply inline-flex min-h-[46px] items-center justify-center gap-2 rounded-lg bg-accent-gold px-5 py-3 text-sm font-extrabold text-primary-dark shadow-[0_16px_34px_rgba(202,164,93,0.24)] transition-all duration-300 hover:bg-[#d9b66d] hover:shadow-[0_18px_44px_rgba(202,164,93,0.34)] focus:outline-none focus:ring-4 focus:ring-accent-gold/25 disabled:pointer-events-none disabled:opacity-60;
+  }
+
   .btn-secondary {
+    @apply inline-flex min-h-[46px] items-center justify-center gap-2 rounded-lg border border-white/35 bg-white/10 px-5 py-3 text-sm font-extrabold text-white backdrop-blur-xl transition-all duration-300 hover:border-white/70 hover:bg-white hover:text-primary-dark focus:outline-none focus:ring-4 focus:ring-white/20;
+  }
+
+  .btn-outline {
     @apply inline-flex min-h-[46px] items-center justify-center gap-2 rounded-lg border border-white/35 bg-white/10 px-5 py-3 text-sm font-extrabold text-white backdrop-blur-xl transition-all duration-300 hover:border-white/70 hover:bg-white hover:text-primary-dark focus:outline-none focus:ring-4 focus:ring-white/20;
   }
 

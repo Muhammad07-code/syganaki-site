@@ -6,7 +6,7 @@ import { buildWhatsAppLink, saveApplication } from '../services/formService';
 import { fetchDataList } from '../services/dataService';
 import { getInstituteContent } from '../data/instituteContent';
 
-const WHATSAPP_NUMBER = '+77771764131';
+const WHATSAPP_NUMBER = '+77761764131';
 
 const Admission = () => {
   const { t, i18n } = useTranslation();

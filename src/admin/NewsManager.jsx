@@ -4,6 +4,7 @@ import { Check, Edit2, Image as ImageIcon, Loader2, Plus, Search, Trash2, Upload
 import { useTranslation } from 'react-i18next';
 import { deleteNewsArticle, fetchNewsList, saveNewsArticle, uploadNewsImage } from '../services/newsService';
 import { normalizeText } from '../utils/formatDate';
+import { getInstituteContent } from '../data/instituteContent';
 
 const initialForm = {
   title: '',
@@ -15,7 +16,8 @@ const initialForm = {
 
 const NewsManager = () => {
   const { t, i18n } = useTranslation();
-  const categories = t('news.categories', { returnObjects: true }).filter((item) => item !== t('common.all'));
+  const institute = getInstituteContent(i18n.language);
+  const categories = [t('common.all'), ...Array.from(new Set(institute.news.map((item) => item.category)))].filter((item) => item !== t('common.all'));
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -27,7 +29,7 @@ const NewsManager = () => {
 
   const loadNews = async () => {
     setLoading(true);
-    const list = await fetchNewsList(t('news.fallback', { returnObjects: true }), i18n.language);
+    const list = await fetchNewsList(institute.news, i18n.language);
     setItems(list);
     setLoading(false);
   };

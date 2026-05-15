@@ -2,10 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram, Mail, MapPin, Phone, Send } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { getInstituteContent } from '../data/instituteContent';
 
 const Footer = () => {
-  const { t } = useTranslation();
-  const programs = t('programs.items', { returnObjects: true });
+  const { t, i18n } = useTranslation();
+  const programs = getInstituteContent(i18n.language).programs;
 
   const navLinks = [
     { label: t('nav.about'), path: '/about' },
@@ -64,7 +65,7 @@ const Footer = () => {
           <div>
             <h3 className="mb-5 text-sm font-extrabold uppercase tracking-[0.18em] text-accent-gold">{t('footer.education')}</h3>
             <div className="space-y-3">
-              {programs.slice(0, 5).map((program) => (
+              {programs.map((program) => (
                 <Link key={program.id} to="/programs" className="block text-sm font-semibold text-white/68 hover:text-accent-gold">
                   {program.title}
                 </Link>

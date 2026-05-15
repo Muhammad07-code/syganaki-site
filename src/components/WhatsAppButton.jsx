@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { buildWhatsAppLink } from '../services/formService';
+import { buildWhatsAppLink } from '../utils/contactLinks';
 
 const WHATSAPP_NUMBER = '+77761764131';
 

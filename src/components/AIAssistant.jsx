@@ -45,7 +45,7 @@ const AIAssistant = () => {
     setLoading(true);
 
     try {
-      const apiAnswer = await askAssistant({ message: text, language: i18n.language });
+      const apiAnswer = await askAssistant({ message: text, language: i18n.language, t });
       setMessages((current) => [
         ...current,
         { role: 'assistant', content: apiAnswer || localAssistantAnswer(text, t, i18n.language) },

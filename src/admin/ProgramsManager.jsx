@@ -1,13 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import SimpleManager from './SimpleManager';
+import { getInstituteContent } from '../data/instituteContent';
 
 const ProgramsManager = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <SimpleManager
       collectionName="programs"
-      fallbackItems={t('programs.items', { returnObjects: true })}
+      fallbackItems={getInstituteContent(i18n.language).programs}
       title={t('admin.programs')}
       fields={[
         { name: 'title', label: t('admin.title_field'), required: true },

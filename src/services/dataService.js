@@ -7,6 +7,16 @@ import {
 import { db, isFirebaseConfigured } from '../firebase/config';
 import { formatDate } from '../utils/formatDate';
 
+const FIREBASE_READ_TIMEOUT = 6000;
+
+const withTimeout = (promise, timeout = FIREBASE_READ_TIMEOUT) =>
+  Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      window.setTimeout(() => reject(new Error('firebase_read_timeout')), timeout);
+    }),
+  ]);
+
 export const fetchDataList = async (collectionName, fallback = [], language = 'kz') => {
   let dbItems = [];
 
@@ -15,7 +25,7 @@ export const fetchDataList = async (collectionName, fallback = [], language = 'k
   } else {
     try {
       const q = query(collection(db, collectionName), orderBy('createdAt', 'desc'));
-      const snapshot = await getDocs(q);
+      const snapshot = await withTimeout(getDocs(q));
       dbItems = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),

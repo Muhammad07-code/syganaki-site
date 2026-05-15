@@ -21,7 +21,7 @@ const About = () => {
   const { t, i18n } = useTranslation();
   const institute = getInstituteContent(i18n.language);
   const values = t('about.values', { returnObjects: true });
-  const stats = t('stats', { returnObjects: true });
+  const stats = institute.stats.map(([value, label]) => ({ value, label }));
   const benefits = t('benefits', { returnObjects: true });
 
   return (
@@ -50,13 +50,13 @@ const About = () => {
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               <div className="premium-card p-6">
                 <Target className="mb-4 text-accent-gold" size={30} />
-                <h3 className="text-xl font-bold">{t('about.mission_title')}</h3>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{t('about.mission')}</p>
+                <h3 className="text-xl font-bold">{institute.missionTitle}</h3>
+                <p className="mt-3 text-sm leading-7 text-slate-600">{institute.mission}</p>
               </div>
               <div className="premium-card p-6">
                 <Eye className="mb-4 text-accent-gold" size={30} />
-                <h3 className="text-xl font-bold">{t('about.vision_title')}</h3>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{t('about.vision')}</p>
+                <h3 className="text-xl font-bold">{institute.legalTitle}</h3>
+                <p className="mt-3 text-sm leading-7 text-slate-600">{institute.legalText}</p>
               </div>
             </div>
           </motion.div>

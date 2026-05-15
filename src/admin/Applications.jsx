@@ -85,6 +85,7 @@ const Applications = () => {
     const map = {
       new: ['bg-blue-50 text-blue-700', Clock, t('admin.new')],
       contacted: ['bg-amber-50 text-amber-700', Phone, t('admin.processed')],
+      processed: ['bg-amber-50 text-amber-700', Phone, t('admin.processed')],
       accepted: ['bg-emerald-50 text-emerald-700', CheckCircle2, t('admin.accepted')],
       rejected: ['bg-red-50 text-red-700', XCircle, t('admin.rejected')],
     };

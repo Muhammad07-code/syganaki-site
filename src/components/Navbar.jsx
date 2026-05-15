@@ -124,7 +124,7 @@ const Navbar = () => {
             <a href="https://www.instagram.com/h.syganaki.kz" target="_blank" rel="noreferrer" className="hover:text-accent-gold">
               <Instagram size={16} />
             </a>
-            <a href="https://t.me/" target="_blank" rel="noreferrer" className="hover:text-accent-gold">
+            <a href="https://t.me/+77761764131" target="_blank" rel="noreferrer" className="hover:text-accent-gold">
               <Send size={16} />
             </a>
           </div>
@@ -152,15 +152,15 @@ const Navbar = () => {
             >
               <img src="/logo.png" alt={t('brand.name')} className="h-full w-full object-contain" />
             </span>
-            <span className="hidden min-w-0 sm:block">
+            <span className="hidden min-w-0 max-w-[220px] sm:block lg:max-w-[260px] 2xl:max-w-none">
               <span
-                className={`block truncate font-serif text-lg font-extrabold leading-tight ${
+                className={`block truncate font-serif text-base font-extrabold leading-tight 2xl:text-lg ${
                   isLight ? 'text-primary-dark' : 'text-white'
                 }`}
               >
                 {t('brand.name')}
               </span>
-              <span className="block truncate text-[10px] font-extrabold uppercase tracking-[0.28em] text-accent-gold">
+              <span className="mt-0.5 block truncate text-[9px] font-extrabold uppercase tracking-[0.22em] text-accent-gold 2xl:text-[10px] 2xl:tracking-[0.28em]">
                 {t('brand.type')}
               </span>
             </span>
@@ -173,7 +173,7 @@ const Navbar = () => {
                 <NavLink
                   to={item.path}
                   className={({ isActive }) =>
-                    `flex min-h-[44px] items-center gap-1 whitespace-nowrap rounded-lg px-2.5 text-[11px] font-extrabold uppercase tracking-[0.06em] transition-all ${
+                    `flex min-h-[44px] items-center gap-1 whitespace-nowrap rounded-lg px-2 text-[10px] font-extrabold uppercase tracking-[0.04em] transition-all 2xl:px-2.5 2xl:text-[11px] ${
                       isLight ? 'text-slate-700 hover:bg-primary/5' : 'text-white/90 hover:bg-white/10'
                     } ${isActive ? 'text-accent-gold' : ''}`
                   }
@@ -208,7 +208,7 @@ const Navbar = () => {
               type="button"
               onClick={() => setSearchOpen(true)}
               aria-label={t('common.search')}
-              className={`hidden h-11 w-11 items-center justify-center rounded-lg xl:flex ${
+              className={`hidden h-11 w-11 items-center justify-center rounded-lg 2xl:flex ${
                 isLight ? 'text-slate-700 hover:bg-primary/5' : 'text-white hover:bg-white/10'
               }`}
             >
@@ -263,7 +263,7 @@ const Navbar = () => {
             {/* Apply button - hidden on smaller screens */}
             <Link 
               to="/admission" 
-              className={`hidden xl:inline-flex h-9 items-center justify-center rounded-full px-5 text-xs font-bold transition-all ${
+              className={`hidden 2xl:inline-flex h-9 items-center justify-center rounded-full px-5 text-xs font-bold transition-all ${
                 isLight 
                   ? 'bg-primary/5 text-primary hover:bg-primary hover:text-white' 
                   : 'bg-white/10 text-white backdrop-blur hover:bg-accent-gold hover:text-primary-dark'

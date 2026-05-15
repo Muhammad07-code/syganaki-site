@@ -67,14 +67,14 @@ const Programs = () => {
 
                   <div className="p-6 sm:p-8 lg:p-10">
                     <div className="grid gap-3 sm:grid-cols-2">
-                      <div className="rounded-2xl bg-accent-lightGold/50 border border-accent-gold/10 p-5">
+                      <div className="rounded-lg bg-accent-lightGold/50 border border-accent-gold/10 p-5">
                         <div className="mb-2 flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-primary">
                           <Clock size={16} className="text-accent-gold" />
                           {t('programs.duration')}
                         </div>
                         <p className="font-bold text-primary-dark text-lg">{program.duration}</p>
                       </div>
-                      <div className="rounded-2xl bg-slate-50 border border-slate-100 p-5">
+                      <div className="rounded-lg bg-slate-50 border border-slate-100 p-5">
                         <div className="mb-2 flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-primary">
                           <Layers size={16} className="text-accent-gold" />
                           {t('programs.format')}
@@ -134,8 +134,23 @@ const Programs = () => {
                       </div>
                     )}
 
+                    {program.books && Array.isArray(program.books) && (
+                      <div className="mt-8">
+                        <h3 className="mb-4 text-xs font-extrabold uppercase tracking-widest text-primary/50">
+                          {t('programs.books', { defaultValue: 'Books' })}
+                        </h3>
+                        <div className="grid gap-2 sm:grid-cols-2">
+                          {program.books.map((book) => (
+                            <div key={book} className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700">
+                              {book}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                     <div className="mt-10 border-t border-slate-100 pt-8">
-                      <Link to="/admission" className="btn-gold !w-full sm:!w-auto !py-4">
+                      <Link to="/admission" className="btn-primary w-full py-4 sm:w-auto">
                         {t('programs.apply')}
                         <ArrowRight size={18} />
                       </Link>

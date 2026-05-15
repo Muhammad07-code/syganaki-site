@@ -1,6 +1,7 @@
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db, isFirebaseConfigured } from '../firebase/config';
 import { canSubmitForm, sanitizeFormPayload } from '../utils/security';
+export { buildWhatsAppLink } from '../utils/contactLinks';
 
 const saveLocal = (collectionName, data) => {
   const key = `syganaki-${collectionName}`;
@@ -41,9 +42,4 @@ export const saveInquiry = (data) => {
         createdAt: serverTimestamp(),
       })
     : saveLocal('inquiries', { ...clean, status: 'new', type: clean.type || 'contact_form' });
-};
-
-export const buildWhatsAppLink = (phone, message) => {
-  const normalizedPhone = phone.replace(/[^\d]/g, '');
-  return `https://wa.me/${normalizedPhone}?text=${encodeURIComponent(message)}`;
 };

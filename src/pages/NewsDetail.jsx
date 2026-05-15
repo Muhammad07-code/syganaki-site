@@ -11,15 +11,7 @@ const NewsDetail = () => {
   const { id } = useParams();
   const { t, i18n } = useTranslation();
   const institute = getInstituteContent(i18n.language);
-  const fallback = useMemo(() => institute.events.map(([title, excerpt, image], index) => ({
-    id: `event-${index + 1}`,
-    title,
-    excerpt,
-    image,
-    date: '2025',
-    category: institute.eventEyebrow,
-    content: `<p>${excerpt}</p>`,
-  })), [i18n.language]);
+  const fallback = useMemo(() => institute.news, [i18n.language]);
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
 

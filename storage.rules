@@ -14,20 +14,28 @@ service firebase.storage {
         );
     }
 
-    function validImage() {
+    function safeFileName(fileName) {
+      return fileName.matches('^[A-Za-z0-9._-]+$');
+    }
+
+    function validImage(fileName) {
       return request.resource != null
-        && request.resource.size < 4 * 1024 * 1024
+        && safeFileName(fileName)
+        && request.resource.size > 0
+        && request.resource.size < 3 * 1024 * 1024
         && request.resource.contentType.matches('image/(jpeg|png|webp)');
     }
 
     match /news/{fileName} {
       allow read: if true;
-      allow write: if isAdmin() && validImage();
+      allow create, update: if isAdmin() && validImage(fileName);
+      allow delete: if isAdmin();
     }
 
     match /gallery/{fileName} {
       allow read: if true;
-      allow write: if isAdmin() && validImage();
+      allow create, update: if isAdmin() && validImage(fileName);
+      allow delete: if isAdmin();
     }
 
     match /{allPaths=**} {

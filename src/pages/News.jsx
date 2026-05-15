@@ -10,16 +10,11 @@ import { getInstituteContent } from '../data/instituteContent';
 const News = () => {
   const { t, i18n } = useTranslation();
   const institute = getInstituteContent(i18n.language);
-  const fallback = useMemo(() => institute.events.map(([title, excerpt, image], index) => ({
-    id: `event-${index + 1}`,
-    title,
-    excerpt,
-    image,
-    date: '2025',
-    category: institute.eventEyebrow,
-    content: `<p>${excerpt}</p>`,
-  })), [i18n.language]);
-  const categories = useMemo(() => [t('common.all'), institute.eventEyebrow], [t, i18n.language]);
+  const fallback = useMemo(() => institute.news, [i18n.language]);
+  const categories = useMemo(
+    () => [t('common.all'), ...Array.from(new Set(institute.news.map((item) => item.category)))],
+    [t, i18n.language],
+  );
   const [news, setNews] = useState(fallback);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');

@@ -39,7 +39,7 @@ const FAQ = ({ compact = false }) => {
   const items = t('faq.items', { returnObjects: true });
 
   return (
-    <section className={compact ? 'bg-background py-10' : 'section-y bg-background'}>
+    <section className={compact ? 'bg-background py-10' : 'bg-background pb-16 pt-32 sm:pb-20 sm:pt-40 lg:pb-24'}>
       <div className="container-custom">
         <div className="mx-auto max-w-4xl">
           <div className="mb-8 text-center sm:mb-10">

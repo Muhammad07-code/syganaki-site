@@ -18,6 +18,15 @@ import { validateImageFile } from '../utils/security';
 
 const NEWS_COLLECTION = 'news';
 const localKey = 'syganaki-news';
+const FIREBASE_READ_TIMEOUT = 6000;
+
+const withTimeout = (promise, timeout = FIREBASE_READ_TIMEOUT) =>
+  Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      window.setTimeout(() => reject(new Error('firebase_read_timeout')), timeout);
+    }),
+  ]);
 
 const getLocalNews = () => {
   if (typeof window === 'undefined') return [];
@@ -49,7 +58,7 @@ export const fetchNewsList = async (fallback = [], language = 'kz') => {
   } else {
     try {
       const q = query(collection(db, NEWS_COLLECTION), orderBy('createdAt', 'desc'));
-      const snapshot = await getDocs(q);
+      const snapshot = await withTimeout(getDocs(q));
       dbItems = snapshot.docs.map((item) => mapNewsDoc(item, language));
     } catch (error) {
       console.warn('News fetch error:', error);
@@ -73,7 +82,7 @@ export const fetchNewsArticle = async (id, fallback = [], language = 'kz') => {
   }
 
   try {
-    const snap = await getDoc(doc(db, NEWS_COLLECTION, id));
+    const snap = await withTimeout(getDoc(doc(db, NEWS_COLLECTION, id)));
     if (snap.exists()) return mapNewsDoc(snap, language);
   } catch (error) {
     console.warn('Article fallback is used:', error);
@@ -129,7 +138,7 @@ export const deleteNewsArticle = (id) => {
 export const uploadNewsImage = async (file) => {
   validateImageFile(file);
 
-  const toBase64 = (f) =>
+  const resizeImage = (f, output = 'data-url') =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -157,7 +166,18 @@ export const uploadNewsImage = async (file) => {
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL('image/jpeg', 0.7));
+          if (output === 'blob') {
+            canvas.toBlob(
+              (blob) => {
+                if (!blob) reject(new Error('image_processing_failed'));
+                else resolve(blob);
+              },
+              'image/jpeg',
+              0.82,
+            );
+          } else {
+            resolve(canvas.toDataURL('image/jpeg', 0.72));
+          }
         };
         img.onerror = reject;
         img.src = e.target.result;
@@ -167,20 +187,20 @@ export const uploadNewsImage = async (file) => {
     });
 
   if (!isFirebaseConfigured) {
-    return toBase64(file);
+    return resizeImage(file);
   }
 
-  try {
-    const safeName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '-')}`;
-    const imageRef = ref(storage, `news/${safeName}`);
-    
-    // Upload with timeout to prevent hanging
-    const uploadPromise = uploadBytes(imageRef, file).then(() => getDownloadURL(imageRef));
-    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 15000));
-    
-    return await Promise.race([uploadPromise, timeoutPromise]);
-  } catch (error) {
-    console.warn('Firebase Storage failed or timed out. Falling back to base64.', error);
-    return toBase64(file);
-  }
+  const blob = await resizeImage(file, 'blob');
+  const safeBase = file.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9._-]/g, '-').slice(0, 80) || 'image';
+  const safeName = `${Date.now()}-${crypto.randomUUID?.() || Math.random().toString(36).slice(2)}-${safeBase}.jpg`;
+  const imageRef = ref(storage, `news/${safeName}`);
+  const metadata = {
+    contentType: 'image/jpeg',
+    cacheControl: 'public,max-age=31536000,immutable',
+  };
+
+  const uploadPromise = uploadBytes(imageRef, blob, metadata).then(() => getDownloadURL(imageRef));
+  const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 15000));
+
+  return Promise.race([uploadPromise, timeoutPromise]);
 };
