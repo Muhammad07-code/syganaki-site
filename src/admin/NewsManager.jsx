@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { deleteNewsArticle, fetchNewsList, saveNewsArticle, uploadNewsImage } from '../services/newsService';
 import { normalizeText } from '../utils/formatDate';
 import { getInstituteContent } from '../data/instituteContent';
+import useMarkSectionRead from '../hooks/useMarkSectionRead';
 
 const initialForm = {
   title: '',
@@ -18,6 +19,7 @@ const CUSTOM_CATEGORY = '__custom__';
 
 const NewsManager = () => {
   const { t, i18n } = useTranslation();
+  useMarkSectionRead('upload');
   const institute = getInstituteContent(i18n.language);
   const categories = [t('common.all'), ...Array.from(new Set(institute.news.map((item) => item.category)))].filter((item) => item !== t('common.all'));
   const [items, setItems] = useState([]);

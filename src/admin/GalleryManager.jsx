@@ -2,9 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import SimpleManager from './SimpleManager';
 import { getInstituteContent } from '../data/instituteContent';
+import useMarkSectionRead from '../hooks/useMarkSectionRead';
 
 const GalleryManager = () => {
   const { t, i18n } = useTranslation();
+  useMarkSectionRead('upload');
   return (
     <SimpleManager
       collectionName="gallery"

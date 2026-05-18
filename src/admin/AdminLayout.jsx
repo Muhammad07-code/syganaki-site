@@ -19,7 +19,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { auth, isFirebaseConfigured } from '../firebase/config';
 import { hasAdminAccess } from '../services/adminAuth';
-import { subscribeAdminNotifications } from '../services/notificationService';
+import { markNotificationsRead, subscribeAdminNotifications } from '../services/notificationService';
 
 const AdminLayout = () => {
   const { t, i18n } = useTranslation();
@@ -218,7 +218,7 @@ const AdminLayout = () => {
         </header>
 
         <main className="p-3 sm:p-6 lg:p-8">
-          <Outlet />
+          <Outlet context={{ user, notifications, markNotificationsRead }} />
         </main>
       </div>
     </div>

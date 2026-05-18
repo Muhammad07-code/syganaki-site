@@ -4,6 +4,7 @@ import { CheckCircle2, Clock, Phone, Search, Trash2, XCircle } from 'lucide-reac
 import { useTranslation } from 'react-i18next';
 import { db, isFirebaseConfigured } from '../firebase/config';
 import { formatDate, normalizeText } from '../utils/formatDate';
+import useMarkSectionRead from '../hooks/useMarkSectionRead';
 
 const localKey = 'syganaki-applications';
 const readLocal = () => JSON.parse(window.localStorage.getItem(localKey) || '[]');
@@ -11,6 +12,7 @@ const writeLocal = (items) => window.localStorage.setItem(localKey, JSON.stringi
 
 const Applications = () => {
   const { t, i18n } = useTranslation();
+  useMarkSectionRead('application');
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
