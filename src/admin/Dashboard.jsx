@@ -6,14 +6,14 @@ import { useTranslation } from 'react-i18next';
 import { db, isFirebaseConfigured } from '../firebase/config';
 import { formatDate } from '../utils/formatDate';
 
-const StatCard = ({ title, value, icon: Icon, tone }) => (
-  <div className="premium-card p-5">
+const StatCard = ({ title, value, icon: Icon, tone, to }) => (
+  <Link to={to} className="premium-card p-5 block hover:shadow-xl transition-shadow duration-200">
     <div className={`mb-5 flex h-12 w-12 items-center justify-center rounded-lg ${tone}`}>
       <Icon size={23} />
     </div>
     <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-slate-500">{title}</p>
     <p className="mt-2 font-serif text-3xl font-extrabold text-primary-dark">{value}</p>
-  </div>
+  </Link>
 );
 
 const Dashboard = () => {
@@ -79,10 +79,10 @@ const Dashboard = () => {
   }, [i18n.language]);
 
   const cards = [
-    { title: t('admin.applications'), value: stats.applications, icon: Inbox, tone: 'bg-primary text-white' },
-    { title: t('admin.inquiries'), value: stats.inquiries, icon: MessageSquare, tone: 'bg-emerald-600 text-white' },
-    { title: t('admin.news'), value: stats.news, icon: Newspaper, tone: 'bg-accent-gold text-primary-dark' },
-    { title: t('admin.assistant'), value: stats.assistant, icon: Bot, tone: 'bg-slate-900 text-white' },
+    { title: t('admin.applications'), value: stats.applications, icon: Inbox, tone: 'bg-primary text-white', to: '/admin/applications' },
+    { title: t('admin.inquiries'), value: stats.inquiries, icon: MessageSquare, tone: 'bg-emerald-600 text-white', to: '/admin/inquiries' },
+    { title: t('admin.news'), value: stats.news, icon: Newspaper, tone: 'bg-accent-gold text-primary-dark', to: '/admin/news' },
+    { title: t('admin.assistant'), value: stats.assistant, icon: Bot, tone: 'bg-slate-900 text-white', to: '/admin/assistant' },
   ];
 
   return (

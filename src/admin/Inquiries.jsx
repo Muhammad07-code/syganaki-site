@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { collection, deleteDoc, doc, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore';
-import { CheckCircle2, Clock, Phone, Search, Trash2 } from 'lucide-react';
+import { CheckCircle2, Clock, MessageCircle, Phone, Search, Trash2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { db, isFirebaseConfigured } from '../firebase/config';
 import { formatDate, normalizeText } from '../utils/formatDate';
@@ -10,6 +11,11 @@ const localKey = 'syganaki-inquiries';
 const readLocal = () => JSON.parse(window.localStorage.getItem(localKey) || '[]');
 const writeLocal = (items) => window.localStorage.setItem(localKey, JSON.stringify(items));
 
+const toWa = (phone) => {
+  const digits = String(phone || '').replace(/\D/g, '');
+  return `https://wa.me/${digits}`;
+};
+
 const Inquiries = () => {
   const { t, i18n } = useTranslation();
   useMarkSectionRead('message');
@@ -17,6 +23,7 @@ const Inquiries = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('all');
+  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
     if (!isFirebaseConfigured) {
@@ -34,39 +41,45 @@ const Inquiries = () => {
       })));
       setLoading(false);
     }, (error) => {
-      console.error("Error fetching inquiries:", error);
+      console.error('Error fetching inquiries:', error);
       setLoading(false);
     });
 
     return () => unsubscribe();
   }, [i18n.language]);
 
-  const changeStatus = async (id, nextStatus) => {
+  const changeStatus = async (id, nextStatus, e) => {
+    e?.stopPropagation();
     if (!isFirebaseConfigured) {
       const nextItems = items.map((item) => (item.id === id ? { ...item, status: nextStatus } : item));
       setItems(nextItems);
       writeLocal(nextItems);
+      if (selected?.id === id) setSelected((prev) => ({ ...prev, status: nextStatus }));
       return;
     }
     try {
       await updateDoc(doc(db, 'inquiries', id), { status: nextStatus });
+      if (selected?.id === id) setSelected((prev) => ({ ...prev, status: nextStatus }));
     } catch (error) {
-      console.error("Error updating inquiry status:", error);
+      console.error('Error updating inquiry status:', error);
     }
   };
 
-  const removeItem = async (id) => {
+  const removeItem = async (id, e) => {
+    e?.stopPropagation();
     if (!window.confirm(t('admin.delete'))) return;
     if (!isFirebaseConfigured) {
       const nextItems = items.filter((item) => item.id !== id);
       setItems(nextItems);
       writeLocal(nextItems);
+      setSelected(null);
       return;
     }
     try {
       await deleteDoc(doc(db, 'inquiries', id));
+      setSelected(null);
     } catch (error) {
-      console.error("Error deleting inquiry:", error);
+      console.error('Error deleting inquiry:', error);
     }
   };
 
@@ -83,14 +96,25 @@ const Inquiries = () => {
     });
   }, [items, search, status]);
 
+  const badge = (value = 'new') =>
+    (value === 'new' || !value) ? (
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
+        <Clock size={13} />{t('admin.new')}
+      </span>
+    ) : (
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+        <CheckCircle2 size={13} />{t('admin.processed')}
+      </span>
+    );
+
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="relative w-full lg:max-w-md">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <input value={search} onChange={(event) => setSearch(event.target.value)} className="admin-input pl-11" placeholder={t('admin.search')} />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} className="admin-input pl-11" placeholder={t('admin.search')} />
         </div>
-        <select value={status} onChange={(event) => setStatus(event.target.value)} className="admin-input lg:w-56">
+        <select value={status} onChange={(e) => setStatus(e.target.value)} className="admin-input lg:w-56">
           <option value="all">{t('common.all')}</option>
           <option value="new">{t('admin.new')}</option>
           <option value="processed">{t('admin.processed')}</option>
@@ -115,28 +139,37 @@ const Inquiries = () => {
                 <tr><td colSpan="6" className="px-5 py-10 text-center text-slate-500">{t('common.loading')}</td></tr>
               ) : filtered.length ? (
                 filtered.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50">
+                  <tr
+                    key={item.id}
+                    className="hover:bg-slate-50 cursor-pointer"
+                    onClick={() => setSelected(item)}
+                  >
                     <td className="px-5 py-4">
                       <p className="font-bold text-primary-dark">{item.name}</p>
-                      <a href={`tel:${item.phone}`} className="mt-1 inline-flex items-center gap-1 text-xs text-slate-500 hover:text-primary">
-                        <Phone size={12} />
-                        {item.phone}
-                      </a>
+                      <span className="mt-1 inline-flex items-center gap-1 text-xs text-slate-500">
+                        <Phone size={12} />{item.phone}
+                      </span>
                     </td>
-                    <td className="px-5 py-4"><span className="rounded-full bg-accent-lightGold px-3 py-1 text-xs font-bold text-primary">{item.subject}</span></td>
+                    <td className="px-5 py-4">
+                      <span className="rounded-full bg-accent-lightGold px-3 py-1 text-xs font-bold text-primary">{item.subject}</span>
+                    </td>
                     <td className="max-w-sm truncate px-5 py-4 text-slate-500">{item.message}</td>
                     <td className="px-5 py-4 text-slate-500">{item.date || formatDate(item.createdAt, i18n.language)}</td>
+                    <td className="px-5 py-4">{badge(item.status)}</td>
                     <td className="px-5 py-4">
-                      {(item.status || 'new') === 'new' ? (
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700"><Clock size={13} />{t('admin.new')}</span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700"><CheckCircle2 size={13} />{t('admin.processed')}</span>
-                      )}
-                    </td>
-                    <td className="px-5 py-4">
-                      <div className="flex justify-end gap-2">
-                        <button type="button" onClick={() => changeStatus(item.id, 'processed')} className="rounded-lg p-2 text-emerald-600 hover:bg-emerald-50"><CheckCircle2 size={16} /></button>
-                        <button type="button" onClick={() => removeItem(item.id)} className="rounded-lg p-2 text-red-600 hover:bg-red-50"><Trash2 size={16} /></button>
+                      <div className="flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+                        <a
+                          href={toWa(item.phone)}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(e) => { e.stopPropagation(); changeStatus(item.id, 'processed'); }}
+                          className="rounded-lg p-2 text-emerald-600 hover:bg-emerald-50"
+                          title="WhatsApp"
+                        >
+                          <MessageCircle size={16} />
+                        </a>
+                        <button type="button" onClick={(e) => changeStatus(item.id, 'processed', e)} className="rounded-lg p-2 text-emerald-600 hover:bg-emerald-50"><CheckCircle2 size={16} /></button>
+                        <button type="button" onClick={(e) => removeItem(item.id, e)} className="rounded-lg p-2 text-red-600 hover:bg-red-50"><Trash2 size={16} /></button>
                       </div>
                     </td>
                   </tr>
@@ -148,6 +181,92 @@ const Inquiries = () => {
           </table>
         </div>
       </div>
+
+      {/* Detail Modal — rendered via Portal to escape stacking context */}
+      {selected && createPortal(
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/80 p-4"
+          onClick={() => setSelected(null)}
+        >
+          <div
+            className="w-full max-w-lg rounded-2xl bg-white shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+              <h2 className="text-lg font-bold text-primary-dark">{selected.name || '—'}</h2>
+              <button type="button" onClick={() => setSelected(null)} className="rounded-lg bg-slate-100 p-2 text-slate-500 hover:bg-slate-200">
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="space-y-4 px-6 py-5">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs font-extrabold uppercase tracking-widest text-slate-400">{t('contacts.subject')}</p>
+                  <span className="mt-1 inline-block rounded-full bg-accent-lightGold px-3 py-1 text-xs font-bold text-primary">{selected.subject || '—'}</span>
+                </div>
+                <div>
+                  <p className="text-xs font-extrabold uppercase tracking-widest text-slate-400">{t('common.date')}</p>
+                  <p className="mt-1 font-semibold text-slate-700">{selected.date || formatDate(selected.createdAt, i18n.language)}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-extrabold uppercase tracking-widest text-slate-400">{t('admin.status')}</p>
+                  <div className="mt-1">{badge(selected.status)}</div>
+                </div>
+                <div>
+                  <p className="text-xs font-extrabold uppercase tracking-widest text-slate-400">{t('admission.phone')}</p>
+                  <a href={`tel:${selected.phone}`} className="mt-1 inline-flex items-center gap-1.5 font-semibold text-primary hover:underline">
+                    <Phone size={14} /> {selected.phone}
+                  </a>
+                </div>
+              </div>
+
+              {selected.message && (
+                <div>
+                  <p className="text-xs font-extrabold uppercase tracking-widest text-slate-400">{t('admission.message')}</p>
+                  <p className="mt-2 text-sm leading-7 text-slate-700 whitespace-pre-wrap">{selected.message}</p>
+                </div>
+              )}
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-2 border-t border-slate-100 px-6 py-4">
+              <a
+                href={toWa(selected.phone)}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => changeStatus(selected.id, 'processed')}
+                className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-500 py-2.5 text-sm font-bold text-white hover:bg-emerald-600"
+              >
+                <MessageCircle size={16} /> WhatsApp
+              </a>
+              <a
+                href={`tel:${selected.phone}`}
+                className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50"
+              >
+                <Phone size={16} />
+              </a>
+              <button
+                type="button"
+                onClick={(e) => changeStatus(selected.id, 'processed', e)}
+                className="flex items-center justify-center gap-1.5 rounded-xl border border-emerald-200 px-4 py-2.5 text-sm font-bold text-emerald-700 hover:bg-emerald-50"
+              >
+                <CheckCircle2 size={16} />
+              </button>
+              <button
+                type="button"
+                onClick={(e) => removeItem(selected.id, e)}
+                className="flex items-center justify-center rounded-xl border border-red-200 px-3 py-2.5 text-red-600 hover:bg-red-50"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 };

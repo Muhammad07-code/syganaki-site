@@ -19,11 +19,12 @@ export const formatDate = (value, language = 'kz') => {
 
   if (Number.isNaN(date.getTime())) return String(value);
 
-  return new Intl.DateTimeFormat(getLocale(language), {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  }).format(date);
+  const d = String(date.getDate()).padStart(2, '0');
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const y = date.getFullYear();
+  const h = String(date.getHours()).padStart(2, '0');
+  const min = String(date.getMinutes()).padStart(2, '0');
+  return `${d}.${m}.${y} ${h}:${min}`;
 };
 
 export const normalizeText = (value = '') =>

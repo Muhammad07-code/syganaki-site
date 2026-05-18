@@ -137,8 +137,8 @@ const AdminLayout = () => {
                 <img src="/logo.png" alt={t('brand.name')} className="h-full w-full object-contain" />
               </span>
               <span className="min-w-0">
-                <span className="block truncate font-serif text-base font-bold">{t('brand.short')}</span>
-                <span className="block truncate text-[10px] font-extrabold uppercase tracking-[0.22em] text-accent-gold">Admin</span>
+                <span className="block font-serif text-sm font-bold leading-snug">{t('brand.name')}</span>
+                <span className="block text-[10px] font-extrabold uppercase tracking-[0.22em] text-accent-gold">Admin</span>
               </span>
             </Link>
             <button type="button" className="rounded-lg bg-white/10 p-2 lg:hidden" onClick={() => setSidebarOpen(false)}>

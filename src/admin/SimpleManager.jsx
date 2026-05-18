@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { addDoc, collection, doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { Check, Edit2, Image as ImageIcon, Loader2, Plus, Search, Trash2, Upload, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -169,9 +170,10 @@ const SimpleManager = ({ collectionName, title, fields, previewField = 'title', 
         <div className="premium-card p-10 text-center text-slate-500">{t('common.not_found')}</div>
       )}
 
-      <AnimatePresence>
-        {modalOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-primary-dark/70 p-4 backdrop-blur-sm">
+      {createPortal(
+        <AnimatePresence>
+          {modalOpen && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/80 p-4">
             <motion.form initial={{ opacity: 0, y: 24, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 24, scale: 0.96 }} onSubmit={handleSubmit} className="max-h-[92vh] w-full max-w-2xl overflow-hidden rounded-lg bg-white shadow-2xl">
               <div className="flex items-center justify-between border-b border-slate-100 p-5">
                 <h2 className="text-xl font-bold">{title}</h2>
@@ -226,9 +228,11 @@ const SimpleManager = ({ collectionName, title, fields, previewField = 'title', 
                 </div>
               </div>
             </motion.form>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 };

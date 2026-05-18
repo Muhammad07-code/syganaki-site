@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Check, Edit2, Image as ImageIcon, Loader2, Plus, Search, Trash2, Upload, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -149,15 +150,16 @@ const NewsManager = () => {
         <div className="premium-card p-10 text-center text-slate-500">{t('common.not_found')}</div>
       )}
 
-      <AnimatePresence>
-        {modalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-primary-dark/70 p-4 backdrop-blur-sm"
-          >
-            <motion.form
+      {createPortal(
+        <AnimatePresence>
+          {modalOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/80 p-4"
+            >
+              <motion.form
               initial={{ opacity: 0, y: 24, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 24, scale: 0.96 }}
@@ -242,10 +244,12 @@ const NewsManager = () => {
                   </button>
                 </div>
               </div>
-            </motion.form>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              </motion.form>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 };

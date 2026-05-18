@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { collection, deleteDoc, doc, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore';
-import { CheckCircle2, Clock, Phone, Search, Trash2, XCircle } from 'lucide-react';
+import { CheckCircle2, Clock, MessageCircle, Phone, Search, Trash2, X, XCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { db, isFirebaseConfigured } from '../firebase/config';
 import { formatDate, normalizeText } from '../utils/formatDate';
@@ -10,6 +11,11 @@ const localKey = 'syganaki-applications';
 const readLocal = () => JSON.parse(window.localStorage.getItem(localKey) || '[]');
 const writeLocal = (items) => window.localStorage.setItem(localKey, JSON.stringify(items));
 
+const toWa = (phone) => {
+  const digits = String(phone || '').replace(/\D/g, '');
+  return `https://wa.me/${digits}`;
+};
+
 const Applications = () => {
   const { t, i18n } = useTranslation();
   useMarkSectionRead('application');
@@ -17,6 +23,7 @@ const Applications = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('all');
+  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
     if (!isFirebaseConfigured) {
@@ -34,39 +41,45 @@ const Applications = () => {
       })));
       setLoading(false);
     }, (error) => {
-      console.error("Error fetching applications:", error);
+      console.error('Error fetching applications:', error);
       setLoading(false);
     });
 
     return () => unsubscribe();
   }, [i18n.language]);
 
-  const changeStatus = async (id, nextStatus) => {
+  const changeStatus = async (id, nextStatus, e) => {
+    e?.stopPropagation();
     if (!isFirebaseConfigured) {
       const nextItems = items.map((item) => (item.id === id ? { ...item, status: nextStatus } : item));
       setItems(nextItems);
       writeLocal(nextItems);
+      if (selected?.id === id) setSelected({ ...selected, status: nextStatus });
       return;
     }
     try {
       await updateDoc(doc(db, 'applications', id), { status: nextStatus });
+      if (selected?.id === id) setSelected({ ...selected, status: nextStatus });
     } catch (error) {
-      console.error("Error updating status:", error);
+      console.error('Error updating status:', error);
     }
   };
 
-  const removeItem = async (id) => {
+  const removeItem = async (id, e) => {
+    e?.stopPropagation();
     if (!window.confirm(t('admin.delete'))) return;
     if (!isFirebaseConfigured) {
       const nextItems = items.filter((item) => item.id !== id);
       setItems(nextItems);
       writeLocal(nextItems);
+      setSelected(null);
       return;
     }
     try {
       await deleteDoc(doc(db, 'applications', id));
+      setSelected(null);
     } catch (error) {
-      console.error("Error deleting application:", error);
+      console.error('Error deleting application:', error);
     }
   };
 
@@ -134,24 +147,37 @@ const Applications = () => {
                 <tr><td colSpan="6" className="px-5 py-10 text-center text-slate-500">{t('common.loading')}</td></tr>
               ) : filtered.length ? (
                 filtered.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50">
+                  <tr
+                    key={item.id}
+                    className="hover:bg-slate-50 cursor-pointer"
+                    onClick={() => setSelected(item)}
+                  >
                     <td className="px-5 py-4">
                       <p className="font-bold text-primary-dark">{item.fullName}</p>
-                      <a href={`tel:${item.phone}`} className="mt-1 inline-flex items-center gap-1 text-xs text-slate-500 hover:text-primary">
+                      <span className="mt-1 inline-flex items-center gap-1 text-xs text-slate-500">
                         <Phone size={12} />
                         {item.phone}
-                      </a>
+                      </span>
                     </td>
                     <td className="px-5 py-4 text-slate-600">{item.program}</td>
                     <td className="max-w-xs truncate px-5 py-4 text-slate-500">{item.message || '—'}</td>
                     <td className="px-5 py-4 text-slate-500">{item.date || formatDate(item.createdAt, i18n.language)}</td>
                     <td className="px-5 py-4">{badge(item.status)}</td>
                     <td className="px-5 py-4">
-                      <div className="flex justify-end gap-2">
-                        <button type="button" onClick={() => changeStatus(item.id, 'contacted')} className="rounded-lg p-2 text-amber-600 hover:bg-amber-50"><Phone size={16} /></button>
-                        <button type="button" onClick={() => changeStatus(item.id, 'accepted')} className="rounded-lg p-2 text-emerald-600 hover:bg-emerald-50"><CheckCircle2 size={16} /></button>
-                        <button type="button" onClick={() => changeStatus(item.id, 'rejected')} className="rounded-lg p-2 text-red-600 hover:bg-red-50"><XCircle size={16} /></button>
-                        <button type="button" onClick={() => removeItem(item.id)} className="rounded-lg p-2 text-red-600 hover:bg-red-50"><Trash2 size={16} /></button>
+                      <div className="flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+                        <a
+                          href={toWa(item.phone)}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(e) => { e.stopPropagation(); changeStatus(item.id, 'contacted'); }}
+                          className="rounded-lg p-2 text-emerald-600 hover:bg-emerald-50"
+                          title="WhatsApp"
+                        >
+                          <MessageCircle size={16} />
+                        </a>
+                        <button type="button" onClick={(e) => changeStatus(item.id, 'accepted', e)} className="rounded-lg p-2 text-emerald-600 hover:bg-emerald-50"><CheckCircle2 size={16} /></button>
+                        <button type="button" onClick={(e) => changeStatus(item.id, 'rejected', e)} className="rounded-lg p-2 text-red-600 hover:bg-red-50"><XCircle size={16} /></button>
+                        <button type="button" onClick={(e) => removeItem(item.id, e)} className="rounded-lg p-2 text-red-600 hover:bg-red-50"><Trash2 size={16} /></button>
                       </div>
                     </td>
                   </tr>
@@ -163,6 +189,99 @@ const Applications = () => {
           </table>
         </div>
       </div>
+
+      {/* Detail Modal — rendered via Portal to escape stacking context */}
+      {selected && createPortal(
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/80 p-4"
+          onClick={() => setSelected(null)}
+        >
+          <div
+            className="w-full max-w-lg rounded-2xl bg-white shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+              <h2 className="text-lg font-bold text-primary-dark">{selected.fullName || '—'}</h2>
+              <button type="button" onClick={() => setSelected(null)} className="rounded-lg bg-slate-100 p-2 text-slate-500 hover:bg-slate-200">
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="space-y-4 px-6 py-5">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs font-extrabold uppercase tracking-widest text-slate-400">{t('admission.program')}</p>
+                  <p className="mt-1 font-semibold text-primary-dark">{selected.program || '—'}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-extrabold uppercase tracking-widest text-slate-400">{t('common.date')}</p>
+                  <p className="mt-1 font-semibold text-slate-700">{selected.date || formatDate(selected.createdAt, i18n.language)}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-extrabold uppercase tracking-widest text-slate-400">{t('admin.status')}</p>
+                  <div className="mt-1">{badge(selected.status)}</div>
+                </div>
+                <div>
+                  <p className="text-xs font-extrabold uppercase tracking-widest text-slate-400">{t('admission.phone')}</p>
+                  <a href={`tel:${selected.phone}`} className="mt-1 inline-flex items-center gap-1.5 font-semibold text-primary hover:underline">
+                    <Phone size={14} /> {selected.phone}
+                  </a>
+                </div>
+              </div>
+
+              {selected.message && (
+                <div>
+                  <p className="text-xs font-extrabold uppercase tracking-widest text-slate-400">{t('admission.message')}</p>
+                  <p className="mt-2 text-sm leading-7 text-slate-700 whitespace-pre-wrap">{selected.message}</p>
+                </div>
+              )}
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-2 border-t border-slate-100 px-6 py-4">
+              <a
+                href={toWa(selected.phone)}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => changeStatus(selected.id, 'contacted')}
+                className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-500 py-2.5 text-sm font-bold text-white hover:bg-emerald-600"
+              >
+                <MessageCircle size={16} /> WhatsApp
+              </a>
+              <a
+                href={`tel:${selected.phone}`}
+                className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50"
+              >
+                <Phone size={16} />
+              </a>
+              <button
+                type="button"
+                onClick={(e) => { changeStatus(selected.id, 'accepted', e); }}
+                className="flex items-center justify-center gap-1.5 rounded-xl border border-emerald-200 px-4 py-2.5 text-sm font-bold text-emerald-700 hover:bg-emerald-50"
+              >
+                <CheckCircle2 size={16} />
+              </button>
+              <button
+                type="button"
+                onClick={(e) => { changeStatus(selected.id, 'rejected', e); }}
+                className="flex items-center justify-center gap-1.5 rounded-xl border border-red-200 px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50"
+              >
+                <XCircle size={16} />
+              </button>
+              <button
+                type="button"
+                onClick={(e) => removeItem(selected.id, e)}
+                className="flex items-center justify-center rounded-xl border border-red-200 px-3 py-2.5 text-red-600 hover:bg-red-50"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 };
