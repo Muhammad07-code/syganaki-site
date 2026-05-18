@@ -122,24 +122,43 @@ const Login = () => {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-primary-dark p-4">
-      <img src="/institute/hero-institute.jpeg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-20" />
-      <div className="islamic-pattern absolute inset-0 opacity-[0.10]" />
+    <div className="grid min-h-screen bg-primary-dark lg:grid-cols-[1.05fr_0.95fr]">
+      <section className="relative hidden overflow-hidden p-10 text-white lg:flex lg:flex-col lg:justify-between">
+        <img src="/institute/hero-institute.jpeg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-35" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-dark via-primary-dark/85 to-primary/80" />
+        <div className="islamic-pattern absolute inset-0 opacity-[0.10]" />
+        <Link to="/" className="relative z-10 inline-flex items-center gap-3">
+          <span className="flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2">
+            <img src="/logo.png" alt={t('brand.name')} className="h-full w-full object-contain" />
+          </span>
+          <span>
+            <span className="block font-serif text-xl font-bold text-white">{t('brand.name')}</span>
+            <span className="text-sm font-bold text-accent-gold">{t('brand.type')}</span>
+          </span>
+        </Link>
+        <div className="relative z-10 max-w-xl">
+          <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-accent-gold">Official CMS</p>
+          <h1 className="mt-4 font-serif text-5xl font-bold leading-tight text-white">{t('admin.login_title')}</h1>
+          <p className="mt-5 text-lg leading-8 text-white/75">{t('admin.login_subtitle')}</p>
+        </div>
+      </section>
 
-      <form onSubmit={handleLogin} className="premium-panel relative z-10 w-full max-w-md bg-white p-8">
+      <main className="relative flex min-h-screen items-center justify-center p-4 sm:p-8">
+        <div className="absolute inset-0 bg-slate-50 lg:hidden" />
+        <form onSubmit={handleLogin} className="premium-panel relative z-10 w-full max-w-md bg-white p-7 sm:p-8">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-white shadow-xl shadow-primary/20">
-            <Lock size={30} />
+          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-white p-2 shadow-xl shadow-primary/10 ring-1 ring-slate-100">
+            <img src="/logo.png" alt={t('brand.name')} className="h-full w-full object-contain" />
           </div>
           <h1 className="text-3xl font-bold">{t('admin.login_title')}</h1>
-          <p className="mt-2 text-sm font-medium text-slate-500 uppercase tracking-widest">{t('admin.login_subtitle')}</p>
+          <p className="mt-2 text-sm font-bold text-primary">{t('admin.admin_panel_subtitle', { defaultValue: 'Әкімшілік басқару панелі' })}</p>
         </div>
 
         {error && <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">{error}</div>}
 
         <div className="space-y-5">
           <label className="block">
-            <span className="mb-2 block text-xs font-extrabold uppercase tracking-widest text-slate-500">Email</span>
+            <span className="mb-2 block text-xs font-extrabold uppercase tracking-widest text-slate-500">{t('admin.email', { defaultValue: 'Email' })}</span>
             <div className="relative">
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
               <input
@@ -199,7 +218,8 @@ const Login = () => {
             {t('admin.back_site')}
           </Link>
         </div>
-      </form>
+        </form>
+      </main>
     </div>
   );
 };

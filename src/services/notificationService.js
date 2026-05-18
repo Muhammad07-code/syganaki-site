@@ -134,7 +134,7 @@ export const subscribeAdminNotifications = (user, language, callback) => {
       sourceQuery,
       (snapshot) => {
         sourceItems[source.collectionName] = snapshot.docs
-          .filter((document) => document.data().deleted !== true)
+          .filter((document) => document.data().deleted !== true && document.data().archived !== true)
           .map((document) => makeNotification(source, document.id, document.data(), language))
           .filter((item) => item.title);
         emit();

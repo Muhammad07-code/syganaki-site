@@ -54,18 +54,45 @@
     "video": "Institute video",
     "location": "36/4 Kabanbay Batyr Avenue, Astana",
     "cards": [
-      { "value": "2022", "label": "Year founded" },
-      { "value": "500+", "label": "Students" },
-      { "value": "5", "label": "Programs" },
-      { "value": "25+", "label": "Teachers" }
+      {
+        "value": "2022",
+        "label": "Year founded"
+      },
+      {
+        "value": "500+",
+        "label": "Students"
+      },
+      {
+        "value": "5",
+        "label": "Programs"
+      },
+      {
+        "value": "25+",
+        "label": "Teachers"
+      }
     ]
   },
   "stats": [
-    { "value": "2022", "label": "Opening year" },
-    { "value": "500+", "label": "Students" },
-    { "value": "5", "label": "Programs" },
-    { "value": "20+", "label": "Mentors" },
-    { "value": "10+", "label": "Partners" }
+    {
+      "value": "2022",
+      "label": "Opening year"
+    },
+    {
+      "value": "500+",
+      "label": "Students"
+    },
+    {
+      "value": "5",
+      "label": "Programs"
+    },
+    {
+      "value": "20+",
+      "label": "Mentors"
+    },
+    {
+      "value": "10+",
+      "label": "Partners"
+    }
   ],
   "home": {
     "programs_eyebrow": "Educational Programs",
@@ -97,10 +124,22 @@
     "payment_note": "Purpose: Sadaqa / Institute support"
   },
   "benefits": [
-    { "title": "Quality Education", "desc": "Quran, hadith, fiqh, aqidah, and Arabic are taught systematically." },
-    { "title": "Experienced Teachers", "desc": "Classes are led by specialists with religious and academic experience." },
-    { "title": "Spiritual Formation", "desc": "Faith, adab, responsibility, and service to society are cultivated." },
-    { "title": "International Outlook", "desc": "Partnerships, scholarly links, and an open learning environment are developed." }
+    {
+      "title": "Quality Education",
+      "desc": "Quran, hadith, fiqh, aqidah, and Arabic are taught systematically."
+    },
+    {
+      "title": "Experienced Teachers",
+      "desc": "Classes are led by specialists with religious and academic experience."
+    },
+    {
+      "title": "Spiritual Formation",
+      "desc": "Faith, adab, responsibility, and service to society are cultivated."
+    },
+    {
+      "title": "International Outlook",
+      "desc": "Partnerships, scholarly links, and an open learning environment are developed."
+    }
   ],
   "programs": {
     "title": "Study Programs",
@@ -120,8 +159,20 @@
         "format": "Full-time",
         "image": "/institute/quran-ijaza.jpeg",
         "desc": "A comprehensive program for future theologians and imams with deep study of Islamic sciences.",
-        "subjects": ["Quranic sciences", "Hadith", "Fiqh", "Aqidah", "Islamic history", "Contemporary religious issues"],
-        "opportunities": ["Imam service", "Religious education", "Research projects", "Community counseling"]
+        "subjects": [
+          "Quranic sciences",
+          "Hadith",
+          "Fiqh",
+          "Aqidah",
+          "Islamic history",
+          "Contemporary religious issues"
+        ],
+        "opportunities": [
+          "Imam service",
+          "Religious education",
+          "Research projects",
+          "Community counseling"
+        ]
       },
       {
         "id": "quran-ijazah",
@@ -130,8 +181,19 @@
         "format": "Special program",
         "image": "/institute/quran-ijaza.jpeg",
         "desc": "A program for memorizing the Quran, mastering tajweed, and preparing for ijazah.",
-        "subjects": ["Hifz", "Tajweed", "Qiraat", "Quran etiquette", "Ijazah preparation"],
-        "opportunities": ["Qari path", "Teaching Quran", "Competitions", "Mentorship"]
+        "subjects": [
+          "Hifz",
+          "Tajweed",
+          "Qiraat",
+          "Quran etiquette",
+          "Ijazah preparation"
+        ],
+        "opportunities": [
+          "Qari path",
+          "Teaching Quran",
+          "Competitions",
+          "Mentorship"
+        ]
       },
       {
         "id": "arabic",
@@ -140,8 +202,18 @@
         "format": "Course",
         "image": "/institute/classroom.jpeg",
         "desc": "An intensive course from beginner level to confident reading of religious texts.",
-        "subjects": ["Sarf", "Nahw", "Reading and translation", "Speaking practice", "Religious terminology"],
-        "opportunities": ["Reading Arabic texts", "Working with sources", "Preparation for study abroad"]
+        "subjects": [
+          "Sarf",
+          "Nahw",
+          "Reading and translation",
+          "Speaking practice",
+          "Religious terminology"
+        ],
+        "opportunities": [
+          "Reading Arabic texts",
+          "Working with sources",
+          "Preparation for study abroad"
+        ]
       },
       {
         "id": "imam",
@@ -150,8 +222,19 @@
         "format": "Professional track",
         "image": "/institute/study-hall.jpeg",
         "desc": "A practical program for mosque service, khutbah culture, and community work.",
-        "subjects": ["Khutbah basics", "Fiqh practice", "Communication", "Family and marriage", "Media literacy"],
-        "opportunities": ["Mosque service", "Spiritual counseling", "Youth work", "Social projects"]
+        "subjects": [
+          "Khutbah basics",
+          "Fiqh practice",
+          "Communication",
+          "Family and marriage",
+          "Media literacy"
+        ],
+        "opportunities": [
+          "Mosque service",
+          "Spiritual counseling",
+          "Youth work",
+          "Social projects"
+        ]
       },
       {
         "id": "theology",
@@ -160,8 +243,19 @@
         "format": "Academic program",
         "image": "/institute/library.jpeg",
         "desc": "Academic study of Islamic theology, religious studies, and contemporary religious discourse.",
-        "subjects": ["Religious studies", "Comparative theology", "Islamic philosophy", "Research methods", "Public communication"],
-        "opportunities": ["Researcher", "Theology expert", "Teaching", "Public and state projects"]
+        "subjects": [
+          "Religious studies",
+          "Comparative theology",
+          "Islamic philosophy",
+          "Research methods",
+          "Public communication"
+        ],
+        "opportunities": [
+          "Researcher",
+          "Theology expert",
+          "Teaching",
+          "Public and state projects"
+        ]
       }
     ]
   },
@@ -176,9 +270,18 @@
     "vision": "To become a respected center of quality religious education in Kazakhstan and develop international academic links.",
     "values_title": "Values",
     "values": [
-      { "title": "Trust", "desc": "To transmit knowledge responsibly and preserve spiritual heritage with care." },
-      { "title": "Quality", "desc": "To maintain high standards of curriculum, discipline, and student experience." },
-      { "title": "Service", "desc": "To direct acquired knowledge toward public benefit." }
+      {
+        "title": "Trust",
+        "desc": "To transmit knowledge responsibly and preserve spiritual heritage with care."
+      },
+      {
+        "title": "Quality",
+        "desc": "To maintain high standards of curriculum, discipline, and student experience."
+      },
+      {
+        "title": "Service",
+        "desc": "To direct acquired knowledge toward public benefit."
+      }
     ]
   },
   "admission": {
@@ -198,19 +301,47 @@
     "send_another": "Send another application",
     "whatsapp_text": "Assalamu alaikum! I would like to learn more about admission to the institute.",
     "steps": [
-      { "title": "Leave an application", "desc": "Fill out the website form or write on WhatsApp." },
-      { "title": "Get consultation", "desc": "An admissions specialist will explain programs and documents." },
-      { "title": "Submit documents", "desc": "Prepare your documents and send them to the admissions office." },
-      { "title": "Interview", "desc": "A conversation about preparation level and learning goals." },
-      { "title": "Exam", "desc": "Taking the entrance exam for the chosen program." }
+      {
+        "title": "Leave an application",
+        "desc": "Fill out the website form or write on WhatsApp."
+      },
+      {
+        "title": "Get consultation",
+        "desc": "An admissions specialist will explain programs and documents."
+      },
+      {
+        "title": "Submit documents",
+        "desc": "Prepare your documents and send them to the admissions office."
+      },
+      {
+        "title": "Interview",
+        "desc": "A conversation about preparation level and learning goals."
+      },
+      {
+        "title": "Exam",
+        "desc": "Taking the entrance exam for the chosen program."
+      }
     ],
-    "requirements": ["ID copy", "Education document", "3x4 photo", "Medical certificate", "Application form", "Contact details"]
+    "requirements": [
+      "ID copy",
+      "Education document",
+      "3x4 photo",
+      "Medical certificate",
+      "Application form",
+      "Contact details"
+    ]
   },
   "news": {
     "title": "News",
     "subtitle": "Important events, announcements, and student life updates.",
     "search_placeholder": "Search news...",
-    "categories": ["All", "Event", "Education", "Announcement", "International"],
+    "categories": [
+      "All",
+      "Event",
+      "Education",
+      "Announcement",
+      "International"
+    ],
     "fallback": [
       {
         "id": "1",
@@ -244,32 +375,97 @@
   "gallery": {
     "title": "Gallery",
     "subtitle": "Institute building, classrooms, library, and student life.",
-    "categories": ["All", "Campus", "Learning", "Students", "Event"],
+    "categories": [
+      "All",
+      "Campus",
+      "Learning",
+      "Students",
+      "Event"
+    ],
     "items": [
-      { "title": "Institute building", "category": "Campus", "image": "/institute/hero-institute.jpeg" },
-      { "title": "Classroom", "category": "Learning", "image": "/institute/classroom.jpeg" },
-      { "title": "Library", "category": "Learning", "image": "/institute/library.jpeg" },
-      { "title": "Students", "category": "Students", "image": "/institute/students.jpeg" },
-      { "title": "Quran class", "category": "Learning", "image": "/institute/quran-ijaza.jpeg" },
-      { "title": "Dormitory", "category": "Campus", "image": "/institute/dormitory.jpeg" },
-      { "title": "Study hall", "category": "Learning", "image": "/institute/study-hall.jpeg" },
-      { "title": "Director office", "category": "Event", "image": "/institute/director.jpg" }
+      {
+        "title": "Institute building",
+        "category": "Campus",
+        "image": "/institute/hero-institute.jpeg"
+      },
+      {
+        "title": "Classroom",
+        "category": "Learning",
+        "image": "/institute/classroom.jpeg"
+      },
+      {
+        "title": "Library",
+        "category": "Learning",
+        "image": "/institute/library.jpeg"
+      },
+      {
+        "title": "Students",
+        "category": "Students",
+        "image": "/institute/students.jpeg"
+      },
+      {
+        "title": "Quran class",
+        "category": "Learning",
+        "image": "/institute/quran-ijaza.jpeg"
+      },
+      {
+        "title": "Dormitory",
+        "category": "Campus",
+        "image": "/institute/dormitory.jpeg"
+      },
+      {
+        "title": "Study hall",
+        "category": "Learning",
+        "image": "/institute/study-hall.jpeg"
+      },
+      {
+        "title": "Director office",
+        "category": "Event",
+        "image": "/institute/director.jpg"
+      }
     ]
   },
   "testimonials": [
-    { "name": "Alikhan", "role": "Islamic Studies student", "text": "The institute teaches not only knowledge, but also responsibility, adab, and service culture." },
-    { "name": "Nursultan", "role": "Quran Ijazah track", "text": "Teachers track each student's pace and pay close attention to memorization and tajweed." },
-    { "name": "Medina", "role": "Arabic course", "text": "Classes are systematic, clear, and truly help with religious texts." }
+    {
+      "name": "Alikhan",
+      "role": "Islamic Studies student",
+      "text": "The institute teaches not only knowledge, but also responsibility, adab, and service culture."
+    },
+    {
+      "name": "Nursultan",
+      "role": "Quran Ijazah track",
+      "text": "Teachers track each student's pace and pay close attention to memorization and tajweed."
+    },
+    {
+      "name": "Medina",
+      "role": "Arabic course",
+      "text": "Classes are systematic, clear, and truly help with religious texts."
+    }
   ],
   "faq": {
     "title": "FAQ",
     "subtitle": "Short answers about admission, programs, and student life.",
     "items": [
-      { "question": "What documents are required for admission?", "answer": "You need an ID copy, education document, photo, medical certificate, and application form." },
-      { "question": "Is dormitory accommodation available?", "answer": "Yes. Out-of-city students can receive housing consultation; availability is confirmed during admission." },
-      { "question": "Can I start Arabic from zero?", "answer": "Yes. The Arabic course starts from basic level and gradually leads to reading religious texts." },
-      { "question": "How do I apply to the Quran Ijazah program?", "answer": "Leave an application, pass a preparation-level interview, and receive an individual study plan." },
-      { "question": "What is the class format?", "answer": "Core programs are full-time; some courses may be organized with a flexible schedule." }
+      {
+        "question": "What documents are required for admission?",
+        "answer": "You need an ID copy, education document, photo, medical certificate, and application form."
+      },
+      {
+        "question": "Is dormitory accommodation available?",
+        "answer": "Yes. Out-of-city students can receive housing consultation; availability is confirmed during admission."
+      },
+      {
+        "question": "Can I start Arabic from zero?",
+        "answer": "Yes. The Arabic course starts from basic level and gradually leads to reading religious texts."
+      },
+      {
+        "question": "How do I apply to the Quran Ijazah program?",
+        "answer": "Leave an application, pass a preparation-level interview, and receive an individual study plan."
+      },
+      {
+        "question": "What is the class format?",
+        "answer": "Core programs are full-time; some courses may be organized with a flexible schedule."
+      }
     ]
   },
   "contacts": {
@@ -283,7 +479,12 @@
     "form_title": "Get consultation",
     "form_subtitle": "Leave your question and we will respond.",
     "subject": "Subject",
-    "subjects": ["Admission", "Study program", "Documents", "Other question"],
+    "subjects": [
+      "Admission",
+      "Study program",
+      "Documents",
+      "Other question"
+    ],
     "socials_title": "Social media",
     "map_title": "Map"
   },
@@ -295,7 +496,11 @@
     "fallback": "Short answer: I can help with admission, programs, Quran Ijazah, Arabic, and contacts. For details, write to the admissions office on WhatsApp.",
     "out_of_scope": "I answer only questions about Husamuddin as-Syganaqi Islamic Institute: programs, admission, faculty, contacts, events and institute life.",
     "related": "Related topics:",
-    "quick": ["How does admission work?", "What programs are available?", "What is the address?"]
+    "quick": [
+      "How does admission work?",
+      "What programs are available?",
+      "What is the address?"
+    ]
   },
   "footer": {
     "description": "An official educational institution combining traditional Islamic education, academic quality, and spiritual formation.",
@@ -308,8 +513,36 @@
     "privacy": "Privacy Policy",
     "offer": "Terms of Use"
   },
-  "teachers": { "title": "Our Faculty", "subtitle": "Experienced specialists with deep Islamic knowledge and academic credentials", "phd": "PhD Holders", "specialists": "Teachers", "experienced": "Years Average", "international": "International faculty", "administration": "Administration", "quran": "Quranic Sciences", "islamic": "Islamic Studies", "languages": "Arabic Language", "education": "Education", "cta_title": "Study with the institute faculty", "cta_desc": "The admissions office can help you choose a track and prepare the documents." },
-  "partners": { "title": "Institutional Partnerships", "subtitle": "The institute grows through DUMK, national and international academic relations, and the expertise of Al-Azhar and Haseki.", "international": "International Partners", "international_desc": "Global partnerships for academic cooperation", "national": "National Partners", "national_desc": "Collaborative institutions in Kazakhstan", "community": "Community Partners", "community_desc": "Local organizations and mosques", "academic_title": "Academic relations and international participation", "academic_desc": "Institute representatives participate in international seminars and scholarly conferences with presentations.", "contact_title": "Contact us about partnership", "contact_desc": "For academic, educational or community project proposals, contact the administration.", "visit_site": "Open official website" },
+  "teachers": {
+    "title": "Our Faculty",
+    "subtitle": "Experienced specialists with deep Islamic knowledge and academic credentials",
+    "phd": "PhD Holders",
+    "specialists": "Teachers",
+    "experienced": "Years Average",
+    "international": "International faculty",
+    "administration": "Administration",
+    "quran": "Quranic Sciences",
+    "islamic": "Islamic Studies",
+    "languages": "Arabic Language",
+    "education": "Education",
+    "cta_title": "Study with the institute faculty",
+    "cta_desc": "The admissions office can help you choose a track and prepare the documents."
+  },
+  "partners": {
+    "title": "Institutional Partnerships",
+    "subtitle": "The institute grows through DUMK, national and international academic relations, and the expertise of Al-Azhar and Haseki.",
+    "international": "International Partners",
+    "international_desc": "Global partnerships for academic cooperation",
+    "national": "National Partners",
+    "national_desc": "Collaborative institutions in Kazakhstan",
+    "community": "Community Partners",
+    "community_desc": "Local organizations and mosques",
+    "academic_title": "Academic relations and international participation",
+    "academic_desc": "Institute representatives participate in international seminars and scholarly conferences with presentations.",
+    "contact_title": "Contact us about partnership",
+    "contact_desc": "For academic, educational or community project proposals, contact the administration.",
+    "visit_site": "Open official website"
+  },
   "admin": {
     "login_title": "Admin Panel",
     "login_subtitle": "Private section for institute administration",
@@ -324,7 +557,7 @@
     "gallery": "Photos",
     "programs": "Programs",
     "content": "Texts",
-    "assistant": "AI Assistant",
+    "assistant": "Q&A Knowledge Base",
     "settings": "Settings",
     "notifications": "Notifications",
     "notifications_desc": "New applications, messages, and uploaded materials appear in real time.",
@@ -361,8 +594,67 @@
     "question": "Question",
     "answer": "Answer",
     "production_note": "Firebase, mobile admin, news CRUD, and application tracking are connected through one control panel.",
-    "firebase_note": "Fill Firebase production environment variables before deployment."
+    "firebase_note": "Fill Firebase production environment variables before deployment.",
+    "admin_panel_subtitle": "Administrative management panel",
+    "email": "Email",
+    "logout_confirm": "Confirm logout?",
+    "enable_push": "Enable push notifications",
+    "push_status": "Push status",
+    "push_checking": "Checking",
+    "push_enabled": "enabled",
+    "push_denied": "permission denied",
+    "push_unsupported": "browser unsupported",
+    "push_disabled": "disabled",
+    "push_missing_key": "VAPID key required",
+    "push_error": "error",
+    "full_text": "Full text",
+    "full_text_ph": "Enter the news text...",
+    "full_text_helper": "This text is shown on the full news page.",
+    "preview": "Preview",
+    "news_title_ph": "Enter news title",
+    "excerpt_ph": "Enter a short text...",
+    "content_home": "Home page",
+    "content_about": "About us",
+    "content_admission": "Admission",
+    "content_contacts": "Contacts",
+    "content_footer": "Footer",
+    "content_desc": "Edit website texts through clear sections.",
+    "content_helper": "Fill the fields and save all changes at once.",
+    "content_placeholder": "Enter text...",
+    "content_main_title": "Main title",
+    "content_short_desc": "Short description",
+    "content_button_text": "Button text",
+    "content_about_text": "Institute text",
+    "content_mission": "Mission",
+    "content_values": "Values",
+    "content_admission_text": "Admission text",
+    "content_documents": "Required documents",
+    "content_requirements": "Admission requirements",
+    "content_phone": "Phone",
+    "content_email": "Email",
+    "content_address": "Address",
+    "content_hours": "Working hours",
+    "content_footer_text": "Short text",
+    "content_copyright": "Copyright",
+    "content_socials": "Social media",
+    "program_title": "Program name",
+    "short_description": "Short description",
+    "full_description": "Full description",
+    "display_order": "Display order",
+    "add_item": "+ Add",
+    "list_item_placeholder": "Enter a new item",
+    "viewed": "Viewed",
+    "contacted": "Contacted",
+    "completed": "Completed",
+    "archive_confirm": "Send to archive?",
+    "today_applications": "Today applications",
+    "today_inquiries": "Today inquiries",
+    "recent_applications": "Recent applications",
+    "recent_inquiries": "Recent inquiries",
+    "add_program": "Add program",
+    "add_gallery_photo": "Add gallery photo",
+    "change_contacts": "Change contacts",
+    "form_helper": "Fill the fields and save.",
+    "delete_confirm": "Confirm deletion?"
   }
 }
-
-
