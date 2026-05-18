@@ -76,6 +76,40 @@ const About = () => {
         </div>
       </section>
 
+      <section className="section-y bg-background">
+        <div className="container-custom">
+          <div className="mb-10 max-w-3xl">
+            <p className="section-eyebrow">{t('about.official_info_eyebrow')}</p>
+            <h2 className="section-title">{t('about.official_info_title')}</h2>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {institute.aboutPoints.map(([title, desc], index) => {
+              const icons = [Award, Building2, ShieldCheck, Library];
+              const Icon = icons[index] || ShieldCheck;
+              return (
+                <div key={title} className="premium-card p-6">
+                  <Icon className="mb-5 text-accent-gold" size={30} />
+                  <h3 className="text-xl font-bold text-primary-dark">{title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-slate-600">{desc}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+            <div className="premium-panel bg-white p-6 sm:p-8">
+              <h3 className="text-2xl font-bold text-primary-dark">{t('about.activity_title')}</h3>
+              <p className="mt-4 text-sm leading-7 text-slate-600">{t('about.activity_desc')}</p>
+            </div>
+            <div className="premium-panel bg-white p-6 sm:p-8">
+              <h3 className="text-2xl font-bold text-primary-dark">{institute.legalTitle}</h3>
+              <p className="mt-4 text-sm leading-7 text-slate-600">{institute.legalText}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-primary-dark py-16 text-white">
         <div className="container-custom">
           <div className="mb-10 max-w-3xl">
@@ -105,7 +139,7 @@ const About = () => {
         </div>
       </section>
 
-      <section className="section-y bg-background">
+      <section id="license" className="section-y bg-background scroll-mt-28">
         <div className="container-custom grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="premium-panel bg-white p-6 sm:p-8">
             <FileText className="mb-5 text-accent-gold" size={34} />

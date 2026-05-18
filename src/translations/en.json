@@ -17,7 +17,17 @@
     "faq": "FAQ",
     "apply": "Apply",
     "institute": "Institute",
-    "support": "Support"
+    "support": "Support / Sadaqa",
+    "history_mission": "History and Mission",
+    "leadership": "Leadership",
+    "graduates": "Our Graduates",
+    "license": "License",
+    "study_programs": "Study Programs",
+    "program_directions": "Program Tracks",
+    "study_format": "Study Format",
+    "admission_process": "Admission Process",
+    "required_docs": "Required Documents",
+    "admission_office": "Admissions Office"
   },
   "topbar": {
     "address": "36/4 Kabanbay Batyr Avenue, Astana",
@@ -122,7 +132,10 @@
     "all_teachers": "All faculty",
     "all_news": "All news",
     "admission_cta_title": "Get admission guidance",
-    "admission_cta_desc": "The admissions office will help you choose a program, prepare documents, and explain the next steps."
+    "admission_cta_desc": "The admissions office will help you choose a program, prepare documents, and explain the next steps.",
+    "gallery_short_title": "Scenes from institute life",
+    "gallery_short_desc": "A concise photo selection from study, campus and institute events.",
+    "all_gallery": "All photos"
   },
   "support": {
     "eyebrow": "Sadaqa and Support",
@@ -267,7 +280,10 @@
           "Public and state projects"
         ]
       }
-    ]
+    ],
+    "format_title": "Two programs with a clear study format",
+    "format_desc": "The programs systematically cover Arabic, classical Islamic works, and practical public religious service.",
+    "directions_title": "Main study tracks"
   },
   "about": {
     "title": "About the Institute",
@@ -319,7 +335,11 @@
       "Dormitory consultation"
     ],
     "cta_title": "Need more information?",
-    "cta_desc": "Contact the institute administration about admission, study programs, or official documents."
+    "cta_desc": "Contact the institute administration about admission, study programs, or official documents.",
+    "official_info_eyebrow": "Official information",
+    "official_info_title": "Core conditions provided for students",
+    "activity_title": "Main activity",
+    "activity_desc": "Within the DUMK system, the institute prepares specialists who master public religious service culture, classical works and responsible service to society."
   },
   "admission": {
     "title": "Admission",
@@ -384,7 +404,11 @@
     "name_placeholder": "Enter your full name",
     "phone_help": "Kazakhstan phone numbers are accepted, for example: +7 777 123 45 67.",
     "message_placeholder": "Write an additional question...",
-    "privacy_note": "Submitted data is used only for admissions office contact."
+    "privacy_note": "Submitted data is used only for admissions office contact.",
+    "features_title": "Study conditions",
+    "certificate_title": "Certificate",
+    "certificate_note": "Students receive an institute certificate after completing the program.",
+    "programs_title": "Admission programs"
   },
   "news": {
     "title": "News",
@@ -584,7 +608,8 @@
     "languages": "Arabic Language",
     "education": "Education",
     "cta_title": "Study with the institute faculty",
-    "cta_desc": "The admissions office can help you choose a track and prepare the documents."
+    "cta_desc": "The admissions office can help you choose a track and prepare the documents.",
+    "bio_fallback": "{{role}}. A {{degree}} specialist with experience connected to {{country}}."
   },
   "partners": {
     "title": "Institutional Partnerships",
@@ -731,5 +756,79 @@
     "kaspi_button": "Support via Kaspi",
     "kaspi_todo": "The Kaspi payment link has not been added yet. Set the official URL in VITE_KASPI_DONATION_URL.",
     "whatsapp_text": "Assalamu alaikum! I would like to learn about supporting the institute."
+  },
+  "historyMission": {
+    "title": "History and Mission",
+    "subtitle": "Founded in 2022 by DUMK, the institute preserves traditional spiritual values and prepares educated imams.",
+    "goal": "Its goal is to give imams deep knowledge, teach classical works, strengthen Arabic, and prepare specialists who can explain religious questions responsibly.",
+    "directions_eyebrow": "Main directions",
+    "directions_title": "Directions that carry the institute mission",
+    "points": [
+      {
+        "title": "Spiritual values",
+        "desc": "Preserving and developing traditional spiritual values is central to the institute."
+      },
+      {
+        "title": "Culture of harmony",
+        "desc": "Education supports interfaith and interethnic harmony."
+      },
+      {
+        "title": "Deep knowledge for imams",
+        "desc": "Current and future imams receive systematic training in religious texts."
+      },
+      {
+        "title": "Classical works",
+        "desc": "Students study classical works in Quran, tafsir, fiqh, hadith and aqidah."
+      },
+      {
+        "title": "Arabic language",
+        "desc": "Arabic grammar, rhetoric and translation skills are strengthened."
+      },
+      {
+        "title": "Study in Kazakhstan",
+        "desc": "Young people can receive quality religious education within Kazakhstan."
+      }
+    ],
+    "local_title": "Study opportunity in Kazakhstan",
+    "local_desc": "The institute creates conditions for studying classical Islamic sciences in the national education environment."
+  },
+  "leadership": {
+    "title": "Leadership",
+    "subtitle": "Responsible leaders coordinating the institute’s academic, educational and public religious work.",
+    "eyebrow": "Management team",
+    "list_title": "Institute leadership",
+    "positions": {
+      "director": "Director",
+      "deputy": "Deputy Director",
+      "academicHead": "Head of Academic Department",
+      "quranHead": "Head of Quran Ijazah Department"
+    }
+  },
+  "graduatesPage": {
+    "title": "Our Graduates",
+    "stats": [
+      {
+        "value": "14",
+        "label": "Islamic Sciences graduates"
+      },
+      {
+        "value": "36",
+        "label": "Quran Ijazah graduates"
+      },
+      {
+        "value": "50",
+        "label": "Total graduates"
+      }
+    ],
+    "outcomes_eyebrow": "Work directions",
+    "outcomes_title": "Graduate career paths",
+    "outcomes_desc": "As of 2025, all 14 Islamic Sciences graduates are employed. Quran Ijazah graduates serve in mosques, education and continued study.",
+    "roles": [
+      "Chief imam / naib imam / imam",
+      "Teacher",
+      "Specialist",
+      "Muezzin",
+      "Continuing education"
+    ]
   }
 }

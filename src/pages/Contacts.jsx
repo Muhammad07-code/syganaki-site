@@ -75,7 +75,7 @@ const Contacts = () => {
         </div>
       </section>
 
-      <section className="-mt-8 pb-8">
+      <section id="admission-office" className="-mt-8 scroll-mt-28 pb-8">
         <div className="container-custom relative z-20 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <ContactCard icon={<MapPin size={24} />} title={t('contacts.address_title')}>
             <a href={MAP_URL} target="_blank" rel="noreferrer" className="font-bold text-primary hover:text-accent-gold">{t('topbar.address')}</a>

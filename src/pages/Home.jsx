@@ -5,11 +5,10 @@ import {
   ArrowRight,
   BookOpen,
   CalendarDays,
-  CheckCircle2,
   GraduationCap,
+  Image,
   MapPin,
   Phone,
-  ShieldCheck,
   Users,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -33,8 +32,8 @@ const Home = () => {
   const { t, i18n } = useTranslation();
   const institute = useMemo(() => getInstituteContent(i18n.language), [i18n.language]);
   const [latestNews, setLatestNews] = useState(institute.news.slice(0, 3));
-  const programs = institute.programs.slice(0, 4);
-  const benefits = t('benefits', { returnObjects: true }).slice(0, 4);
+  const programs = institute.programs.slice(0, 2);
+  const gallery = institute.gallery.slice(0, 4);
 
   const featuredTeachers = useMemo(
     () =>
@@ -122,7 +121,7 @@ const Home = () => {
             </Link>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-6 lg:grid-cols-2">
             {programs.map((program, index) => (
               <motion.article
                 key={program.id}
@@ -137,48 +136,28 @@ const Home = () => {
                   src={program.image}
                   alt={program.title}
                   loading="lazy"
-                  className="aspect-[16/10] w-full object-cover"
-                  width="420"
-                  height="263"
+                  className="aspect-[16/9] w-full object-cover"
+                  width="680"
+                  height="383"
                 />
-                <div className="p-5">
+                <div className="p-6 sm:p-7">
                   <span className="inline-flex items-center gap-2 rounded-full bg-accent-lightGold px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.12em] text-primary">
                     <GraduationCap size={15} />
                     {program.duration}
                   </span>
-                  <h3 className="mt-4 font-serif text-xl font-bold leading-tight text-primary-dark">{program.title}</h3>
-                  <p className="mt-3 line-clamp-3 text-sm leading-7 text-slate-600">{program.desc}</p>
+                  <h3 className="mt-5 font-serif text-2xl font-bold leading-tight text-primary-dark">{program.title}</h3>
+                  <p className="mt-3 line-clamp-4 text-sm leading-7 text-slate-600">{program.desc}</p>
+                  {program.subjects?.length > 0 && (
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {program.subjects.slice(0, 4).map((subject) => (
+                        <span key={subject} className="rounded-full bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-600">
+                          {subject}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </motion.article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-y bg-background">
-        <div className="container-custom">
-          <div className="mb-10 max-w-3xl">
-            <p className="section-eyebrow">
-              <ShieldCheck size={16} />
-              {t('home.benefits_eyebrow')}
-            </p>
-            <h2 className="section-title text-balance">{t('home.benefits_title')}</h2>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {benefits.map((benefit, index) => (
-              <motion.div
-                key={benefit.title}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-80px' }}
-                variants={fadeUp}
-                transition={{ delay: index * 0.04 }}
-                className="premium-card p-5"
-              >
-                <CheckCircle2 className="mb-4 text-accent-gold" size={26} />
-                <h3 className="text-lg font-bold text-primary-dark">{benefit.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{benefit.desc}</p>
-              </motion.div>
             ))}
           </div>
         </div>
@@ -306,6 +285,52 @@ const Home = () => {
               {t('nav.contacts')}
               <ArrowRight size={16} />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="section-y bg-background">
+        <div className="container-custom">
+          <div className="mb-10 flex flex-wrap items-end justify-between gap-5">
+            <div className="max-w-3xl">
+              <p className="section-eyebrow">
+                <Image size={16} />
+                {t('nav.gallery')}
+              </p>
+              <h2 className="section-title text-balance">{t('home.gallery_short_title')}</h2>
+              <p className="section-copy mt-4">{t('home.gallery_short_desc')}</p>
+            </div>
+            <Link to="/gallery" className="btn-ghost">
+              {t('home.all_gallery')}
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {gallery.map((item, index) => (
+              <motion.article
+                key={item.id}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-80px' }}
+                variants={fadeUp}
+                transition={{ delay: index * 0.04 }}
+                className="premium-card overflow-hidden"
+              >
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  loading="lazy"
+                  className="aspect-[4/3] w-full object-cover"
+                  width="360"
+                  height="270"
+                />
+                <div className="p-4">
+                  <span className="rounded-full bg-accent-lightGold px-3 py-1 text-xs font-bold text-primary">{item.category}</span>
+                  <h3 className="mt-3 line-clamp-2 text-base font-bold text-primary-dark">{item.title}</h3>
+                </div>
+              </motion.article>
+            ))}
           </div>
         </div>
       </section>

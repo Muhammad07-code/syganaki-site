@@ -20,11 +20,13 @@ import { normalizeText } from '../utils/formatDate';
 import { MAP_URL } from '../config/site';
 
 const languages = [
-  { code: 'kz', label: 'Қазақша', short: 'KZ' },
-  { code: 'ru', label: 'Русский', short: 'RU' },
+  { code: 'kz', label: '\u049a\u0430\u0437\u0430\u049b\u0448\u0430', short: 'KZ' },
+  { code: 'ru', label: '\u0420\u0443\u0441\u0441\u043a\u0438\u0439', short: 'RU' },
   { code: 'en', label: 'English', short: 'ENG' },
-  { code: 'ar', label: 'العربية', short: 'AR' },
+  { code: 'ar', label: '\u0627\u0644\u0639\u0631\u0628\u064a\u0629', short: 'AR' },
 ];
+
+const pathOnly = (path) => path.split('#')[0];
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
@@ -41,12 +43,49 @@ const Navbar = () => {
   const navItems = useMemo(
     () => [
       { label: t('nav.home'), path: '/' },
-      { label: t('nav.institute', { defaultValue: t('nav.about') }), path: '/about' },
-      { label: t('nav.programs'), path: '/programs' },
-      { label: t('nav.admission'), path: '/admission' },
-      { label: t('nav.teachers'), path: '/teachers' },
+      {
+        label: t('nav.institute', { defaultValue: t('nav.about') }),
+        path: '/about',
+        children: [
+          { label: t('nav.about'), path: '/about' },
+          { label: t('nav.history_mission'), path: '/history-mission' },
+          { label: t('nav.leadership'), path: '/leadership' },
+          { label: t('nav.teachers'), path: '/teachers' },
+          { label: t('nav.partners'), path: '/partners' },
+          { label: t('nav.graduates'), path: '/graduates' },
+          { label: t('nav.license'), path: '/about#license' },
+          { label: t('nav.gallery'), path: '/gallery' },
+        ],
+      },
+      {
+        label: t('nav.programs'),
+        path: '/programs',
+        children: [
+          { label: t('nav.study_programs'), path: '/programs' },
+          { label: t('nav.program_directions'), path: '/programs#directions' },
+          { label: t('nav.study_format'), path: '/programs#format' },
+        ],
+      },
+      {
+        label: t('nav.admission'),
+        path: '/admission',
+        children: [
+          { label: t('nav.admission_process'), path: '/admission' },
+          { label: t('nav.required_docs'), path: '/admission#documents' },
+          { label: t('nav.faq'), path: '/faq' },
+          { label: t('nav.apply'), path: '/admission#application' },
+        ],
+      },
       { label: t('nav.news'), path: '/news' },
-      { label: t('nav.contacts'), path: '/contacts' },
+      {
+        label: t('nav.contacts'),
+        path: '/contacts',
+        children: [
+          { label: t('nav.contacts'), path: '/contacts' },
+          { label: t('nav.admission_office'), path: '/contacts#admission-office' },
+          { label: t('nav.support'), path: '/donation' },
+        ],
+      },
     ],
     [t],
   );
@@ -55,12 +94,16 @@ const Navbar = () => {
     languages.find((language) => language.code === i18n.language) || languages[0];
   const isLight = scrolled || location.pathname !== '/';
 
+  const isItemActive = (item) => {
+    if (item.path === '/') return location.pathname === '/';
+    if (location.pathname === item.path) return true;
+    return item.children?.some((child) => pathOnly(child.path) === location.pathname);
+  };
+
   const searchResults = useMemo(() => {
+    const navigationItems = navItems.flatMap((item) => [item, ...(item.children || [])]);
     const baseItems = [
-      ...navItems.map((item) => ({ title: item.label, label: t('common.details'), path: item.path })),
-      { title: t('nav.gallery'), label: t('nav.gallery'), path: '/gallery' },
-      { title: t('nav.faq'), label: t('nav.faq'), path: '/faq' },
-      { title: t('nav.support', { defaultValue: t('donation.title', { defaultValue: 'Support' }) }), label: t('footer.navigation'), path: '/donation' },
+      ...navigationItems.map((item) => ({ title: item.label, label: t('common.details'), path: item.path })),
       ...institute.programs.map((item) => ({ title: item.title, label: t('nav.programs'), path: '/programs' })),
       ...institute.news.map((item) => ({ title: item.title, label: t('nav.news'), path: `/news/${item.id}` })),
     ];
@@ -190,19 +233,39 @@ const Navbar = () => {
           </Link>
 
           <nav className="hidden items-center gap-0.5 xl:flex">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={({ isActive }) =>
-                  `flex min-h-[42px] items-center whitespace-nowrap rounded-lg px-2.5 text-[11px] font-extrabold uppercase tracking-[0.04em] transition-all 2xl:px-3 ${
-                    isLight ? 'text-slate-700 hover:bg-primary/5' : 'text-white/90 hover:bg-white/10'
-                  } ${isActive ? (isLight ? 'bg-primary/5 text-primary-dark' : 'text-accent-gold') : ''}`
-                }
-              >
-                {item.label}
-              </NavLink>
-            ))}
+            {navItems.map((item) => {
+              const active = isItemActive(item);
+              return (
+                <div key={item.path} className="group relative">
+                  <NavLink
+                    to={item.path}
+                    end={item.path === '/'}
+                    className={() =>
+                      `flex min-h-[42px] items-center gap-1 whitespace-nowrap rounded-lg px-2.5 text-sm font-extrabold uppercase tracking-[0.02em] transition-all 2xl:px-3 ${
+                        isLight ? 'text-slate-700 hover:bg-primary/5' : 'text-white/90 hover:bg-white/10'
+                      } ${active ? (isLight ? 'text-primary-dark' : 'text-accent-gold') : ''}`
+                    }
+                  >
+                    {item.label}
+                    {item.children && <ChevronDown size={14} className="transition-transform group-hover:rotate-180" />}
+                  </NavLink>
+
+                  {item.children && (
+                    <div className="invisible absolute left-0 top-full z-[95] mt-2 w-64 translate-y-2 rounded-lg border border-slate-200 bg-white p-2 opacity-0 shadow-[0_24px_80px_rgba(5,24,17,0.18)] transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.path}
+                          to={child.path}
+                          className="block rounded-md px-4 py-3 text-sm font-bold leading-5 text-slate-600 hover:bg-accent-lightGold hover:text-primary-dark"
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </nav>
 
           <div className="flex shrink-0 items-center gap-2">
@@ -266,7 +329,7 @@ const Navbar = () => {
               className={`flex h-11 w-11 items-center justify-center rounded-lg xl:hidden ${
                 isLight ? 'bg-primary/5 text-primary' : 'bg-white/10 text-white backdrop-blur-xl'
               }`}
-              aria-label={t('common.open_menu', { defaultValue: 'Open menu' })}
+              aria-label={t('common.open_menu')}
             >
               <Menu size={23} />
             </button>
@@ -312,15 +375,12 @@ const Navbar = () => {
                   {navItems.map((item) => (
                     <MobileMenuAccordion key={item.path} item={item} onNavigate={() => setMenuOpen(false)} />
                   ))}
-                  <MobileMenuAccordion item={{ label: t('nav.faq'), path: '/faq' }} onNavigate={() => setMenuOpen(false)} />
-                  <MobileMenuAccordion item={{ label: t('nav.gallery'), path: '/gallery' }} onNavigate={() => setMenuOpen(false)} />
-                  <MobileMenuAccordion item={{ label: t('nav.support', { defaultValue: t('donation.title', { defaultValue: 'Support' }) }), path: '/donation' }} onNavigate={() => setMenuOpen(false)} />
                 </nav>
               </div>
 
               <div className="space-y-3 border-t border-slate-100 bg-slate-50 p-4">
                 <Link
-                  to="/admission"
+                  to="/admission#application"
                   className="flex items-center justify-center rounded-lg bg-accent-gold py-2.5 text-sm font-bold text-primary-dark transition-colors hover:bg-accent-gold/90"
                   onClick={() => setMenuOpen(false)}
                 >

@@ -127,6 +127,41 @@ const Admission = () => {
               </div>
             </div>
 
+            <div className="premium-panel bg-white p-6 sm:p-8">
+              <div className="mb-6 flex items-center gap-3">
+                <ShieldCheck className="text-accent-gold" size={30} />
+                <h2 className="text-3xl font-bold">{t('admission.features_title')}</h2>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {institute.aboutPoints.map(([title, desc]) => (
+                  <div key={title} className="rounded-lg bg-slate-50 p-4">
+                    <h3 className="font-bold text-primary-dark">{title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">{desc}</p>
+                  </div>
+                ))}
+                <div className="rounded-lg bg-accent-lightGold/50 p-4">
+                  <h3 className="font-bold text-primary-dark">{t('admission.certificate_title')}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">{t('admission.certificate_note')}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="premium-panel bg-white p-6 sm:p-8">
+              <div className="mb-6 flex items-center gap-3">
+                <FileText className="text-accent-gold" size={30} />
+                <h2 className="text-3xl font-bold">{t('admission.programs_title')}</h2>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {fallbackPrograms.slice(0, 2).map((program) => (
+                  <div key={program.id} className="rounded-lg border border-slate-200 bg-white p-5">
+                    <p className="text-xs font-extrabold uppercase tracking-[0.12em] text-accent-gold">{program.duration}</p>
+                    <h3 className="mt-2 text-xl font-bold text-primary-dark">{program.title}</h3>
+                    <p className="mt-3 text-sm leading-7 text-slate-600">{program.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div>
               <div className="mb-7 flex items-center gap-3">
                 <ShieldCheck className="text-accent-gold" size={30} />
@@ -152,7 +187,7 @@ const Admission = () => {
               </div>
             </div>
 
-            <div className="premium-panel bg-white p-6 sm:p-8">
+            <div id="documents" className="premium-panel scroll-mt-28 bg-white p-6 sm:p-8">
               <div className="mb-6 flex items-center gap-3">
                 <FileText className="text-accent-gold" size={30} />
                 <h2 className="text-3xl font-bold">{t('admission.docs_title')}</h2>
@@ -180,7 +215,7 @@ const Admission = () => {
             </div>
           </div>
 
-          <aside className="premium-panel sticky top-24 bg-white p-6 sm:p-8">
+          <aside id="application" className="premium-panel sticky top-24 scroll-mt-28 bg-white p-6 sm:p-8">
             <h2 className="text-2xl font-bold">{t('admission.form_title')}</h2>
             <p className="mt-3 text-sm leading-7 text-slate-600">{t('admission.form_subtitle')}</p>
 
