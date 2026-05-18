@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
-import { Loader2, Lock, Mail, ChevronLeft, Send } from 'lucide-react';
+import { Loader2, Lock, Mail, ChevronLeft, Send, Eye, EyeOff } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { auth } from '../firebase/config';
 
@@ -13,6 +13,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [resetSent, setResetSent] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
@@ -166,13 +167,23 @@ const Login = () => {
             <div className="relative">
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                className="w-full rounded-xl border-2 border-slate-100 bg-slate-50 px-12 py-4 font-bold outline-none focus:border-primary transition-all"
+                className="w-full rounded-xl border-2 border-slate-100 bg-slate-50 py-4 pl-12 pr-14 font-bold outline-none focus:border-primary transition-all"
                 placeholder="••••••••"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword((value) => !value)}
+                className="absolute right-4 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-white/70 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                aria-label={showPassword
+                  ? t('admin.hide_password', { defaultValue: 'Hide password' })
+                  : t('admin.show_password', { defaultValue: 'Show password' })}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
           </label>
 

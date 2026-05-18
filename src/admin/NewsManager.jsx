@@ -14,6 +14,8 @@ const initialForm = {
   content: '',
 };
 
+const CUSTOM_CATEGORY = '__custom__';
+
 const NewsManager = () => {
   const { t, i18n } = useTranslation();
   const institute = getInstituteContent(i18n.language);
@@ -26,6 +28,7 @@ const NewsManager = () => {
   const [search, setSearch] = useState('');
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
 
   const loadNews = async () => {
     setLoading(true);
@@ -46,6 +49,7 @@ const NewsManager = () => {
   const openCreate = () => {
     setEditingId(null);
     setFormData({ ...initialForm, category: categories[0] });
+    setUploadError('');
     setModalOpen(true);
   };
 
@@ -58,6 +62,7 @@ const NewsManager = () => {
       excerpt: item.excerpt || '',
       content: item.content || '',
     });
+    setUploadError('');
     setModalOpen(true);
   };
 
@@ -65,11 +70,16 @@ const NewsManager = () => {
     const file = event.target.files?.[0];
     if (!file) return;
     setUploading(true);
+    setUploadError('');
     try {
       const url = await uploadNewsImage(file);
       setFormData((current) => ({ ...current, image: url }));
+    } catch (error) {
+      console.error('News image upload error:', error);
+      setUploadError(t('admin.upload_error'));
     } finally {
       setUploading(false);
+      event.target.value = '';
     }
   };
 
@@ -167,9 +177,26 @@ const NewsManager = () => {
                   </label>
                   <label className="block">
                     <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.14em] text-slate-500">{t('common.category')}</span>
-                    <select value={formData.category} onChange={(event) => setFormData({ ...formData, category: event.target.value })} className="admin-input">
+                    <select
+                      value={categories.includes(formData.category) ? formData.category : CUSTOM_CATEGORY}
+                      onChange={(event) => {
+                        const value = event.target.value;
+                        setFormData({ ...formData, category: value === CUSTOM_CATEGORY ? '' : value });
+                      }}
+                      className="admin-input"
+                    >
                       {categories.map((item) => <option key={item}>{item}</option>)}
+                      <option value={CUSTOM_CATEGORY}>{t('admin.custom_category')}</option>
                     </select>
+                    {!categories.includes(formData.category) && (
+                      <input
+                        value={formData.category}
+                        onChange={(event) => setFormData({ ...formData, category: event.target.value })}
+                        className="admin-input mt-3"
+                        placeholder={t('admin.custom_category')}
+                        required
+                      />
+                    )}
                   </label>
                 </div>
 
@@ -183,9 +210,15 @@ const NewsManager = () => {
                       <input type="file" accept="image/*" onChange={handleUpload} className="hidden" />
                     </label>
                   </div>
+                  <p className="mt-2 text-xs font-semibold text-slate-400">{t('admin.upload_hint')}</p>
+                  {uploadError && <p className="mt-2 text-xs font-bold text-red-600">{uploadError}</p>}
                 </label>
 
-                {formData.image && <img src={formData.image} alt="" className="aspect-[16/7] w-full rounded-lg object-cover" />}
+                {formData.image && (
+                  <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+                    <img src={formData.image} alt="" className="aspect-[16/7] w-full object-cover" />
+                  </div>
+                )}
 
                 <label className="block">
                   <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.14em] text-slate-500">{t('admin.excerpt')}</span>

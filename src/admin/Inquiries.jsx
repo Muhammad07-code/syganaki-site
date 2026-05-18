@@ -97,7 +97,7 @@ const Inquiries = () => {
 
       <div className="premium-card overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
+          <table className="min-w-[760px] w-full text-left text-sm">
             <thead className="bg-slate-50 text-xs font-extrabold uppercase tracking-[0.12em] text-slate-500">
               <tr>
                 <th className="px-5 py-4">{t('admission.name')}</th>

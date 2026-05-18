@@ -24,6 +24,7 @@ const SimpleManager = ({ collectionName, title, fields, previewField = 'title', 
   const [formData, setFormData] = useState(makeInitial(fields));
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
 
   const loadItems = async () => {
     setLoading(true);
@@ -49,12 +50,14 @@ const SimpleManager = ({ collectionName, title, fields, previewField = 'title', 
   const openCreate = () => {
     setEditingId(null);
     setFormData(makeInitial(fields));
+    setUploadError('');
     setModalOpen(true);
   };
 
   const openEdit = (item) => {
     setEditingId(item.id);
     setFormData(fields.reduce((acc, field) => ({ ...acc, [field.name]: item[field.name] || field.defaultValue || '' }), {}));
+    setUploadError('');
     setModalOpen(true);
   };
 
@@ -62,14 +65,16 @@ const SimpleManager = ({ collectionName, title, fields, previewField = 'title', 
     const file = event.target.files?.[0];
     if (!file) return;
     setUploading(true);
+    setUploadError('');
     try {
-      const url = await uploadNewsImage(file);
+      const url = await uploadNewsImage(file, collectionName === 'gallery' ? 'gallery' : 'news');
       setFormData((current) => ({ ...current, [fieldName]: url }));
     } catch (error) {
       console.error("Upload error:", error);
-      alert(t('common.error'));
+      setUploadError(t('admin.upload_error'));
     } finally {
       setUploading(false);
+      event.target.value = '';
     }
   };
 
@@ -179,13 +184,22 @@ const SimpleManager = ({ collectionName, title, fields, previewField = 'title', 
                     {field.type === 'textarea' ? (
                       <textarea value={formData[field.name]} onChange={(event) => setFormData({ ...formData, [field.name]: event.target.value })} className="admin-input min-h-[120px] resize-none" required={field.required} />
                     ) : field.type === 'image' ? (
-                      <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
-                        <input value={formData[field.name]} onChange={(event) => setFormData({ ...formData, [field.name]: event.target.value })} className="admin-input" required={field.required} />
-                        <label className="btn-ghost cursor-pointer">
-                          {uploading ? <Loader2 size={17} className="animate-spin" /> : <Upload size={17} />}
-                          {t('admin.upload')}
-                          <input type="file" accept="image/*" onChange={(event) => handleUpload(event, field.name)} className="hidden" />
-                        </label>
+                      <div className="space-y-3">
+                        <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+                          <input value={formData[field.name]} onChange={(event) => setFormData({ ...formData, [field.name]: event.target.value })} className="admin-input" required={field.required} />
+                          <label className="btn-ghost cursor-pointer">
+                            {uploading ? <Loader2 size={17} className="animate-spin" /> : <Upload size={17} />}
+                            {t('admin.upload')}
+                            <input type="file" accept="image/*" onChange={(event) => handleUpload(event, field.name)} className="hidden" />
+                          </label>
+                        </div>
+                        <p className="text-xs font-semibold text-slate-400">{t('admin.upload_hint')}</p>
+                        {uploadError && <p className="text-xs font-bold text-red-600">{uploadError}</p>}
+                        {formData[field.name] && (
+                          <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+                            <img src={formData[field.name]} alt="" className="aspect-[16/8] w-full object-cover" />
+                          </div>
+                        )}
                       </div>
                     ) : field.type === 'array' ? (
                       <div className="space-y-2">

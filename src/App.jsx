@@ -22,6 +22,7 @@ const AdminGallery = lazy(() => import('./admin/GalleryManager'));
 const AdminPrograms = lazy(() => import('./admin/ProgramsManager'));
 const AdminContent = lazy(() => import('./admin/ContentManager'));
 const AdminAssistant = lazy(() => import('./admin/AssistantManager'));
+const AdminNotifications = lazy(() => import('./admin/Notifications'));
 const Login = lazy(() => import('./admin/Login'));
 
 const PageLoader = () => (
@@ -58,6 +59,7 @@ function App() {
           <Route path="programs" element={<AdminPrograms />} />
           <Route path="content" element={<AdminContent />} />
           <Route path="assistant" element={<AdminAssistant />} />
+          <Route path="notifications" element={<AdminNotifications />} />
         </Route>
       </Routes>
     </Suspense>

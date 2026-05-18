@@ -566,6 +566,7 @@ const partners = [
     type: L('Құрылтайшы бастама', 'Учредительная инициатива', 'Founding initiative', 'المبادرة المؤسسة'),
     name: L('Қазақстан мұсылмандары діни басқармасы', 'Духовное управление мусульман Казахстана', 'Spiritual Administration of Muslims of Kazakhstan', 'الإدارة الدينية لمسلمي كازاخستان'),
     location: L('Қазақстан', 'Казахстан', 'Kazakhstan', 'كازاخستان'),
+    url: 'https://www.muftiyat.kz/kk/',
     description: L('Институт ҚМДБ бастамасымен құрылған және діни-ағартушылық қызметті осы ортада жүзеге асырады.', 'Институт создан по инициативе ДУМК и ведет духовно-просветительскую работу в этой системе.', 'The institute was founded by DUMK and carries out public religious education in this institutional framework.', 'تأسس المعهد بمبادرة الإدارة الدينية ويعمل في إطار الخدمة الدينية والتعليمية.'),
   },
   {
@@ -573,6 +574,7 @@ const partners = [
     type: L('Ғылыми байланыс', 'Научная связь', 'Academic relation', 'علاقة علمية'),
     name: L('Нұр-Мүбарак Египет ислам мәдениеті университеті', 'Египетский университет исламской культуры Нур-Мубарак', 'Nur-Mubarak Egyptian University of Islamic Culture', 'جامعة نور مبارك المصرية للثقافة الإسلامية'),
     location: L('Алматы', 'Алматы', 'Almaty', 'ألماتي'),
+    url: 'https://www.nmu.edu.kz/',
     description: L('Халықаралық семинарлар мен ғылыми кездесулер аясындағы серіктес орта.', 'Партнерская академическая среда международных семинаров и научных встреч.', 'A partner academic environment for international seminars and scholarly meetings.', 'بيئة أكاديمية شريكة للندوات الدولية واللقاءات العلمية.'),
   },
   {
@@ -580,6 +582,7 @@ const partners = [
     type: L('Халықаралық ұйым', 'Международная организация', 'International organization', 'منظمة دولية'),
     name: 'IRCICA',
     location: L('Халықаралық', 'Международно', 'International', 'دولي'),
+    url: 'https://www.ircica.org/ircica',
     description: L('Ислам мәдениеті мен қолжазба мұрасын зерттеу бағытындағы халықаралық ғылыми байланыс.', 'Международная научная связь в области исламской культуры и рукописного наследия.', 'International scholarly cooperation in Islamic culture and manuscript heritage.', 'تعاون علمي دولي في الثقافة الإسلامية وتراث المخطوطات.'),
   },
   {
@@ -587,6 +590,7 @@ const partners = [
     type: L('Шетелдік мамандар', 'Зарубежные специалисты', 'International faculty', 'أساتذة دوليون'),
     name: L('Әл-Азһар университеті', 'Университет Аль-Азхар', 'Al-Azhar University', 'جامعة الأزهر'),
     location: L('Мысыр', 'Египет', 'Egypt', 'مصر'),
+    url: 'https://azu.edu.eg/',
     description: L('Мысырдан шақырылған мамандар институттағы ислам ілімдері және араб тілі бағытын күшейтеді.', 'Приглашенные из Египта специалисты усиливают направления исламских наук и арабского языка.', 'Specialists invited from Egypt strengthen Islamic sciences and Arabic language instruction.', 'يسهم متخصصون من مصر في تقوية العلوم الإسلامية واللغة العربية في المعهد.'),
   },
   {
@@ -594,6 +598,7 @@ const partners = [
     type: L('Шетелдік тәжірибе', 'Зарубежный опыт', 'International expertise', 'خبرة دولية'),
     name: L('Хасеки академиясы', 'Академия Хасеки', 'Haseki Academy', 'أكاديمية حاسكي'),
     location: L('Түркия', 'Турция', 'Türkiye', 'تركيا'),
+    url: 'https://istanbulihtisas.diyanet.gov.tr/',
     description: L('Түркиядағы исламтану тәжірибесі институттың оқу және ғылыми ортасын толықтырады.', 'Опыт исламского образования Турции дополняет учебную и научную среду института.', 'Türkiye’s Islamic studies experience complements the institute’s academic environment.', 'تضيف خبرة التعليم الإسلامي في تركيا إلى البيئة العلمية للمعهد.'),
   },
 ];

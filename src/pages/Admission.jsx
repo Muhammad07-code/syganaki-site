@@ -60,8 +60,6 @@ const Admission = () => {
       await saveApplication(formData);
       setSubmitted(true);
       const firstProgram = programs[0]?.title || fallbackPrograms[0]?.title || '';
-      const message = `${t('admission.whatsapp_text')}\n\n${t('admission.name')}: ${formData.fullName}\n${t('admission.phone')}: ${formData.phone}\n${t('admission.program')}: ${formData.program}`;
-      window.open(buildWhatsAppLink(WHATSAPP_NUMBER, message), '_blank', 'noopener,noreferrer');
       setFormData({ fullName: '', phone: '', program: firstProgram, message: '' });
     } catch (err) {
       setError(err.message === 'rate_limited' ? t('common.too_many_requests', { defaultValue: t('common.error') }) : t('common.error'));
@@ -142,7 +140,6 @@ const Admission = () => {
             ) : (
               <>
                 <h2 className="text-2xl font-bold">{t('admission.form_title')}</h2>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{t('admission.form_subtitle')}</p>
 
                 {error && <div className="mt-5 rounded-lg border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">{error}</div>}
 

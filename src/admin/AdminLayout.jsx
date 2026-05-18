@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import {
   Bell,
   Bot,
@@ -18,43 +17,41 @@ import {
   X,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { auth, db, isFirebaseConfigured } from '../firebase/config';
+import { auth, isFirebaseConfigured } from '../firebase/config';
 import { hasAdminAccess } from '../services/adminAuth';
+import { subscribeAdminNotifications } from '../services/notificationService';
 
 const AdminLayout = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [accessDenied, setAccessDenied] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [counts, setCounts] = useState({ applications: 0, inquiries: 0 });
+  const [notifications, setNotifications] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    if (!isFirebaseConfigured) return;
+  const unreadNotifications = useMemo(
+    () => notifications.filter((item) => !item.read),
+    [notifications],
+  );
 
-    const qApps = query(collection(db, 'applications'), where('status', '==', 'new'));
-    const unsubApps = onSnapshot(qApps, (snap) => {
-      setCounts(prev => ({ ...prev, applications: snap.size }));
-    });
-
-    const qInq = query(collection(db, 'inquiries'), where('status', '==', 'new'));
-    const unsubInq = onSnapshot(qInq, (snap) => {
-      setCounts(prev => ({ ...prev, inquiries: snap.size }));
-    });
-
-    return () => {
-      unsubApps();
-      unsubInq();
-    };
-  }, []);
+  const counts = useMemo(
+    () => ({
+      notifications: unreadNotifications.length,
+      applications: unreadNotifications.filter((item) => item.type === 'application').length,
+      inquiries: unreadNotifications.filter((item) => item.type === 'message').length,
+      uploads: unreadNotifications.filter((item) => item.type === 'upload').length,
+    }),
+    [unreadNotifications],
+  );
 
   const menuItems = [
     { icon: LayoutDashboard, label: t('admin.dashboard'), path: '/admin' },
+    { icon: Bell, label: t('admin.notifications'), path: '/admin/notifications', badge: counts.notifications },
     { icon: Inbox, label: t('admin.applications'), path: '/admin/applications', badge: counts.applications },
     { icon: MessageSquare, label: t('admin.inquiries'), path: '/admin/inquiries', badge: counts.inquiries },
-    { icon: Newspaper, label: t('admin.news'), path: '/admin/news' },
+    { icon: Newspaper, label: t('admin.news'), path: '/admin/news', badge: counts.uploads },
     { icon: Image, label: t('admin.gallery'), path: '/admin/gallery' },
     { icon: Settings, label: t('admin.programs'), path: '/admin/programs' },
     { icon: FileText, label: t('admin.content'), path: '/admin/content' },
@@ -84,6 +81,12 @@ const AdminLayout = () => {
     return () => unsubscribe();
   }, [navigate]);
 
+  useEffect(() => {
+    if (!user && isFirebaseConfigured) return;
+    const unsubscribe = subscribeAdminNotifications(user, i18n.language, setNotifications);
+    return () => unsubscribe();
+  }, [i18n.language, user]);
+
   const handleLogout = async () => {
     await signOut(auth);
     navigate('/admin/login');
@@ -110,12 +113,20 @@ const AdminLayout = () => {
   }
 
   const currentTitle = menuItems.find((item) => item.path === location.pathname)?.label || t('admin.dashboard');
-  const totalNew = counts.applications + counts.inquiries;
+  const totalNew = counts.notifications;
 
   return (
-    <div className="min-h-screen bg-slate-50 lg:flex">
+    <div className="min-h-screen overflow-x-hidden bg-slate-50 lg:flex">
+      {sidebarOpen && (
+        <button
+          type="button"
+          aria-label="Close sidebar"
+          className="fixed inset-0 z-40 bg-slate-950/40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-[280px] transform bg-primary-dark text-white shadow-2xl transition-transform duration-300 lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-[280px] max-w-[86vw] transform bg-primary-dark text-white shadow-2xl transition-transform duration-300 lg:static lg:max-w-none lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -185,7 +196,12 @@ const AdminLayout = () => {
             <h1 className="truncate text-lg font-extrabold text-primary-dark">{currentTitle}</h1>
           </div>
           <div className="flex items-center gap-3">
-            <button type="button" className="relative rounded-lg bg-slate-100 p-2 text-slate-600">
+            <button
+              type="button"
+              onClick={() => navigate('/admin/notifications')}
+              className="relative rounded-lg bg-slate-100 p-2 text-slate-600 hover:bg-accent-lightGold hover:text-primary"
+              aria-label={t('admin.notifications')}
+            >
               <Bell size={20} />
               {totalNew > 0 && (
                 <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 animate-pulse" />
@@ -201,7 +217,7 @@ const AdminLayout = () => {
           </div>
         </header>
 
-        <main className="p-4 sm:p-6 lg:p-8">
+        <main className="p-3 sm:p-6 lg:p-8">
           <Outlet />
         </main>
       </div>

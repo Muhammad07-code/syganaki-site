@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   ChevronDown,
+  Globe,
   Instagram,
   Mail,
   MapPin,
@@ -10,12 +11,12 @@ import {
   Search,
   Send,
   X,
-  Globe,
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import MobileMenuAccordion from './MobileMenuAccordion';
-import LanguagePills from './LanguagePills';
+import { getInstituteContent } from '../data/instituteContent';
+import { normalizeText } from '../utils/formatDate';
 
 const languages = [
   { code: 'kz', label: 'Қазақша', short: 'ҚАЗ' },
@@ -29,10 +30,12 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const [logoClicks, setLogoClicks] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
+  const institute = useMemo(() => getInstituteContent(i18n.language), [i18n.language]);
 
   const navItems = useMemo(
     () => [
@@ -52,7 +55,21 @@ const Navbar = () => {
   const currentLanguage =
     languages.find((language) => language.code === i18n.language) || languages[0];
   const isLight = scrolled;
-  const direction = i18n.language === 'ar' ? 'rtl' : 'ltr';
+
+  const searchResults = useMemo(() => {
+    const baseItems = [
+      ...navItems.map((item) => ({ title: item.label, label: t('common.details'), path: item.path })),
+      ...institute.programs.map((item) => ({ title: item.title, label: t('nav.programs'), path: '/programs' })),
+      ...institute.news.map((item) => ({ title: item.title, label: t('nav.news'), path: `/news/${item.id}` })),
+      ...institute.gallery.slice(0, 6).map((item) => ({ title: item.title, label: t('nav.gallery'), path: '/gallery' })),
+    ];
+    const query = normalizeText(searchQuery);
+    const results = query
+      ? baseItems.filter((item) => normalizeText(`${item.title} ${item.label}`).includes(query))
+      : baseItems.slice(0, 6);
+
+    return results.slice(0, 8);
+  }, [institute, navItems, searchQuery, t]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -65,15 +82,27 @@ const Navbar = () => {
     setMenuOpen(false);
     setLangOpen(false);
     setSearchOpen(false);
+    setSearchQuery('');
   }, [location.pathname]);
 
-  // Close language dropdown on outside click
   useEffect(() => {
     if (!langOpen) return;
     const handleClick = () => setLangOpen(false);
     document.addEventListener('click', handleClick);
     return () => document.removeEventListener('click', handleClick);
   }, [langOpen]);
+
+  useEffect(() => {
+    if (!searchOpen) return;
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setSearchOpen(false);
+        setSearchQuery('');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [searchOpen]);
 
   const changeLanguage = (code) => {
     i18n.changeLanguage(code);
@@ -95,9 +124,8 @@ const Navbar = () => {
 
   return (
     <>
-      {/* ── Topbar ── */}
       <div
-        dir={direction}
+        dir="ltr"
         className={`fixed inset-x-0 top-0 z-50 hidden border-b transition-all duration-500 lg:block ${
           scrolled
             ? '-translate-y-full border-transparent bg-primary-dark/0'
@@ -131,9 +159,8 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* ── Main header ── */}
       <header
-        dir={direction}
+        dir="ltr"
         className={`fixed inset-x-0 z-50 transition-all duration-500 ${
           isLight
             ? 'top-0 border-b border-slate-200/80 bg-white/95 shadow-[0_18px_60px_rgba(5,24,17,0.08)] backdrop-blur-xl'
@@ -141,7 +168,6 @@ const Navbar = () => {
         }`}
       >
         <div className="container-custom flex h-20 items-center justify-between gap-3 lg:h-[86px]">
-          {/* ── Logo ── */}
           <Link to="/" onClick={handleLogoClick} className="flex shrink-0 items-center gap-3">
             <span
               className={`flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border p-1.5 transition-all ${
@@ -166,7 +192,6 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {/* ── Desktop nav ── */}
           <nav className="hidden items-center gap-0.5 xl:flex">
             {navItems.map((item) => (
               <div key={item.path} className="group relative">
@@ -181,29 +206,11 @@ const Navbar = () => {
                   {item.label}
                   {item.children && <ChevronDown size={14} className="transition-transform group-hover:rotate-180" />}
                 </NavLink>
-
-                {item.children && (
-                  <div className="invisible absolute left-1/2 top-full min-w-56 -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
-                    <div className="premium-card overflow-hidden p-2">
-                      {item.children.map((child) => (
-                        <Link
-                          key={`${child.label}-${child.path}`}
-                          to={child.path}
-                          className="block rounded-md px-4 py-3 text-sm font-semibold text-slate-600 hover:bg-accent-lightGold hover:text-primary"
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             ))}
           </nav>
 
-          {/* ── Right controls ── */}
           <div className="flex shrink-0 items-center gap-2">
-            {/* Search button - desktop only */}
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
@@ -215,7 +222,6 @@ const Navbar = () => {
               <Search size={20} />
             </button>
 
-            {/* ── Language switcher (always visible) ── */}
             <div className="relative" onClick={(e) => e.stopPropagation()}>
               <button
                 type="button"
@@ -260,19 +266,6 @@ const Navbar = () => {
               </AnimatePresence>
             </div>
 
-            {/* Apply button - hidden on smaller screens */}
-            <Link 
-              to="/admission" 
-              className={`hidden 2xl:inline-flex h-9 items-center justify-center rounded-full px-5 text-xs font-bold transition-all ${
-                isLight 
-                  ? 'bg-primary/5 text-primary hover:bg-primary hover:text-white' 
-                  : 'bg-white/10 text-white backdrop-blur hover:bg-accent-gold hover:text-primary-dark'
-              }`}
-            >
-              {t('nav.apply')}
-            </Link>
-
-            {/* Mobile menu button */}
             <button
               type="button"
               onClick={() => setMenuOpen(true)}
@@ -287,7 +280,6 @@ const Navbar = () => {
         </div>
       </header>
 
-      {/* ── Mobile sidebar ── */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -299,24 +291,22 @@ const Navbar = () => {
             onClick={() => setMenuOpen(false)}
           >
             <motion.aside
-              initial={{ x: direction === 'rtl' ? '-100%' : '100%' }}
+              initial={{ x: '100%' }}
               animate={{ x: 0 }}
-              exit={{ x: direction === 'rtl' ? '-100%' : '100%' }}
+              exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 240 }}
-              className={`safe-bottom flex h-full w-full max-w-sm flex-col bg-white shadow-2xl overflow-hidden ${
-                direction === 'rtl' ? 'mr-auto' : 'ml-auto'
-              }`}
+              className="safe-bottom ml-auto flex h-full w-full max-w-sm flex-col overflow-hidden bg-white shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
                 <div className="flex min-w-0 items-center gap-2">
-                  <img src="/logo.png" alt={t('brand.name')} className="h-8 w-8 rounded-md object-contain" />
-                  <p className="truncate font-serif text-sm font-bold text-primary-dark">{t('brand.short')}</p>
+                  <img src="/logo.png" alt={t('brand.name')} className="h-8 w-8 shrink-0 rounded-md object-contain" />
+                  <p className="line-clamp-2 font-serif text-sm font-bold leading-tight text-primary-dark">{t('brand.name')}</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setMenuOpen(false)}
-                  className="rounded-lg hover:bg-slate-100 p-2 text-primary transition-colors"
+                  className="rounded-lg p-2 text-primary transition-colors hover:bg-slate-100"
                   aria-label="Close menu"
                 >
                   <X size={20} />
@@ -337,20 +327,10 @@ const Navbar = () => {
                 </nav>
               </div>
 
-              <div className="border-t border-slate-100 bg-slate-50 p-4 space-y-3">
-                <div>
-                  <p className="text-xs font-bold text-slate-600 mb-2">{t('admin.language', { defaultValue: '' }) || 'Тіл / Язык / Language'}</p>
-                  <LanguagePills
-                    languages={languages}
-                    currentLanguage={currentLanguage}
-                    onChange={(code) => {
-                      changeLanguage(code);
-                    }}
-                  />
-                </div>
+              <div className="space-y-3 border-t border-slate-100 bg-slate-50 p-4">
                 <Link
                   to="/admission"
-                  className="flex items-center justify-center rounded-lg bg-accent-gold text-primary-dark font-bold py-2.5 hover:bg-accent-gold/90 transition-colors text-sm"
+                  className="flex items-center justify-center rounded-lg bg-accent-gold py-2.5 text-sm font-bold text-primary-dark transition-colors hover:bg-accent-gold/90"
                   onClick={() => setMenuOpen(false)}
                 >
                   {t('nav.apply')}
@@ -361,39 +341,57 @@ const Navbar = () => {
         )}
       </AnimatePresence>
 
-      {/* ── Search overlay ── */}
       <AnimatePresence>
         {searchOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[110] flex items-center justify-center bg-primary-dark/96 p-4 backdrop-blur-xl"
+            initial={{ opacity: 0, y: -8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.98 }}
+            className="fixed right-4 top-24 z-[110] w-[calc(100vw-2rem)] max-w-xl sm:right-6 lg:right-8 lg:top-28"
           >
-            <button
-              type="button"
-              onClick={() => setSearchOpen(false)}
-              className="absolute right-4 top-4 rounded-lg bg-white/10 p-3 text-white hover:bg-white/20 sm:right-8 sm:top-8"
-              aria-label={t('common.close')}
-            >
-              <X size={24} />
-            </button>
-            <div className="w-full max-w-3xl">
-              <p className="section-eyebrow">{t('common.search')}</p>
-              <div className="relative">
+            <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_24px_80px_rgba(5,24,17,0.22)]">
+              <div className="flex items-center gap-3 border-b border-slate-100 p-3">
+                <Search className="shrink-0 text-accent-gold" size={20} />
                 <input
                   autoFocus
-                  className="w-full border-b border-white/25 bg-transparent py-4 pr-12 text-2xl text-white outline-none placeholder:text-white/25 focus:border-accent-gold sm:text-3xl"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  className="min-w-0 flex-1 bg-transparent px-1 py-2 text-sm font-semibold text-slate-900 outline-none placeholder:text-slate-400"
                   placeholder={t('common.search_placeholder')}
                 />
-                <Search className="absolute right-0 top-1/2 -translate-y-1/2 text-accent-gold" size={24} />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchOpen(false);
+                    setSearchQuery('');
+                  }}
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-50 text-slate-500 hover:bg-slate-100"
+                  aria-label={t('common.close')}
+                >
+                  <X size={18} />
+                </button>
               </div>
-              <div className="mt-8 flex flex-wrap gap-3">
-                {navItems.map((item) => (
-                  <Link key={`search-${item.path}`} to={item.path} className="btn-secondary">
-                    {item.label}
-                  </Link>
-                ))}
+
+              <div className="max-h-[340px] overflow-y-auto p-2">
+                {searchResults.length ? (
+                  searchResults.map((item, index) => (
+                    <Link
+                      key={`${item.path}-${item.title}-${index}`}
+                      to={item.path}
+                      className="group flex items-center justify-between gap-4 rounded-lg px-3 py-3 hover:bg-accent-lightGold/70"
+                    >
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-bold text-primary-dark">{item.title}</span>
+                        <span className="mt-0.5 block text-xs font-semibold text-slate-500">{item.label}</span>
+                      </span>
+                      <Search size={15} className="shrink-0 text-slate-300 group-hover:text-accent-gold" />
+                    </Link>
+                  ))
+                ) : (
+                  <div className="px-3 py-8 text-center text-sm font-semibold text-slate-500">
+                    {t('common.not_found')}
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>

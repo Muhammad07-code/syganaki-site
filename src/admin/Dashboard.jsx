@@ -100,7 +100,7 @@ const Dashboard = () => {
             </Link>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
+            <table className="min-w-[680px] w-full text-left text-sm">
               <thead className="bg-slate-50 text-xs font-extrabold uppercase tracking-[0.12em] text-slate-500">
                 <tr>
                   <th className="px-5 py-4">{t('admission.name')}</th>
@@ -142,7 +142,7 @@ const Dashboard = () => {
             <h2 className="text-xl font-bold text-white">{t('admin.dashboard')}</h2>
             <p className="mt-3 text-sm leading-7 text-white/65">{t('admin.production_note')}</p>
             <Link to="/admin/news" className="btn-gold mt-6 w-full !text-primary-dark">
-              {t('admin.add')} {t('admin.news')}
+              {t('admin.add_news', { defaultValue: `${t('admin.add')} ${t('admin.news')}` })}
               <ArrowRight size={16} />
             </Link>
           </div>
@@ -160,4 +160,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

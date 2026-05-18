@@ -82,7 +82,19 @@
     "testimonials_eyebrow": "Testimonials",
     "testimonials_title": "What students and alumni say",
     "contact_eyebrow": "Contacts",
-    "contact_title": "Contact the admissions office"
+    "contact_title": "Contact the admissions office",
+    "featured_teachers_eyebrow": "Faculty",
+    "featured_teachers_title": "Featured Teachers",
+    "featured_teachers_desc": "Short profiles of four teachers leading the institute's core academic areas."
+  },
+  "support": {
+    "eyebrow": "Sadaqa and Support",
+    "title": "Support the Institute",
+    "subtitle": "Sadaqa for the path of knowledge supports student learning, the library, and the institute's spiritual education projects.",
+    "point_1": "Support helps improve the learning environment.",
+    "point_2": "Kaspi payment details are ready for use.",
+    "kaspi_label": "Kaspi support number",
+    "payment_note": "Purpose: Sadaqa / Institute support"
   },
   "benefits": [
     { "title": "Quality Education", "desc": "Quran, hadith, fiqh, aqidah, and Arabic are taught systematically." },
@@ -297,7 +309,7 @@
     "offer": "Terms of Use"
   },
   "teachers": { "title": "Our Faculty", "subtitle": "Experienced specialists with deep Islamic knowledge and academic credentials", "phd": "PhD Holders", "specialists": "Teachers", "experienced": "Years Average", "international": "International faculty", "administration": "Administration", "quran": "Quranic Sciences", "islamic": "Islamic Studies", "languages": "Arabic Language", "education": "Education", "cta_title": "Study with the institute faculty", "cta_desc": "The admissions office can help you choose a track and prepare the documents." },
-  "partners": { "title": "Institutional Partnerships", "subtitle": "The institute grows through DUMK, national and international academic relations, and the expertise of Al-Azhar and Haseki.", "international": "International Partners", "international_desc": "Global partnerships for academic cooperation", "national": "National Partners", "national_desc": "Collaborative institutions in Kazakhstan", "community": "Community Partners", "community_desc": "Local organizations and mosques", "academic_title": "Academic relations and international participation", "academic_desc": "Institute representatives participate in international seminars and scholarly conferences with presentations.", "contact_title": "Contact us about partnership", "contact_desc": "For academic, educational or community project proposals, contact the administration." },
+  "partners": { "title": "Institutional Partnerships", "subtitle": "The institute grows through DUMK, national and international academic relations, and the expertise of Al-Azhar and Haseki.", "international": "International Partners", "international_desc": "Global partnerships for academic cooperation", "national": "National Partners", "national_desc": "Collaborative institutions in Kazakhstan", "community": "Community Partners", "community_desc": "Local organizations and mosques", "academic_title": "Academic relations and international participation", "academic_desc": "Institute representatives participate in international seminars and scholarly conferences with presentations.", "contact_title": "Contact us about partnership", "contact_desc": "For academic, educational or community project proposals, contact the administration.", "visit_site": "Open official website" },
   "admin": {
     "login_title": "Admin Panel",
     "login_subtitle": "Private section for institute administration",
@@ -314,6 +326,19 @@
     "content": "Texts",
     "assistant": "AI Assistant",
     "settings": "Settings",
+    "notifications": "Notifications",
+    "notifications_desc": "New applications, messages, and uploaded materials appear in real time.",
+    "mark_all_read": "Mark all as read",
+    "unread": "Unread",
+    "read": "Read",
+    "no_notifications": "No notifications",
+    "notification_application": "Application",
+    "notification_message": "Message",
+    "notification_upload": "Upload",
+    "open": "Open",
+    "custom_category": "Enter custom category",
+    "upload_error": "Image upload failed. Check the file type and size.",
+    "upload_hint": "JPG, PNG or WebP, up to 12 MB. Images are optimized automatically.",
     "new": "New",
     "processed": "Processed",
     "accepted": "Accepted",
@@ -322,6 +347,7 @@
     "delete": "Delete",
     "edit": "Edit",
     "add": "Add",
+    "add_news": "Add news",
     "search": "Search...",
     "status": "Status",
     "title_field": "Title",

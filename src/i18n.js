@@ -35,13 +35,17 @@ i18n
 i18n.on('languageChanged', (lng) => {
   if (typeof document !== 'undefined') {
     document.documentElement.lang = lng === 'kz' ? 'kk' : lng;
-    document.body.dir = lng === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = 'ltr';
+    document.body.dir = 'ltr';
+    document.body.dataset.lang = lng;
   }
 });
 
 if (typeof document !== 'undefined') {
   document.documentElement.lang = i18n.language === 'kz' ? 'kk' : i18n.language;
-  document.body.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
+  document.documentElement.dir = 'ltr';
+  document.body.dir = 'ltr';
+  document.body.dataset.lang = i18n.language;
 }
 
 export default i18n;

@@ -26,7 +26,7 @@ export const canSubmitForm = (key, intervalMs = 60_000) => {
 
 export const validateImageFile = (file) => {
   const allowed = ['image/jpeg', 'image/png', 'image/webp'];
-  const maxSize = 3 * 1024 * 1024;
+  const maxSize = 12 * 1024 * 1024;
   if (!file || !allowed.includes(file.type)) {
     throw new Error('Invalid image type');
   }

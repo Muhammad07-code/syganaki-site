@@ -1,9 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, BookOpen, CalendarDays, CheckCircle2, GraduationCap, MapPin, Sparkles } from 'lucide-react';
+import {
+  ArrowRight,
+  BookOpen,
+  CalendarDays,
+  CheckCircle2,
+  CreditCard,
+  GraduationCap,
+  HeartHandshake,
+  MapPin,
+  QrCode,
+  Sparkles,
+  Users,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getInstituteContent } from '../data/instituteContent';
+import FAQ from '../sections/FAQ';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -16,6 +29,18 @@ const Home = () => {
   const programs = institute.programs.slice(0, 2);
   const latest = institute.news.slice(0, 2);
   const gallery = institute.gallery.slice(0, 3);
+  const statIcons = [CalendarDays, BookOpen, Users, GraduationCap];
+  const featuredTeachers = [
+    { id: 'bagdat-manabayev', image: '/institute/featured-director.png' },
+    { id: 'zhaksylyk-rakhymbay', image: '/institute/featured-zhaksylyk.png' },
+    { id: 'azamat-baizakov', image: '/institute/featured-azamat.png' },
+    { id: 'temirzhan-muratov', image: '/institute/featured-temirzhan.png' },
+  ]
+    .map(({ id, image }) => {
+      const teacher = institute.teachers.find((item) => item.id === id);
+      return teacher ? { ...teacher, image } : null;
+    })
+    .filter(Boolean);
 
   return (
     <div className="overflow-hidden bg-background">
@@ -67,13 +92,20 @@ const Home = () => {
 
       <section className="relative z-20 -mt-16 px-4 sm:-mt-20">
         <div className="container-custom">
-          <div className="premium-panel grid grid-cols-2 gap-px overflow-hidden bg-slate-200/70 shadow-xl lg:grid-cols-4">
-            {institute.stats.map(([value, label]) => (
-              <div key={label} className="bg-white/95 p-5 sm:p-6 lg:p-7">
-                <p className="font-serif text-3xl font-extrabold text-primary-dark sm:text-4xl">{value}</p>
-                <p className="mt-2 text-xs font-bold uppercase tracking-[0.12em] text-slate-500">{label}</p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {institute.stats.map(([value, label], index) => {
+              const Icon = statIcons[index] || Sparkles;
+              return (
+              <div key={label} className="group relative overflow-hidden rounded-lg border border-white/80 bg-white p-5 shadow-[0_22px_70px_rgba(5,24,17,0.12)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_80px_rgba(5,24,17,0.18)] sm:p-6">
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-accent-gold via-primary to-accent-gold opacity-80" />
+                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-accent-lightGold text-primary shadow-inner">
+                  <Icon size={21} />
+                </div>
+                <p className="font-serif text-4xl font-extrabold leading-none text-primary-dark sm:text-5xl">{value}</p>
+                <p className="mt-3 text-xs font-extrabold uppercase tracking-[0.14em] text-slate-500">{label}</p>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -162,6 +194,48 @@ const Home = () => {
       </section>
 
       <section className="section-y bg-background">
+        <div className="container-custom">
+          <div className="mb-10 flex flex-wrap items-end justify-between gap-5">
+            <div className="max-w-3xl">
+              <p className="section-eyebrow">
+                <Users size={16} />
+                {t('home.featured_teachers_eyebrow')}
+              </p>
+              <h2 className="section-title text-balance">{t('home.featured_teachers_title')}</h2>
+              <p className="section-copy mt-4">{t('home.featured_teachers_desc')}</p>
+            </div>
+            <Link to="/teachers" className="btn-ghost">
+              {t('nav.teachers')}
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+            {featuredTeachers.map((teacher, index) => (
+              <motion.article
+                key={teacher.id}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-80px' }}
+                variants={fadeUp}
+                transition={{ delay: index * 0.05 }}
+                className="group overflow-hidden rounded-lg border border-slate-200/70 bg-white shadow-[0_18px_54px_rgba(5,24,17,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-accent-gold/40 hover:shadow-[0_28px_78px_rgba(5,24,17,0.14)]"
+              >
+                <div className="aspect-[4/4.35] overflow-hidden bg-slate-100">
+                  <img src={teacher.image} alt={teacher.name} loading="lazy" className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+                </div>
+                <div className="p-5">
+                  <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-accent-gold">{teacher.category}</p>
+                  <h3 className="mt-2 font-serif text-xl font-bold leading-tight text-primary-dark">{teacher.name}</h3>
+                  <p className="mt-2 line-clamp-2 text-sm font-semibold leading-6 text-slate-600">{teacher.role}</p>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-y bg-background">
         <div className="container-custom grid gap-8 lg:grid-cols-[1fr_0.9fr]">
           <div>
             <div className="mb-8 flex items-end justify-between gap-4">
@@ -219,6 +293,56 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      <section className="section-y bg-white">
+        <div className="container-custom">
+          <div className="relative overflow-hidden rounded-lg bg-primary-dark p-6 text-white shadow-[0_28px_90px_rgba(5,24,17,0.18)] sm:p-8 lg:p-10">
+            <div className="islamic-pattern absolute inset-0 opacity-[0.12]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary-dark via-primary-dark/96 to-primary/70" />
+            <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_360px] lg:items-center">
+              <div className="max-w-3xl">
+                <p className="section-eyebrow text-accent-gold">
+                  <HeartHandshake size={16} />
+                  {t('support.eyebrow')}
+                </p>
+                <h2 className="section-title text-white">{t('support.title')}</h2>
+                <p className="mt-5 max-w-2xl text-base leading-8 text-white/72">{t('support.subtitle')}</p>
+                <div className="mt-7 grid gap-3 sm:grid-cols-2">
+                  {[t('support.point_1'), t('support.point_2')].map((item) => (
+                    <div key={item} className="flex gap-3 rounded-lg border border-white/10 bg-white/8 p-4">
+                      <CheckCircle2 className="mt-0.5 shrink-0 text-accent-gold" size={18} />
+                      <p className="text-sm font-semibold leading-6 text-white/78">{item}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-white/15 bg-white p-5 text-primary-dark shadow-[0_22px_70px_rgba(0,0,0,0.18)]">
+                <div className="mb-5 grid aspect-square place-items-center rounded-lg border border-dashed border-accent-gold/60 bg-accent-lightGold">
+                  <div className="text-center">
+                    <QrCode className="mx-auto text-primary" size={82} />
+                    <p className="mt-3 text-xs font-extrabold uppercase tracking-[0.18em] text-primary/70">Kaspi QR</p>
+                  </div>
+                </div>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center gap-3 rounded-lg bg-slate-50 p-3">
+                    <CreditCard className="shrink-0 text-accent-gold" size={19} />
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-400">{t('support.kaspi_label')}</p>
+                      <p className="font-extrabold text-primary-dark">{t('topbar.phone')}</p>
+                    </div>
+                  </div>
+                  <p className="rounded-lg bg-primary-dark px-4 py-3 text-center text-sm font-extrabold text-white">
+                    {t('support.payment_note')}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <FAQ compact />
     </div>
   );
 };

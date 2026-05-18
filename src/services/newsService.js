@@ -135,7 +135,7 @@ export const deleteNewsArticle = (id) => {
   return setDoc(doc(db, NEWS_COLLECTION, id), { deleted: true }, { merge: true });
 };
 
-export const uploadNewsImage = async (file) => {
+export const uploadNewsImage = async (file, folder = 'news') => {
   validateImageFile(file);
 
   const resizeImage = (f, output = 'data-url') =>
@@ -190,10 +190,12 @@ export const uploadNewsImage = async (file) => {
     return resizeImage(file);
   }
 
+  const allowedFolders = new Set(['news', 'gallery']);
+  const targetFolder = allowedFolders.has(folder) ? folder : 'news';
   const blob = await resizeImage(file, 'blob');
   const safeBase = file.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9._-]/g, '-').slice(0, 80) || 'image';
   const safeName = `${Date.now()}-${crypto.randomUUID?.() || Math.random().toString(36).slice(2)}-${safeBase}.jpg`;
-  const imageRef = ref(storage, `news/${safeName}`);
+  const imageRef = ref(storage, `${targetFolder}/${safeName}`);
   const metadata = {
     contentType: 'image/jpeg',
     cacheControl: 'public,max-age=31536000,immutable',

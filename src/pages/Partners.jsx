@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Globe2, MapPin, Users } from 'lucide-react';
+import { ArrowRight, Building2, ExternalLink, Globe2, MapPin, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getInstituteContent } from '../data/instituteContent';
 
@@ -13,6 +13,7 @@ const fadeUp = {
 const Partners = () => {
   const { t, i18n } = useTranslation();
   const institute = getInstituteContent(i18n.language);
+  const partnerIcons = [Users, Building2, Globe2, Building2, Globe2];
 
   return (
     <div className="overflow-hidden bg-background">
@@ -36,30 +37,41 @@ const Partners = () => {
           </div>
 
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {institute.partners.map((partner, index) => (
-              <motion.article
+            {institute.partners.map((partner, index) => {
+              const Icon = partnerIcons[index] || Globe2;
+              return (
+              <motion.a
                 key={partner.id}
+                href={partner.url}
+                target="_blank"
+                rel="noreferrer"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: '-80px' }}
                 variants={fadeUp}
                 transition={{ delay: index * 0.05 }}
-                className="premium-card p-6"
+                className="group relative flex min-h-[310px] flex-col overflow-hidden rounded-lg border border-slate-200/80 bg-white p-6 shadow-[0_18px_60px_rgba(5,24,17,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-accent-gold/50 hover:shadow-[0_30px_90px_rgba(5,24,17,0.15)]"
               >
-                <div className="mb-5 flex items-start justify-between gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-accent-lightGold text-primary">
-                    {index === 0 ? <Users size={24} /> : <Globe2 size={24} />}
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-accent-gold to-primary opacity-80" />
+                <div className="mb-6 flex items-start justify-between gap-4">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-accent-gold/20 bg-accent-lightGold text-primary shadow-inner">
+                    <Icon size={25} />
                   </div>
-                  <span className="rounded-full bg-slate-50 px-3 py-1 text-xs font-bold text-slate-500">{partner.type}</span>
+                  <span className="rounded-full bg-slate-50 px-3 py-1 text-xs font-extrabold text-slate-500">{partner.type}</span>
                 </div>
-                <h3 className="text-xl font-bold text-primary-dark">{partner.name}</h3>
+                <h3 className="font-serif text-2xl font-bold leading-tight text-primary-dark">{partner.name}</h3>
                 <p className="mt-3 flex items-center gap-2 text-sm font-bold text-accent-gold">
                   <MapPin size={15} />
                   {partner.location}
                 </p>
-                <p className="mt-4 text-sm leading-7 text-slate-600">{partner.description}</p>
-              </motion.article>
-            ))}
+                <p className="mt-4 flex-1 text-sm leading-7 text-slate-600">{partner.description}</p>
+                <span className="mt-6 inline-flex items-center gap-2 text-sm font-extrabold text-primary group-hover:text-accent-gold">
+                  {t('partners.visit_site')}
+                  <ExternalLink size={16} />
+                </span>
+              </motion.a>
+              );
+            })}
           </div>
         </div>
       </section>

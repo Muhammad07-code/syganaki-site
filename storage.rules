@@ -6,11 +6,18 @@ service firebase.storage {
       return request.auth != null;
     }
 
+    function hasAdminRoleDoc() {
+      return signedIn()
+        && firestore.exists(/databases/(default)/documents/adminRoles/$(request.auth.uid))
+        && firestore.get(/databases/(default)/documents/adminRoles/$(request.auth.uid)).data.role == 'admin';
+    }
+
     function isAdmin() {
       return signedIn()
         && (
           request.auth.token.admin == true
           || request.auth.token.role == 'admin'
+          || hasAdminRoleDoc()
         );
     }
 
