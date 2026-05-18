@@ -300,6 +300,14 @@ const AdminLayout = () => {
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white">
               <User size={20} />
             </div>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="hidden min-h-[40px] items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-extrabold text-red-700 hover:bg-red-100 lg:inline-flex"
+            >
+              <LogOut size={16} />
+              {t('admin.logout')}
+            </button>
           </div>
         </header>
 
