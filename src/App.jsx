@@ -13,6 +13,7 @@ const NewsDetail = lazy(() => import('./pages/NewsDetail'));
 const Gallery = lazy(() => import('./pages/Gallery'));
 const Contacts = lazy(() => import('./pages/Contacts'));
 const FAQPage = lazy(() => import('./pages/FAQPage'));
+const Donation = lazy(() => import('./pages/Donation'));
 const AdminLayout = lazy(() => import('./admin/AdminLayout'));
 const AdminDashboard = lazy(() => import('./admin/Dashboard'));
 const AdminApplications = lazy(() => import('./admin/Applications'));
@@ -47,6 +48,7 @@ function App() {
           <Route path="gallery" element={<Gallery />} />
           <Route path="faq" element={<FAQPage />} />
           <Route path="contacts" element={<Contacts />} />
+          <Route path="donation" element={<Donation />} />
         </Route>
 
         <Route path="/admin/login" element={<Login />} />

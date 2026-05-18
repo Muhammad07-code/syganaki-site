@@ -15,7 +15,9 @@
     "contacts": "Contacts",
     "gallery": "Gallery",
     "faq": "FAQ",
-    "apply": "Apply"
+    "apply": "Apply",
+    "institute": "Institute",
+    "support": "Support"
   },
   "topbar": {
     "address": "36/4 Kabanbay Batyr Avenue, Astana",
@@ -43,7 +45,10 @@
     "details": "Details",
     "date": "Date",
     "category": "Category",
-    "not_found": "Content not found"
+    "not_found": "Content not found",
+    "sending": "Sending...",
+    "too_many_requests": "Please wait before submitting again.",
+    "open_menu": "Open menu"
   },
   "hero": {
     "badge": "Official Islamic Education",
@@ -112,7 +117,12 @@
     "contact_title": "Contact the admissions office",
     "featured_teachers_eyebrow": "Faculty",
     "featured_teachers_title": "Featured Teachers",
-    "featured_teachers_desc": "Short profiles of four teachers leading the institute's core academic areas."
+    "featured_teachers_desc": "Short profiles of four teachers leading the institute's core academic areas.",
+    "all_programs": "All programs",
+    "all_teachers": "All faculty",
+    "all_news": "All news",
+    "admission_cta_title": "Get admission guidance",
+    "admission_cta_desc": "The admissions office will help you choose a program, prepare documents, and explain the next steps."
   },
   "support": {
     "eyebrow": "Sadaqa and Support",
@@ -282,7 +292,34 @@
         "title": "Service",
         "desc": "To direct acquired knowledge toward public benefit."
       }
-    ]
+    ],
+    "documents_title": "Official Documents",
+    "documents_desc": "Licensing, accreditation, and internal regulatory documents are published in this section. Actual documents can be added through the admin panel.",
+    "documents": [
+      {
+        "title": "License",
+        "desc": "The official document number will be shown after the data is added."
+      },
+      {
+        "title": "Accreditation",
+        "desc": "Accreditation information will be updated when documents are prepared."
+      },
+      {
+        "title": "Internal rules",
+        "desc": "Student rules and academic procedures are placed in this section."
+      }
+    ],
+    "leadership_title": "Leadership",
+    "material_title": "Facilities",
+    "material_desc": "The institute supports the learning process with classrooms, library resources, and spaces for student life.",
+    "material_items": [
+      "Classrooms",
+      "Library and reading room",
+      "Student environment",
+      "Dormitory consultation"
+    ],
+    "cta_title": "Need more information?",
+    "cta_desc": "Contact the institute administration about admission, study programs, or official documents."
   },
   "admission": {
     "title": "Admission",
@@ -290,7 +327,7 @@
     "steps_title": "Admission steps",
     "docs_title": "Required documents",
     "form_title": "Admission application",
-    "form_subtitle": "Fill in the fields. The application is saved to Firebase and WhatsApp opens contact with the admissions office.",
+    "form_subtitle": "Fill in the fields. The admissions office will contact you soon.",
     "name": "Name",
     "phone": "Phone",
     "program": "Program",
@@ -329,7 +366,25 @@
       "Medical certificate",
       "Application form",
       "Contact details"
-    ]
+    ],
+    "periods_title": "Admission Dates",
+    "periods": [
+      "The admission schedule is confirmed by the administration each year.",
+      "Exact dates can be clarified through the admissions office."
+    ],
+    "conditions_title": "Study Conditions",
+    "conditions": [
+      "An interview or level assessment may be required for the program.",
+      "Admission decisions are made after the full document package is submitted."
+    ],
+    "tuition_title": "Tuition",
+    "tuition_note": "Tuition is clarified through the admissions office.",
+    "invalid_phone": "Enter a Kazakhstan phone number, for example: +7 777 123 45 67.",
+    "spam_error": "The form was not submitted. If this is a mistake, contact us on WhatsApp.",
+    "name_placeholder": "Enter your full name",
+    "phone_help": "Kazakhstan phone numbers are accepted, for example: +7 777 123 45 67.",
+    "message_placeholder": "Write an additional question...",
+    "privacy_note": "Submitted data is used only for admissions office contact."
   },
   "news": {
     "title": "News",
@@ -486,7 +541,10 @@
       "Other question"
     ],
     "socials_title": "Social media",
-    "map_title": "Map"
+    "map_title": "Map",
+    "message_placeholder": "Write your question...",
+    "success_title": "Message sent successfully",
+    "success_desc": "We will contact you soon."
   },
   "assistant": {
     "title": "AI Assistant",
@@ -509,7 +567,7 @@
     "teachers": "Faculty",
     "partners": "Partners",
     "contacts": "Contacts",
-    "copyright": "В© 2026 Husamuddin as-Syganaqi Islamic Institute. All rights reserved.",
+    "copyright": "© 2026 Husamuddin as-Syganaqi Islamic Institute. All rights reserved.",
     "privacy": "Privacy Policy",
     "offer": "Terms of Use"
   },
@@ -656,5 +714,22 @@
     "change_contacts": "Change contacts",
     "form_helper": "Fill the fields and save.",
     "delete_confirm": "Confirm deletion?"
+  },
+  "donation": {
+    "title": "Sadaqa / Support",
+    "subtitle": "Supporting the institute is voluntary help for education, the library, and the student environment.",
+    "official_title": "Voluntary Support",
+    "official_text": "Sadaqa and support funds are directed to educational, spiritual, and student-focused needs.",
+    "items": [
+      "Student learning support",
+      "Library development",
+      "Improving the learning environment",
+      "Spiritual and educational projects"
+    ],
+    "kaspi_title": "Support via Kaspi",
+    "kaspi_text": "After the real Kaspi payment link is added, the button will open the payment page directly.",
+    "kaspi_button": "Support via Kaspi",
+    "kaspi_todo": "The Kaspi payment link has not been added yet. Set the official URL in VITE_KASPI_DONATION_URL.",
+    "whatsapp_text": "Assalamu alaikum! I would like to learn about supporting the institute."
   }
 }

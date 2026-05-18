@@ -1,12 +1,22 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, FileText, Loader2, MessageCircle, Send, ShieldCheck } from 'lucide-react';
+import {
+  CalendarDays,
+  CheckCircle2,
+  FileText,
+  Loader2,
+  MessageCircle,
+  Send,
+  ShieldCheck,
+  WalletCards,
+  X,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { buildWhatsAppLink, saveApplication } from '../services/formService';
 import { fetchDataList } from '../services/dataService';
 import { getInstituteContent } from '../data/instituteContent';
-
-const WHATSAPP_NUMBER = '+77761764131';
+import { isValidKazakhstanPhone } from '../utils/security';
+import { WHATSAPP_NUMBER } from '../config/site';
 
 const Admission = () => {
   const { t, i18n } = useTranslation();
@@ -15,14 +25,18 @@ const Admission = () => {
   const [programs, setPrograms] = useState([]);
   const [loadingPrograms, setLoadingPrograms] = useState(true);
 
-  const steps = t('admission.steps', { returnObjects: true });
+  const steps = t('admission.steps', { returnObjects: true }).slice(0, 4);
   const requirements = t('admission.requirements', { returnObjects: true });
+  const periods = t('admission.periods', { returnObjects: true, defaultValue: [] });
+  const conditions = t('admission.conditions', { returnObjects: true, defaultValue: [] });
+  const faqItems = t('faq.items', { returnObjects: true }).slice(0, 3);
 
   const [formData, setFormData] = useState({
     fullName: '',
     phone: '',
     program: '',
     message: '',
+    website: '',
   });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -34,24 +48,31 @@ const Admission = () => {
       const data = await fetchDataList('programs', fallbackPrograms, i18n.language);
       setPrograms(data);
       if (data.length > 0 && !formData.program) {
-        setFormData(prev => ({ ...prev, program: data[0].title }));
+        setFormData((prev) => ({ ...prev, program: data[0].title }));
       }
       setLoadingPrograms(false);
     };
     loadPrograms();
   }, [i18n.language]);
 
-  const isValid = useMemo(() => {
-    const phoneDigits = formData.phone.replace(/\D/g, '');
-    return formData.fullName.trim().length >= 2 && phoneDigits.length >= 10 && formData.program;
-  }, [formData]);
+  const isValid = useMemo(
+    () => formData.fullName.trim().length >= 2 && isValidKazakhstanPhone(formData.phone) && Boolean(formData.program),
+    [formData],
+  );
+
+  const mapError = (err) => {
+    if (err.message === 'rate_limited') return t('common.too_many_requests', { defaultValue: t('common.error') });
+    if (err.message === 'invalid_phone') return t('admission.invalid_phone');
+    if (err.message === 'spam_detected') return t('admission.spam_error');
+    return t('common.error');
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError('');
 
     if (!isValid) {
-      setError(t('common.error'));
+      setError(t('admission.invalid_phone'));
       return;
     }
 
@@ -60,9 +81,9 @@ const Admission = () => {
       await saveApplication(formData);
       setSubmitted(true);
       const firstProgram = programs[0]?.title || fallbackPrograms[0]?.title || '';
-      setFormData({ fullName: '', phone: '', program: firstProgram, message: '' });
+      setFormData({ fullName: '', phone: '', program: firstProgram, message: '', website: '' });
     } catch (err) {
-      setError(err.message === 'rate_limited' ? t('common.too_many_requests', { defaultValue: t('common.error') }) : t('common.error'));
+      setError(mapError(err));
     } finally {
       setLoading(false);
     }
@@ -71,7 +92,7 @@ const Admission = () => {
   return (
     <div className="bg-background">
       <section className="relative overflow-hidden bg-primary-dark pb-16 pt-32 text-white sm:pt-40">
-        <img src="/institute/students.jpeg" alt={t('admission.title')} className="absolute inset-0 h-full w-full object-cover opacity-28" />
+        <img src="/institute/students.jpeg" alt={t('admission.title')} className="absolute inset-0 h-full w-full object-cover opacity-28" loading="eager" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary-dark via-primary-dark/90 to-primary-dark/55" />
         <div className="islamic-pattern absolute inset-0 opacity-[0.12]" />
         <div className="container-custom relative z-10 max-w-4xl">
@@ -84,6 +105,28 @@ const Admission = () => {
       <section className="section-y">
         <div className="container-custom grid gap-8 lg:grid-cols-[1fr_420px] lg:items-start">
           <div className="space-y-8">
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="premium-card p-5">
+                <CalendarDays className="mb-4 text-accent-gold" size={28} />
+                <h3 className="text-xl font-bold">{t('admission.periods_title')}</h3>
+                <div className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
+                  {periods.map((item) => <p key={item}>{item}</p>)}
+                </div>
+              </div>
+              <div className="premium-card p-5">
+                <ShieldCheck className="mb-4 text-accent-gold" size={28} />
+                <h3 className="text-xl font-bold">{t('admission.conditions_title')}</h3>
+                <div className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
+                  {conditions.map((item) => <p key={item}>{item}</p>)}
+                </div>
+              </div>
+              <div className="premium-card p-5">
+                <WalletCards className="mb-4 text-accent-gold" size={28} />
+                <h3 className="text-xl font-bold">{t('admission.tuition_title')}</h3>
+                <p className="mt-3 text-sm leading-7 text-slate-600">{t('admission.tuition_note')}</p>
+              </div>
+            </div>
+
             <div>
               <div className="mb-7 flex items-center gap-3">
                 <ShieldCheck className="text-accent-gold" size={30} />
@@ -123,89 +166,119 @@ const Admission = () => {
                 ))}
               </div>
             </div>
+
+            <div className="premium-panel bg-white p-6 sm:p-8">
+              <h2 className="text-3xl font-bold">{t('faq.title')}</h2>
+              <div className="mt-6 space-y-4">
+                {faqItems.map((item) => (
+                  <div key={item.question} className="rounded-lg border border-slate-200 bg-white p-4">
+                    <h3 className="font-bold text-primary-dark">{item.question}</h3>
+                    <p className="mt-2 text-sm leading-7 text-slate-600">{item.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           <aside className="premium-panel sticky top-24 bg-white p-6 sm:p-8">
-            {submitted ? (
-              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="py-8 text-center">
-                <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                  <CheckCircle2 size={42} />
-                </div>
-                <h3 className="text-2xl font-bold">{t('admission.success')}</h3>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{t('admission.success_desc')}</p>
-                <button type="button" onClick={() => setSubmitted(false)} className="btn-ghost mt-7">
-                  {t('admission.send_another')}
-                </button>
-              </motion.div>
-            ) : (
-              <>
-                <h2 className="text-2xl font-bold">{t('admission.form_title')}</h2>
+            <h2 className="text-2xl font-bold">{t('admission.form_title')}</h2>
+            <p className="mt-3 text-sm leading-7 text-slate-600">{t('admission.form_subtitle')}</p>
 
-                {error && <div className="mt-5 rounded-lg border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">{error}</div>}
+            {error && <div className="mt-5 rounded-lg border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">{error}</div>}
 
-                <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                  <label className="block">
-                    <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.14em] text-slate-500">{t('admission.name')}</span>
-                    <input
-                      value={formData.fullName}
-                      onChange={(event) => setFormData({ ...formData, fullName: event.target.value })}
-                      className="input-premium"
-                      required
-                      minLength={2}
-                      autoComplete="name"
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.14em] text-slate-500">{t('admission.phone')}</span>
-                    <input
-                      value={formData.phone}
-                      onChange={(event) => setFormData({ ...formData, phone: event.target.value })}
-                      className="input-premium"
-                      required
-                      type="tel"
-                      placeholder="+7 ___ ___ __ __"
-                      autoComplete="tel"
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.14em] text-slate-500">{t('admission.program')}</span>
-                    <select
-                      value={formData.program}
-                      onChange={(event) => setFormData({ ...formData, program: event.target.value })}
-                      className="input-premium"
-                    >
-                      {programs.map((program) => (
-                        <option key={program.id}>{program.title}</option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="block">
-                    <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.14em] text-slate-500">{t('admission.message')}</span>
-                    <textarea
-                      value={formData.message}
-                      onChange={(event) => setFormData({ ...formData, message: event.target.value })}
-                      className="input-premium min-h-[118px] resize-none"
-                    />
-                  </label>
-                  <button type="submit" disabled={loading || !isValid} className="btn-primary w-full">
-                    {loading ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
-                    {t('admission.send')}
-                  </button>
-                  <a
-                    href={buildWhatsAppLink(WHATSAPP_NUMBER, t('admission.whatsapp_text'))}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="btn-ghost w-full"
-                  >
-                    <MessageCircle size={18} />
-                    {t('common.whatsapp')}
-                  </a>
-                </form>
-              </>
-            )}
+            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+              <input
+                type="text"
+                tabIndex="-1"
+                autoComplete="off"
+                value={formData.website}
+                onChange={(event) => setFormData({ ...formData, website: event.target.value })}
+                className="hidden"
+                aria-hidden="true"
+              />
+              <label className="block">
+                <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.14em] text-slate-500">{t('admission.name')}</span>
+                <input
+                  value={formData.fullName}
+                  onChange={(event) => setFormData({ ...formData, fullName: event.target.value })}
+                  className="input-premium"
+                  required
+                  minLength={2}
+                  autoComplete="name"
+                  placeholder={t('admission.name_placeholder')}
+                />
+              </label>
+              <label className="block">
+                <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.14em] text-slate-500">{t('admission.phone')}</span>
+                <input
+                  value={formData.phone}
+                  onChange={(event) => setFormData({ ...formData, phone: event.target.value })}
+                  className="input-premium"
+                  required
+                  type="tel"
+                  placeholder="+7 777 123 45 67"
+                  autoComplete="tel"
+                />
+                <span className="mt-2 block text-xs font-semibold text-slate-500">{t('admission.phone_help')}</span>
+              </label>
+              <label className="block">
+                <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.14em] text-slate-500">{t('admission.program')}</span>
+                <select
+                  value={formData.program}
+                  onChange={(event) => setFormData({ ...formData, program: event.target.value })}
+                  className="input-premium"
+                  disabled={loadingPrograms}
+                >
+                  {programs.map((program) => (
+                    <option key={program.id}>{program.title}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="block">
+                <span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.14em] text-slate-500">{t('admission.message')}</span>
+                <textarea
+                  value={formData.message}
+                  onChange={(event) => setFormData({ ...formData, message: event.target.value })}
+                  className="input-premium min-h-[118px] resize-none"
+                  placeholder={t('admission.message_placeholder')}
+                />
+              </label>
+              <button type="submit" disabled={loading || !isValid} className="btn-primary w-full">
+                {loading ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
+                {loading ? t('common.sending') : t('admission.send')}
+              </button>
+              <a
+                href={buildWhatsAppLink(WHATSAPP_NUMBER, t('admission.whatsapp_text'))}
+                target="_blank"
+                rel="noreferrer"
+                className="btn-ghost w-full"
+              >
+                <MessageCircle size={18} />
+                {t('common.whatsapp')}
+              </a>
+              <p className="text-xs leading-6 text-slate-500">{t('admission.privacy_note')}</p>
+            </form>
           </aside>
         </div>
       </section>
+
+      {submitted && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center bg-primary-dark/70 p-4 backdrop-blur-sm">
+          <motion.div initial={{ opacity: 0, y: 18, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} className="w-full max-w-md rounded-lg bg-white p-6 text-center shadow-2xl">
+            <button type="button" onClick={() => setSubmitted(false)} className="ml-auto flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50 text-slate-500 hover:bg-slate-100" aria-label={t('common.close')}>
+              <X size={19} />
+            </button>
+            <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+              <CheckCircle2 size={42} />
+            </div>
+            <h3 className="text-2xl font-bold">{t('admission.success')}</h3>
+            <p className="mt-3 text-sm leading-7 text-slate-600">{t('admission.success_desc')}</p>
+            <button type="button" onClick={() => setSubmitted(false)} className="btn-primary mt-7 w-full">
+              {t('common.close')}
+            </button>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };

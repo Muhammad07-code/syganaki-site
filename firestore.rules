@@ -38,23 +38,27 @@ service cloud.firestore {
     }
 
     function validApplicationCreate() {
-      return request.resource.data.keys().hasOnly(['fullName', 'phone', 'program', 'message', 'status', 'createdAt'])
+      return request.resource.data.keys().hasOnly(['fullName', 'phone', 'program', 'message', 'status', 'createdAt', 'source', 'isRead'])
         && isShortText(request.resource.data.fullName, 120)
         && isShortText(request.resource.data.phone, 40)
         && isShortText(request.resource.data.program, 120)
         && (!('message' in request.resource.data) || isOptionalText(request.resource.data.message, 1000))
         && request.resource.data.status == 'new'
+        && (!('source' in request.resource.data) || request.resource.data.source == 'website')
+        && (!('isRead' in request.resource.data) || request.resource.data.isRead == false)
         && request.resource.data.createdAt == request.time;
     }
 
     function validInquiryCreate() {
-      return request.resource.data.keys().hasOnly(['name', 'phone', 'subject', 'message', 'type', 'status', 'createdAt'])
+      return request.resource.data.keys().hasOnly(['name', 'phone', 'subject', 'message', 'type', 'status', 'createdAt', 'source', 'isRead'])
         && isShortText(request.resource.data.name, 120)
         && isShortText(request.resource.data.phone, 40)
         && isShortText(request.resource.data.subject, 120)
         && isShortText(request.resource.data.message, 1200)
         && (!('type' in request.resource.data) || isOptionalText(request.resource.data.type, 60))
         && request.resource.data.status == 'new'
+        && (!('source' in request.resource.data) || request.resource.data.source == 'website')
+        && (!('isRead' in request.resource.data) || request.resource.data.isRead == false)
         && request.resource.data.createdAt == request.time;
     }
 
