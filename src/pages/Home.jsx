@@ -59,7 +59,7 @@ const Home = () => {
 
   return (
     <div className="overflow-hidden bg-background">
-      <section className="relative min-h-[680px] overflow-hidden bg-primary-dark pt-24 text-white sm:min-h-[720px] lg:pt-28">
+      <section className="relative min-h-screen overflow-hidden bg-primary-dark pt-24 text-white lg:pt-28">
         <img
           src={institute.baseImages.hero}
           alt={t('brand.name')}
@@ -71,7 +71,7 @@ const Home = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-primary-dark via-transparent to-primary-dark/15" />
         <div className="islamic-pattern absolute inset-y-0 left-0 w-1/2 opacity-[0.10]" />
 
-        <div className="container-custom relative z-10 flex min-h-[590px] flex-col justify-center pb-20 pt-12 sm:pb-28 lg:pt-18">
+        <div className="container-custom relative z-10 flex min-h-[calc(100vh-6rem)] flex-col justify-center pb-20 pt-12 sm:pb-28 lg:min-h-[calc(100vh-7rem)] lg:pt-18">
           <motion.div initial="hidden" animate="visible" variants={fadeUp} transition={{ duration: 0.65 }} className="max-w-4xl">
             <p className="section-eyebrow text-accent-gold">{institute.heroBadge}</p>
             <h1 className="max-w-4xl font-serif text-4xl font-extrabold leading-[1.08] text-white sm:text-5xl lg:text-6xl">
