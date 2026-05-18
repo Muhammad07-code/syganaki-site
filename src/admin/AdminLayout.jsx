@@ -96,11 +96,11 @@ const PushNotificationsCard = ({ user }) => {
       type="button"
       onClick={enable}
       disabled={busy || status === 'denied' || status === 'checking'}
-      className="hidden min-h-[38px] items-center gap-2 rounded-lg border border-accent-gold/40 bg-accent-lightGold px-3 py-2 text-xs font-extrabold text-primary-dark hover:border-accent-gold disabled:opacity-60 md:inline-flex"
+      className="inline-flex min-h-[38px] items-center gap-2 rounded-lg border border-accent-gold/40 bg-accent-lightGold px-3 py-2 text-xs font-extrabold text-primary-dark hover:border-accent-gold disabled:opacity-60"
       title={statusLabel[status]}
     >
       <Bell size={15} />
-      {busy ? t('common.loading') : t('admin.enable_push', { defaultValue: 'Push хабарламаларды қосу' })}
+      {busy ? t('common.loading') : t('admin.enable_push', { defaultValue: 'Push' })}
     </button>
   );
 };
@@ -119,6 +119,23 @@ const AdminLayout = () => {
     () => notifications.filter((item) => !item.read),
     [notifications],
   );
+
+  const prevUnreadCount = React.useRef(0);
+
+  useEffect(() => {
+    const current = unreadNotifications.length;
+    const prev = prevUnreadCount.current;
+    if (current > prev && prev >= 0 && 'Notification' in window) {
+      const newest = unreadNotifications[0];
+      if (Notification.permission === 'granted' && newest) {
+        new Notification(newest.title || 'Жаңа хабарлама', {
+          body: newest.body || '',
+          icon: '/logo.png',
+        });
+      }
+    }
+    prevUnreadCount.current = current;
+  }, [unreadNotifications]);
 
   const counts = useMemo(
     () => ({
@@ -259,7 +276,8 @@ const AdminLayout = () => {
             ))}
           </nav>
 
-          <div className="border-t border-white/10 p-4">
+          <div className="border-t border-white/10 p-4 space-y-2">
+            <PushNotificationsCard user={user} />
             <button
               type="button"
               onClick={handleLogout}
