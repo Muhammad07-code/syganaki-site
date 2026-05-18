@@ -197,7 +197,7 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   `flex min-h-[42px] items-center whitespace-nowrap rounded-lg px-2.5 text-[11px] font-extrabold uppercase tracking-[0.04em] transition-all 2xl:px-3 ${
                     isLight ? 'text-slate-700 hover:bg-primary/5' : 'text-white/90 hover:bg-white/10'
-                  } ${isActive ? 'bg-accent-lightGold text-primary-dark' : ''}`
+                  } ${isActive ? (isLight ? 'bg-primary/5 text-primary-dark' : 'text-accent-gold') : ''}`
                 }
               >
                 {item.label}
