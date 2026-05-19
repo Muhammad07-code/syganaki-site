@@ -25,7 +25,7 @@ const MainLayout = () => {
   }, [location.pathname, location.hash]);
 
   return (
-    <div className={`flex min-h-screen flex-col ${isArabic ? 'has-arabic-content' : ''}`}>
+    <div dir={isArabic ? 'rtl' : 'ltr'} className={`flex min-h-screen flex-col ${isArabic ? 'has-arabic-content' : ''}`}>
       <Seo />
       <Navbar />
       <main className="flex-grow">

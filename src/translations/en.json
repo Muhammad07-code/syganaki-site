@@ -755,6 +755,7 @@
     "kaspi_text": "After the real Kaspi payment link is added, the button will open the payment page directly.",
     "kaspi_button": "Support via Kaspi",
     "kaspi_todo": "The Kaspi payment link has not been added yet. Set the official URL in VITE_KASPI_DONATION_URL.",
+    "kaspi_fallback_note": "The official payment link has not been added yet. The button opens Kaspi transfers. Transfer number: {{phone}}.",
     "whatsapp_text": "Assalamu alaikum! I would like to learn about supporting the institute."
   },
   "historyMission": {

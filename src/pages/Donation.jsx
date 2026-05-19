@@ -2,13 +2,19 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, CreditCard, HeartHandshake, Info, Phone } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { KASPI_DONATION_URL, WHATSAPP_NUMBER } from '../config/site';
+import {
+  KASPI_DONATION_URL,
+  KASPI_FALLBACK_URL,
+  KASPI_SUPPORT_NUMBER,
+  WHATSAPP_NUMBER,
+} from '../config/site';
 import { buildWhatsAppLink } from '../utils/contactLinks';
 
 const Donation = () => {
   const { t } = useTranslation();
   const supportItems = t('donation.items', { returnObjects: true, defaultValue: [] });
   const kaspiReady = Boolean(KASPI_DONATION_URL);
+  const kaspiHref = KASPI_DONATION_URL || KASPI_FALLBACK_URL;
 
   return (
     <div className="bg-background">
@@ -56,21 +62,24 @@ const Donation = () => {
             <h2 className="text-2xl font-bold">{t('donation.kaspi_title')}</h2>
             <p className="mt-3 text-sm leading-7 text-slate-600">{t('donation.kaspi_text')}</p>
 
-            {kaspiReady ? (
-              <a
-                href={KASPI_DONATION_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary mt-7 w-full"
-              >
-                <CreditCard size={18} />
-                {t('donation.kaspi_button')}
-                <ArrowRight size={18} />
-              </a>
-            ) : (
-              <div className="mt-7 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm font-semibold leading-7 text-amber-800">
+            <a
+              href={kaspiHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary mt-7 w-full"
+            >
+              <CreditCard size={18} />
+              {t('donation.kaspi_button')}
+              <ArrowRight size={18} />
+            </a>
+
+            {!kaspiReady && (
+              <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm font-semibold leading-7 text-amber-800">
                 <Info className="mb-2 text-amber-600" size={18} />
-                {t('donation.kaspi_todo')}
+                {t('donation.kaspi_fallback_note', {
+                  phone: KASPI_SUPPORT_NUMBER,
+                  defaultValue: t('donation.kaspi_todo'),
+                })}
               </div>
             )}
 

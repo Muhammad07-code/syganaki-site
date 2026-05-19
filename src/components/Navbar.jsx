@@ -352,6 +352,7 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 240 }}
+              dir="ltr"
               className="safe-bottom ml-auto flex h-full w-full max-w-sm flex-col overflow-hidden bg-white shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
@@ -398,6 +399,7 @@ const Navbar = () => {
             initial={{ opacity: 0, y: -8, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
+            dir="ltr"
             className="fixed right-4 top-24 z-[110] w-[calc(100vw-2rem)] max-w-xl sm:right-6 lg:right-8 lg:top-28"
           >
             <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_24px_80px_rgba(5,24,17,0.22)]">
