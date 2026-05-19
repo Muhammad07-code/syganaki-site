@@ -4,15 +4,19 @@ import MainLayout from './layouts/MainLayout';
 
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
+const HistoryMission = lazy(() => import('./pages/HistoryMission'));
+const Leadership = lazy(() => import('./pages/Leadership'));
 const Programs = lazy(() => import('./pages/Programs'));
 const Teachers = lazy(() => import('./pages/Teachers'));
 const Partners = lazy(() => import('./pages/Partners'));
+const Graduates = lazy(() => import('./pages/Graduates'));
 const Admission = lazy(() => import('./pages/Admission'));
 const News = lazy(() => import('./pages/News'));
 const NewsDetail = lazy(() => import('./pages/NewsDetail'));
 const Gallery = lazy(() => import('./pages/Gallery'));
 const Contacts = lazy(() => import('./pages/Contacts'));
 const FAQPage = lazy(() => import('./pages/FAQPage'));
+const Donation = lazy(() => import('./pages/Donation'));
 const AdminLayout = lazy(() => import('./admin/AdminLayout'));
 const AdminDashboard = lazy(() => import('./admin/Dashboard'));
 const AdminApplications = lazy(() => import('./admin/Applications'));
@@ -38,15 +42,19 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
+          <Route path="history-mission" element={<HistoryMission />} />
+          <Route path="leadership" element={<Leadership />} />
           <Route path="programs" element={<Programs />} />
           <Route path="teachers" element={<Teachers />} />
           <Route path="partners" element={<Partners />} />
+          <Route path="graduates" element={<Graduates />} />
           <Route path="admission" element={<Admission />} />
           <Route path="news" element={<News />} />
           <Route path="news/:id" element={<NewsDetail />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="faq" element={<FAQPage />} />
           <Route path="contacts" element={<Contacts />} />
+          <Route path="donation" element={<Donation />} />
         </Route>
 
         <Route path="/admin/login" element={<Login />} />

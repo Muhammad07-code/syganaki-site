@@ -4,6 +4,7 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import {
   Bell,
   Bot,
+  CheckCircle2,
   FileText,
   Image,
   Inbox,
@@ -19,7 +20,90 @@ import {
 import { useTranslation } from 'react-i18next';
 import { auth, isFirebaseConfigured } from '../firebase/config';
 import { hasAdminAccess } from '../services/adminAuth';
-import { markNotificationsRead, subscribeAdminNotifications } from '../services/notificationService';
+import { subscribeAdminNotifications } from '../services/notificationService';
+import { getPushPermissionState, registerAdminPushToken, subscribeForegroundAdminPush } from '../services/pushNotificationService';
+
+const PushNotificationsCard = ({ user }) => {
+  const { t } = useTranslation();
+  const [status, setStatus] = useState('checking');
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    getPushPermissionState().then((state) => {
+      if (mounted) setStatus(state);
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let unsubscribe = () => {};
+    subscribeForegroundAdminPush((payload) => {
+      const title = payload?.notification?.title || payload?.data?.title;
+      if (title && typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('syganaki-admin-push', { detail: payload }));
+      }
+    }).then((cleanup) => {
+      unsubscribe = cleanup;
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const enable = async () => {
+    setBusy(true);
+    try {
+      const result = await registerAdminPushToken(user);
+      setStatus(result.status);
+    } catch (error) {
+      console.warn('Push registration failed:', error);
+      setStatus('error');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const statusLabel = {
+    checking: t('admin.push_checking', { defaultValue: 'Тексерілуде' }),
+    granted: t('admin.push_enabled', { defaultValue: 'қосылған' }),
+    denied: t('admin.push_denied', { defaultValue: 'рұқсат берілмеген' }),
+    unsupported: t('admin.push_unsupported', { defaultValue: 'браузер қолдамайды' }),
+    default: t('admin.push_disabled', { defaultValue: 'қосылмаған' }),
+    'missing-vapid-key': t('admin.push_missing_key', { defaultValue: 'VAPID key қажет' }),
+    error: t('admin.push_error', { defaultValue: 'қате' }),
+  };
+
+  if (status === 'granted') {
+    return (
+      <div className="hidden items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700 md:flex">
+        <CheckCircle2 size={15} />
+        {t('admin.push_status')}: {statusLabel[status]}
+      </div>
+    );
+  }
+
+  if (status === 'unsupported') {
+    return (
+      <div className="hidden rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-500 md:block">
+        {t('admin.push_status')}: {statusLabel[status]}
+      </div>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={enable}
+      disabled={busy || status === 'denied' || status === 'checking'}
+      className="inline-flex min-h-[38px] items-center gap-2 rounded-lg border border-accent-gold/40 bg-accent-lightGold px-3 py-2 text-xs font-extrabold text-primary-dark hover:border-accent-gold disabled:opacity-60"
+      title={statusLabel[status]}
+    >
+      <Bell size={15} />
+      {busy ? t('common.loading') : t('admin.enable_push', { defaultValue: 'Push' })}
+    </button>
+  );
+};
 
 const AdminLayout = () => {
   const { t, i18n } = useTranslation();
@@ -35,6 +119,23 @@ const AdminLayout = () => {
     () => notifications.filter((item) => !item.read),
     [notifications],
   );
+
+  const prevUnreadCount = React.useRef(0);
+
+  useEffect(() => {
+    const current = unreadNotifications.length;
+    const prev = prevUnreadCount.current;
+    if (current > prev && prev >= 0 && 'Notification' in window) {
+      const newest = unreadNotifications[0];
+      if (Notification.permission === 'granted' && newest) {
+        new Notification(newest.title || 'Жаңа хабарлама', {
+          body: newest.body || '',
+          icon: '/logo.png',
+        });
+      }
+    }
+    prevUnreadCount.current = current;
+  }, [unreadNotifications]);
 
   const counts = useMemo(
     () => ({
@@ -52,7 +153,7 @@ const AdminLayout = () => {
     { icon: Inbox, label: t('admin.applications'), path: '/admin/applications', badge: counts.applications },
     { icon: MessageSquare, label: t('admin.inquiries'), path: '/admin/inquiries', badge: counts.inquiries },
     { icon: Newspaper, label: t('admin.news'), path: '/admin/news', badge: counts.uploads },
-    { icon: Image, label: t('admin.gallery'), path: '/admin/gallery' },
+    { icon: Image, label: t('admin.gallery'), path: '/admin/gallery', badge: counts.uploads },
     { icon: Settings, label: t('admin.programs'), path: '/admin/programs' },
     { icon: FileText, label: t('admin.content'), path: '/admin/content' },
     { icon: Bot, label: t('admin.assistant'), path: '/admin/assistant' },
@@ -88,6 +189,7 @@ const AdminLayout = () => {
   }, [i18n.language, user]);
 
   const handleLogout = async () => {
+    if (!window.confirm(t('admin.logout_confirm', { defaultValue: 'Шығуды растайсыз ба?' }))) return;
     await signOut(auth);
     navigate('/admin/login');
   };
@@ -174,7 +276,8 @@ const AdminLayout = () => {
             ))}
           </nav>
 
-          <div className="border-t border-white/10 p-4">
+          <div className="border-t border-white/10 p-4 space-y-2">
+            <PushNotificationsCard user={user} />
             <button
               type="button"
               onClick={handleLogout}
@@ -196,6 +299,7 @@ const AdminLayout = () => {
             <h1 className="truncate text-lg font-extrabold text-primary-dark">{currentTitle}</h1>
           </div>
           <div className="flex items-center gap-3">
+            <PushNotificationsCard user={user} />
             <button
               type="button"
               onClick={() => navigate('/admin/notifications')}
@@ -214,11 +318,19 @@ const AdminLayout = () => {
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white">
               <User size={20} />
             </div>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="hidden min-h-[40px] items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-extrabold text-red-700 hover:bg-red-100 lg:inline-flex"
+            >
+              <LogOut size={16} />
+              {t('admin.logout')}
+            </button>
           </div>
         </header>
 
         <main className="p-3 sm:p-6 lg:p-8">
-          <Outlet context={{ user, notifications, markNotificationsRead }} />
+          <Outlet context={{ user, notifications }} />
         </main>
       </div>
     </div>
